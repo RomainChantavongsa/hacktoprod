@@ -1,0 +1,38 @@
+# Configuration Git pour le projet
+
+# Normalisation des fins de lignes
+* text=auto
+
+# Fichiers texte
+*.md text
+*.txt text
+*.json text
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Scripts Shell
+*.sh text eol=lf
+*.ps1 text eol=crlf
+
+# Fichiers binaires
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+
+# Sécurité : Marquer les fichiers sensibles comme non-mergeable
+.env merge=ours
+.env.* merge=ours
+!.env.example merge=ours

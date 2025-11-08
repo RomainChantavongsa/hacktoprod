@@ -1,0 +1,86 @@
+# #################################################
+# # Fichiers Node.js & Yarn
+# #################################################
+# Ne jamais commiter les dépendances
+node_modules/
+/frontend/node_modules/
+/backend/node_modules/
+
+# Fichiers de logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# #################################################
+# # Fichiers de Build & Cache
+# #################################################
+# Dossiers de build (générés)
+/frontend/dist/
+/backend/dist/
+build/
+out/
+
+# Cache de Vite
+.vite/
+
+# Cache divers
+.cache/
+.tmp/
+
+# #################################################
+# # Fichiers sensibles (SECRETS)
+# #################################################
+# Fichiers d'environnement - Ne jamais les commiter !
+.env
+.env.*
+!.env.example
+
+/frontend/.env
+/frontend/.env.*
+!/frontend/.env.example
+
+/backend/.env
+/backend/.env.*
+!/backend/.env.example
+
+# #################################################
+# # Fichiers de l'OS et de l'IDE
+# #################################################
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+.sublime-project
+.sublime-workspace
+
+# #################################################
+# # Docker
+# #################################################
+# Ne pas commiter les volumes Docker locaux (facultatif)
+# docker-volumes/
+
+# #################################################
+# # Fichiers temporaires
+# #################################################
+*.tmp
+*.temp
+*.bak
+*.orig

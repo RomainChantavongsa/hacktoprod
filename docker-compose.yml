@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------
+  # Service Backend (Node.js / Express)
+  # ----------------------------------------
+  backend:
+    build:
+      context: ./backend # Doit contenir un Dockerfile
+    container_name: my_backend_api
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}" # Expose le port de l'API sur l'hôte
+    volumes:
+      - ./backend:/usr/src/app # Monte le code source pour le hot-reloading
+      - /usr/src/app/node_modules # S'assure que node_modules du conteneur est utilisé
+    environment:
+      # Connexion à la base de données
+      - DATABASE_URL=${DATABASE_URL}
+      - PORT=${BACKEND_PORT}
+      
+      # Secrets pour JWT
+      - JWT_SECRET=${JWT_SECRET}
+      
+      # Clés API pour les services externes
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
+      - AWS_REGION=${AWS_REGION}
+      
+      - NODE_ENV=${NODE_ENV}
+    networks:
+      - app-network
+    depends_on:
+      - db # S'assure que la BDD est démarrée avant le backend
+
+  # ----------------------------------------
+  # Service Frontend (React.js)
+  # ----------------------------------------
+  frontend:
+    build:
+      context: ./frontend # Doit contenir un Dockerfile
+    container_name: my_frontend_app
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}" # Expose le serveur de dev React
+    volumes:
+      - ./frontend:/app # Monte le code source pour le hot-reloading
+      - /app/node_modules # S'assure que node_modules du conteneur est utilisé
+    environment:
+      - VITE_API_URL=${VITE_API_URL}
+      - NODE_ENV=${NODE_ENV}
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+  # ----------------------------------------
+  # Service Base de données (PostgreSQL)
+  # ----------------------------------------
+  db:
+    image: postgres:15-alpine # Utilise une image Postgres légère
+    container_name: my_postgres_db
+    restart: always
+    environment:
+      # Variables d'environnement sécurisées
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "5432:5432" # Expose le port de Postgres sur l'hôte (utile pour déboguer)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistance des données
+    networks:
+      - app-network
+
+# ----------------------------------------
+# Réseaux et Volumes
+# ----------------------------------------
+networks:
+  app-network:
+    driver: bridge # Réseau privé pour que les conteneurs communiquent
+
+volumes:
+  postgres_data: # Volume nommé géré par Docker pour la BDD
