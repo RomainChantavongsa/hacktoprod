@@ -22,6 +22,9 @@ services:
       # Secrets pour JWT
       - JWT_SECRET=${JWT_SECRET}
       
+      # Clé de chiffrement pour les données sensibles
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      
       # Clés API pour les services externes
       - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
       - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
