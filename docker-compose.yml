@@ -22,9 +22,6 @@ services:
       # Secrets pour JWT
       - JWT_SECRET=${JWT_SECRET}
       
-      # Clé de chiffrement pour les données sensibles
-      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
-      
       # Clés API pour les services externes
       - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
       - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
@@ -78,20 +75,6 @@ services:
       - postgres_data:/var/lib/postgresql/data # Persistance des données
     networks:
       - app-network
-
-  # ----------------------------------------
-  # Interface légère pour la DB (Adminer)
-  # ----------------------------------------
-  adminer:
-    image: adminer:latest
-    container_name: my_adminer
-    restart: unless-stopped
-    ports:
-      - "8081:8080" # Accès web à Adminer depuis l'hôte
-    networks:
-      - app-network
-    depends_on:
-      - db
 
 # ----------------------------------------
 # Réseaux et Volumes
