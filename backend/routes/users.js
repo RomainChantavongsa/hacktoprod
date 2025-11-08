@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Utilisateur = require('../models/Utilisateur');
+const { authMiddleware, requireRole } = require('../utils/jwt');
 
 /**
  * POST /api/users - Créer un nouvel utilisateur
@@ -68,9 +69,9 @@ router.post('/', async (req, res) => {
 });
 
 /**
- * GET /api/users - Récupérer tous les utilisateurs
+ * GET /api/users - Récupérer tous les utilisateurs (protégé)
  */
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, requireRole('admin'), async (req, res) => {
   try {
     const users = await Utilisateur.getAll();
     const safeUsers = users.map(u => u.toSafeObject());
@@ -91,9 +92,9 @@ router.get('/', async (req, res) => {
 });
 
 /**
- * GET /api/users/:id - Récupérer un utilisateur par ID
+ * GET /api/users/:id - Récupérer un utilisateur par ID (protégé)
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', authMiddleware, async (req, res) => {
   try {
     const user = await Utilisateur.getFromId(req.params.id);
 

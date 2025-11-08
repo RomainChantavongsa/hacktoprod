@@ -16,19 +16,25 @@ app.use(express.static('.')); // Servir les fichiers statiques depuis le dossier
 
 // Import des routes
 const usersRouter = require('./routes/users');
+const transporteursRouter = require('./routes/transporteurs');
+const donneursOrdreRouter = require('./routes/donneurs-ordre');
 
 // Routes
 app.get('/', (req, res) => {
   res.json({ 
     message: 'API HackToGone - Backend server is running!',
     endpoints: {
-      users: '/api/users'
+      users: '/api/users',
+      transporteurs: '/api/transporteurs',
+      donneurs_ordre: '/api/donneurs-ordre'
     }
   });
 });
 
 // Montage des routes
 app.use('/api/users', usersRouter);
+app.use('/api/transporteurs', transporteursRouter);
+app.use('/api/donneurs-ordre', donneursOrdreRouter);
 
 app.listen(port, () => {
   console.log(`Backend server is running on http://localhost:${port}`);
