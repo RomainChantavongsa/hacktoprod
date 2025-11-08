@@ -76,6 +76,20 @@ services:
     networks:
       - app-network
 
+  # ----------------------------------------
+  # Interface légère pour la DB (Adminer)
+  # ----------------------------------------
+  adminer:
+    image: adminer:latest
+    container_name: my_adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080" # Accès web à Adminer depuis l'hôte
+    networks:
+      - app-network
+    depends_on:
+      - db
+
 # ----------------------------------------
 # Réseaux et Volumes
 # ----------------------------------------
