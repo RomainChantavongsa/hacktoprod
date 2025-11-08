@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const { initDatabase } = require('./config/initDatabase');
 
 const app = express();
 
@@ -36,6 +37,21 @@ app.use('/api/users', usersRouter);
 app.use('/api/transporteurs', transporteursRouter);
 app.use('/api/donneurs-ordre', donneursOrdreRouter);
 
-app.listen(port, () => {
-  console.log(`Backend server is running on http://localhost:${port}`);
-});
+// Fonction de démarrage asynchrone
+async function startServer() {
+  try {
+    // Initialiser la base de données
+    await initDatabase();
+    
+    // Démarrer le serveur
+    app.listen(port, () => {
+      console.log(`✅ Backend server is running on http://localhost:${port}`);
+    });
+  } catch (error) {
+    console.error('❌ Erreur lors du démarrage du serveur:', error);
+    process.exit(1);
+  }
+}
+
+// Démarrer le serveur
+startServer();
