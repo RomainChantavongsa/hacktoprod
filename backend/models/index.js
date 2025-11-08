@@ -10,10 +10,12 @@ const BaseModel = require('./BaseModel');
 const Transporteur = require('./Transporteur');
 const DonneurOrdre = require('./DonneurOrdre');
 const Utilisateur = require('./Utilisateur');
+const OffreFret = require('./OffreFret');
 
 module.exports = {
   BaseModel,
   Transporteur,
   DonneurOrdre,
-  Utilisateur
+  Utilisateur,
+  OffreFret
 };

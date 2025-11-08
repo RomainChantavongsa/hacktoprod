@@ -63,3 +63,37 @@ CREATE TABLE IF NOT EXISTS utilisateurs (
         (role = 'donneur_ordre' AND donneur_ordre_id IS NOT NULL AND transporteur_id IS NULL)
     )
 );
+
+-- ******************************************************
+-- 4. Table : offre_fret (Les transactions)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS offre_fret (
+    id SERIAL PRIMARY KEY,
+    donneur_ordre_id INT NOT NULL,
+    transporteur_attribue_id INT,
+    
+    date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    statut_offre VARCHAR(50) NOT NULL DEFAULT 'Publiee', -- 'Publiee', 'Attribuee', 'EnCours', 'Completee', 'Annulee'
+    
+    poids_marchandise_kg DECIMAL(10, 2) NOT NULL,
+    volume_m3 DECIMAL(10, 2),
+    type_marchandise VARCHAR(100) NOT NULL,
+    
+    -- Lieux de Chargement
+    adresse_chargement VARCHAR(255) NOT NULL,
+    ville_chargement VARCHAR(100) NOT NULL,
+    code_postal_chargement VARCHAR(10) NOT NULL, -- AJOUT
+    
+    -- Lieux de Livraison
+    adresse_livraison VARCHAR(255) NOT NULL,
+    ville_livraison VARCHAR(100) NOT NULL,
+    code_postal_livraison VARCHAR(10) NOT NULL, -- AJOUT
+    
+    type_vehicule_souhaite VARCHAR(100),
+    date_chargement_prevue DATE NOT NULL,
+    conditions_speciales VARCHAR(500),
+    prix_propose DECIMAL(10, 2),
+    
+    FOREIGN KEY (donneur_ordre_id) REFERENCES donneur_ordre(id),
+    FOREIGN KEY (transporteur_attribue_id) REFERENCES transporteur(id)
+);
