@@ -1,0 +1,287 @@
+@import '../../../styles/variables';
+
+.entreprise-profile {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .loading,
+  .error-message,
+  .info-message {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.1rem;
+  }
+
+  .error-message {
+    color: #e74c3c;
+    background-color: #fadbd8;
+    border-radius: 8px;
+  }
+
+  .info-message {
+    color: #666;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+}
+
+.entreprise-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e0e0e0;
+
+  .entreprise-header-content {
+    flex: 1;
+  }
+
+  .entreprise-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $secondary-color;
+    margin: 0 0 1rem 0;
+  }
+
+  .entreprise-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    &.badge-transporteur {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+
+    &.badge-donneur_ordre {
+      background-color: #f3e5f5;
+      color: #7b1fa2;
+    }
+
+    &.badge-particulier {
+      background-color: #fff3e0;
+      color: #f57c00;
+    }
+
+    &.badge-digital {
+      background-color: #e8f5e9;
+      color: #388e3c;
+    }
+  }
+
+  .btn-edit {
+    padding: 0.75rem 1.5rem;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.profile-section {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $secondary-color;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .info-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-value {
+      font-size: 1rem;
+      color: #333;
+      font-weight: 500;
+
+      &.highlight {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $primary-color;
+      }
+    }
+  }
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  .tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    &.tag-vehicle {
+      background-color: #e3f2fd;
+      color: #1976d2;
+    }
+
+    &.tag-zone {
+      background-color: #f3e5f5;
+      color: #7b1fa2;
+    }
+
+    &.tag-certification {
+      background-color: #e8f5e9;
+      color: #388e3c;
+    }
+  }
+}
+
+.specialties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+
+  .specialty-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    background-color: #f8f9fa;
+    transition: all 0.3s;
+    opacity: 0.5;
+
+    &.active {
+      opacity: 1;
+      border-color: $primary-color;
+      background-color: lighten($primary-color, 45%);
+      box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+    }
+
+    .specialty-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .specialty-name {
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $secondary-color;
+    }
+  }
+}
+
+.equipment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+
+  .equipment-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+    background-color: #f8f9fa;
+
+    &.available {
+      border-color: #4caf50;
+      background-color: #e8f5e9;
+
+      .equipment-name {
+        color: #2e7d32;
+      }
+    }
+
+    &.unavailable {
+      opacity: 0.5;
+
+      .equipment-name {
+        color: #999;
+      }
+    }
+
+    .equipment-icon {
+      font-size: 1.5rem;
+    }
+
+    .equipment-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .entreprise-profile {
+    padding: 1rem;
+  }
+
+  .entreprise-header {
+    flex-direction: column;
+    gap: 1rem;
+
+    .btn-edit {
+      width: 100%;
+    }
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .specialties-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-grid {
+    grid-template-columns: 1fr;
+  }
+}

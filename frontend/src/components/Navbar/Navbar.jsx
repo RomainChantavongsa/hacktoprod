@@ -35,8 +35,9 @@ function Navbar() {
           )}
 
           <Link to="/" className="navbar-logo">
-            HackToGone
+            <img src="/images/GDSLogo.svg" alt="GDS Logo" className="navbar-logo-image" />
           </Link>
+
           <ul className="navbar-links">
           {!isAuthenticated() && (
             <li>
@@ -46,7 +47,7 @@ function Navbar() {
             </li>
           )}
           
-          {isAuthenticated() ? (
+          {isAuthenticated() && (
             <>
               {/* Sections principales - Navigation par sidebar */}
               {userType === 'donneurOrdre' || userType === 'donneur_ordre' ? (
@@ -106,31 +107,29 @@ function Navbar() {
                   </li>
                 </>
               )}
-              
-              <li className="navbar-user">
-                <span className="navbar-username">👤 {user?.username}</span>
-              </li>
-              <li>
-                <button onClick={handleLogout} className="navbar-link navbar-logout-btn">
-                  Déconnexion
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <NavLink to="/login" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
-                  Connexion
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/register" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
-                  Inscription
-                </NavLink>
-              </li>
             </>
           )}
         </ul>
+
+        <div className="navbar-user">
+          {isAuthenticated() ? (
+            <>
+              <span className="navbar-username">👤 {user?.username}</span>
+              <button onClick={handleLogout} className="navbar-logout-btn">
+                Déconnexion
+              </button>
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
+                Connexion
+              </NavLink>
+              <NavLink to="/register" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
+                Inscription
+              </NavLink>
+            </>
+          )}
+        </div>
       </div>
     </nav>
 

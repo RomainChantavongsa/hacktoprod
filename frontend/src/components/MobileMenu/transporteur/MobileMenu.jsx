@@ -60,9 +60,7 @@ function MobileMenu({ isOpen, onClose }) {
       <div className={`mobile-menu ${isOpen ? 'open' : ''}`}>
         <div className="mobile-menu-header">
           <div className="mobile-menu-logo">
-            <span className="logo-icon">📦</span>
-            <span className="logo-text">zipmend</span>
-            <span className="logo-subtitle">Express</span>
+            <img src="/images/GDSLogo.svg" alt="GDS Logo" className="logo-image" />
           </div>
           <button className="mobile-menu-close" onClick={onClose}>
             ✕

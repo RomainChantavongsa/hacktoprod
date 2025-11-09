@@ -5,12 +5,6 @@ import './sideBar3.scss'
 function SideBar3() {
   return (
     <aside className="sidebar sidebar3">
-      <div className="sidebar-header">
-        <h3 className="sidebar-title">Navigation</h3>
-        <button className="sidebar-toggle">
-          ‹
-        </button>
-      </div>
       
       <nav className="sidebar-nav">
         <ul className="sidebar-menu">

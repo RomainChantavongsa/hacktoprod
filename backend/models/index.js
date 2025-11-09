@@ -7,6 +7,7 @@
  */
 
 const BaseModel = require('./BaseModel');
+const Entreprise = require('./Entreprise');
 const Transporteur = require('./Transporteur');
 const DonneurOrdre = require('./DonneurOrdre');
 const Utilisateur = require('./Utilisateur');
@@ -14,6 +15,7 @@ const OffreFret = require('./OffreFret');
 
 module.exports = {
   BaseModel,
+  Entreprise,
   Transporteur,
   DonneurOrdre,
   Utilisateur,

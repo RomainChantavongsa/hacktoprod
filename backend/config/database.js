@@ -12,9 +12,20 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
+// Intercepter les requêtes pour les afficher en développement
+if (process.env.NODE_ENV !== 'production') {
+  const originalQuery = pool.query.bind(pool);
+  pool.query = function(...args) {
+    console.log('\n🔍 SQL Query:', args[0]);
+    if (args[1]) console.log('📦 Parameters:', args[1]);
+    return originalQuery(...args);
+  };
+}
+
 // Test de connexion
 pool.on('connect', () => {
   console.log('✅ Connecté à la base de données PostgreSQL');
+  console.log('🔧 Mode:', process.env.NODE_ENV || 'development');
 });
 
 pool.on('error', (err) => {
