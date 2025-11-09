@@ -1,11 +1,11 @@
 const BaseModel = require('./BaseModel');
 
 /**
- * Modèle pour la table donneurs_ordre
+ * Modèle pour la table donneur_ordre
  */
 class DonneurOrdre extends BaseModel {
   constructor(data = {}) {
-    super('donneurs_ordre', data);
+    super('donneur_ordre', data);
   }
 
   // Getters
