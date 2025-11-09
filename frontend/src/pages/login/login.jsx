@@ -3,15 +3,22 @@ import { useLogin } from './login.ts'
 import './login.css'
 
 function Login() {
-  const { username, setUsername, password, setPassword, errors, loading, handleSubmit } = useLogin()
+  const { username, setUsername, password, setPassword, errors, loading, successMessage, handleSubmit } = useLogin()
 
   return (
     <div className="login">
       <div className="login-container">
         <h1 className="login-title">Connexion</h1>
+        
+        {successMessage && (
+          <div className="success-message">
+            ✓ {successMessage}
+          </div>
+        )}
+        
         <form className="login-form" onSubmit={handleSubmit}>
           {errors.general && (
-            <div style={{ color: 'red', textAlign: 'center' }}>
+            <div className="error-message">
               {errors.general}
             </div>
           )}

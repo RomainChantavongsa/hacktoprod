@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS utilisateur (
     email VARCHAR(255) UNIQUE NOT NULL,
     nom VARCHAR(255) NOT NULL,
     prenom VARCHAR(255),
-    role VARCHAR(50) NOT NULL, -- 'admin', 'transporteur', 'donneur_ordre'
+    role VARCHAR(50) NOT NULL, -- 'transporteur', 'donneur_ordre'
+    is_admin BOOLEAN DEFAULT FALSE, -- Flag administrateur (indépendant de l'inscription)
     
     -- Clé étrangère vers la table transporteur (optionnelle)
     transporteur_id INT,
@@ -56,9 +57,7 @@ CREATE TABLE IF NOT EXISTS utilisateur (
 
     -- Contrainte : Si role = 'transporteur', transporteur_id doit être rempli
     -- Si role = 'donneur_ordre', donneur_ordre_id doit être rempli
-    -- Si role = 'admin', les deux peuvent être NULL
     CHECK (
-        (role = 'admin') OR
         (role = 'transporteur' AND transporteur_id IS NOT NULL AND donneur_ordre_id IS NULL) OR
         (role = 'donneur_ordre' AND donneur_ordre_id IS NOT NULL AND transporteur_id IS NULL)
     )

@@ -1,7 +1,8 @@
 import { useState, FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import apiService from '@services/apiService'
 import { isApiSuccess } from '@models/api'
+import { useAuth } from '@/contexts/AuthContext.jsx'
 
 // Types pour les erreurs du formulaire
 export interface LoginErrors {
@@ -33,7 +34,19 @@ export const useLogin = () => {
   const [password, setPassword] = useState<string>('')
   const [errors, setErrors] = useState<LoginErrors>({})
   const [loading, setLoading] = useState<boolean>(false)
+  const [successMessage, setSuccessMessage] = useState<string>('')
   const navigate = useNavigate()
+  const location = useLocation()
+  const { login } = useAuth()
+
+  // Récupérer le message de succès depuis l'état de navigation (après inscription)
+  useState(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message)
+      // Nettoyer l'état après 5 secondes
+      setTimeout(() => setSuccessMessage(''), 5000)
+    }
+  })
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -52,10 +65,17 @@ export const useLogin = () => {
     const response = await apiService.login({ username, password })
     
     if (isApiSuccess(response)) {
-      console.log('Connexion réussie!', response.data.user)
-      navigate('/') // Rediriger vers la page d'accueil
+      // Le backend retourne token et user directement dans la réponse
+      const loginResponse = response as any
+      console.log('✅ Connexion réussie!', loginResponse.user)
+      
+      // Sauvegarder l'utilisateur dans le contexte d'authentification
+      login(loginResponse.token, loginResponse.user)
+      
+      // Rediriger vers la page d'accueil
+      navigate('/')
     } else {
-      setErrors({ general: response.message })
+      setErrors({ general: response.message || 'Identifiants incorrects' })
     }
     
     setLoading(false)
@@ -68,6 +88,7 @@ export const useLogin = () => {
     setPassword,
     errors,
     loading,
+    successMessage,
     handleSubmit
   }
 }

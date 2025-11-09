@@ -104,8 +104,9 @@ class ApiService {
     });
 
     // Si succès, sauvegarder le token
-    if (isApiSuccess(response) && response.data.token) {
-      this.setToken(response.data.token);
+    // Note: Le backend retourne le token directement dans la réponse, pas dans response.data
+    if (response.success && (response as any).token) {
+      this.setToken((response as any).token);
     }
 
     return response;

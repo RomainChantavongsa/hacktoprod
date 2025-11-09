@@ -1,12 +1,17 @@
 import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import apiService from '@services/apiService'
+import { isApiSuccess } from '@models/api'
 
 // Types pour la page d'inscription
 export interface RegisterFormData {
-  name: string
+  username: string
   email: string
   password: string
   confirmPassword: string
+  nom: string
+  prenom?: string
+  role: 'transporteur' | 'donneur_ordre' | ''
 }
 
 export interface RegisterResponse {
@@ -20,10 +25,12 @@ export interface RegisterResponse {
 }
 
 export interface RegisterErrors {
-  name?: string
+  username?: string
   email?: string
   password?: string
   confirmPassword?: string
+  nom?: string
+  role?: string
   general?: string
 }
 
@@ -39,89 +46,68 @@ export interface PasswordStrength {
 }
 
 // Fonction de validation
-const validateForm = (
-  name: string,
-  email: string,
-  password: string,
-  confirmPassword: string
-): RegisterErrors => {
+const validateForm = (formData: RegisterFormData): RegisterErrors => {
   const errors: RegisterErrors = {}
   
-  if (!name || name.trim().length < 2) {
-    errors.name = 'Le nom doit contenir au moins 2 caractères'
+  if (!formData.username || formData.username.trim().length < 3) {
+    errors.username = 'Le nom d\'utilisateur doit contenir au moins 3 caractères'
   }
   
-  if (!email) {
+  if (!formData.email) {
     errors.email = 'L\'email est requis'
-  } else if (!/\S+@\S+\.\S+/.test(email)) {
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
     errors.email = 'L\'email n\'est pas valide'
   }
   
-  if (!password) {
+  if (!formData.password) {
     errors.password = 'Le mot de passe est requis'
-  } else if (password.length < 6) {
-    errors.password = 'Le mot de passe doit contenir au moins 6 caractères'
+  } else if (formData.password.length < 8) {
+    errors.password = 'Le mot de passe doit contenir au moins 8 caractères'
   }
   
-  if (password !== confirmPassword) {
+  if (formData.password !== formData.confirmPassword) {
     errors.confirmPassword = 'Les mots de passe ne correspondent pas'
+  }
+  
+  if (!formData.nom || formData.nom.trim().length < 2) {
+    errors.nom = 'Le nom est requis (minimum 2 caractères)'
+  }
+  
+  if (!formData.role) {
+    errors.role = 'Le rôle est requis'
   }
   
   return errors
 }
 
-// Fonction d'API
-const submitRegister = async (
-  name: string,
-  email: string,
-  password: string
-): Promise<RegisterResult> => {
-  try {
-    const response = await fetch('/api/auth/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, password }),
-    })
-    
-    if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.message || 'Erreur d\'inscription')
-    }
-    
-    const data: RegisterResponse = await response.json()
-    
-    // Optionnel : connecter automatiquement après l'inscription
-    if (data.token) {
-      localStorage.setItem('token', data.token)
-    }
-    
-    return { success: true, data }
-  } catch (error) {
-    console.error('Erreur d\'inscription:', error)
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Erreur inconnue'
-    }
-  }
-}
-
 // Custom Hook - TOUTE LA LOGIQUE ICI
 export const useRegister = () => {
-  const [name, setName] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [formData, setFormData] = useState<RegisterFormData>({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    nom: '',
+    prenom: '',
+    role: ''
+  })
   const [errors, setErrors] = useState<RegisterErrors>({})
   const [loading, setLoading] = useState<boolean>(false)
   const navigate = useNavigate()
+
+  const handleChange = (field: keyof RegisterFormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    // Efface les erreurs quand l'utilisateur modifie un champ
+    if (Object.keys(errors).length > 0) {
+      setErrors({})
+    }
+  }
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     
     // Validation
-    const validationErrors = validateForm(name, email, password, confirmPassword)
+    const validationErrors = validateForm(formData)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
       return
@@ -130,28 +116,44 @@ export const useRegister = () => {
     setLoading(true)
     setErrors({})
     
-    // Soumission
-    const result = await submitRegister(name, email, password)
-    
-    if (result.success) {
-      console.log('Inscription réussie!')
-      navigate('/')
-    } else {
-      setErrors({ general: result.error })
+    try {
+      // Préparer les données pour l'API (sans confirmPassword)
+      const { confirmPassword, ...userData } = formData
+      
+      // S'assurer que role n'est pas vide (TypeScript safety)
+      if (userData.role !== 'transporteur' && userData.role !== 'donneur_ordre') {
+        setErrors({ general: 'Veuillez sélectionner un rôle valide' })
+        setLoading(false)
+        return
+      }
+      
+      // TypeScript type narrowing après validation
+      const validUserData = userData as Omit<RegisterFormData, 'confirmPassword' | 'role'> & { 
+        role: 'transporteur' | 'donneur_ordre' 
+      }
+      
+      const response = await apiService.register(validUserData)
+      
+      if (isApiSuccess(response)) {
+        console.log('✅ Inscription réussie!', response.data)
+        // Rediriger vers la page de login après inscription réussie
+        navigate('/login', { 
+          state: { message: 'Inscription réussie ! Vous pouvez maintenant vous connecter.' }
+        })
+      } else {
+        setErrors({ general: response.message || 'Erreur lors de l\'inscription' })
+      }
+    } catch (error) {
+      console.error('❌ Erreur d\'inscription:', error)
+      setErrors({ general: 'Une erreur est survenue. Veuillez réessayer.' })
+    } finally {
+      setLoading(false)
     }
-    
-    setLoading(false)
   }
 
   return {
-    name,
-    setName,
-    email,
-    setEmail,
-    password,
-    setPassword,
-    confirmPassword,
-    setConfirmPassword,
+    formData,
+    handleChange,
     errors,
     loading,
     handleSubmit

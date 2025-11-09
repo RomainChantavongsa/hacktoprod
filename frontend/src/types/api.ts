@@ -8,11 +8,10 @@
 
 export interface User {
   id: number;
-  username: string;
-  email: string;
-  nom: string;
-  prenom?: string;
-  role: 'admin' | 'transporteur' | 'donneur_ordre';
+  username: string; // Seule donnée déchiffrée envoyée au client
+  // Note: email, nom, prenom restent chiffrés côté serveur pour la sécurité
+  role: 'transporteur' | 'donneur_ordre';
+  is_admin?: boolean; // Flag administrateur (indépendant de l'inscription)
   transporteur_id?: number;
   donneur_ordre_id?: number;
   created_at?: string;
@@ -38,7 +37,7 @@ export interface RegisterRequest {
   password: string;
   nom: string;
   prenom?: string;
-  role: 'admin' | 'transporteur' | 'donneur_ordre';
+  role: 'transporteur' | 'donneur_ordre';
   transporteur_id?: number;
   donneur_ordre_id?: number;
 }

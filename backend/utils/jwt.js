@@ -60,7 +60,7 @@ const authMiddleware = (req, res, next) => {
 
 /**
  * Middleware pour vérifier le rôle de l'utilisateur
- * @param {String} role - Le rôle requis (ex: 'admin', 'transporteur', 'donneur_ordre')
+ * @param {String} role - Le rôle requis (ex: 'transporteur', 'donneur_ordre')
  */
 const requireRole = (role) => {
   return (req, res, next) => {
@@ -74,6 +74,22 @@ const requireRole = (role) => {
     
     next();
   };
+};
+
+/**
+ * Middleware pour vérifier si l'utilisateur est administrateur
+ * Vérifie le flag is_admin (indépendant du rôle)
+ */
+const requireAdmin = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({ error: 'Non authentifié' });
+  }
+  
+  if (!req.user.is_admin) {
+    return res.status(403).json({ error: 'Accès refusé. Droits administrateur requis.' });
+  }
+  
+  next();
 };
 
 /**
@@ -97,4 +113,5 @@ module.exports = {
   verifyToken,
   authMiddleware,
   requireRole,
+  requireAdmin,
 };
