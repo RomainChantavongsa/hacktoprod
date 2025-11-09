@@ -42,3 +42,30 @@
   border-bottom: 2px solid white;
   padding-bottom: 4px;
 }
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-username {
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+}
+
+.navbar-logout-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.navbar-logout-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  opacity: 1;
+}

@@ -7,7 +7,7 @@ const cryptoUtils = require('../utils/crypto');
  */
 class Utilisateur extends BaseModel {
   constructor(data = {}) {
-    super('utilisateurs', data);
+    super('utilisateur', data);
     
     // Déchiffrer automatiquement les données lors de la construction
     if (data.username) this._decryptedUsername = cryptoUtils.decrypt(data.username);
@@ -39,6 +39,10 @@ class Utilisateur extends BaseModel {
 
   getRole() {
     return this.role;
+  }
+
+  getIsAdmin() {
+    return this.is_admin || false;
   }
 
   getTransporteurId() {
@@ -84,6 +88,11 @@ class Utilisateur extends BaseModel {
 
   setRole(value) {
     this.role = value;
+    return this;
+  }
+
+  setIsAdmin(value) {
+    this.is_admin = value;
     return this;
   }
 
@@ -170,9 +179,27 @@ class Utilisateur extends BaseModel {
   }
 
   /**
-   * Retourne l'utilisateur sans le mot de passe et avec les données déchiffrées
+   * Retourne l'utilisateur pour le client (données minimales, username déchiffré uniquement)
+   * Email, nom, prenom restent chiffrés pour la sécurité
    */
   toSafeObject() {
+    return {
+      id: this.id,
+      username: this.getUsername(), // Déchiffré pour l'affichage
+      role: this.role,
+      is_admin: this.getIsAdmin(),
+      transporteur_id: this.transporteur_id,
+      donneur_ordre_id: this.donneur_ordre_id,
+      created_at: this.created_at,
+      updated_at: this.updated_at
+    };
+  }
+
+  /**
+   * Retourne l'utilisateur avec toutes les données déchiffrées (usage interne backend uniquement)
+   * NE PAS envoyer cette version au client !
+   */
+  toFullObject() {
     return {
       id: this.id,
       username: this.getUsername(),
@@ -180,6 +207,7 @@ class Utilisateur extends BaseModel {
       nom: this.getNom(),
       prenom: this.getPrenom(),
       role: this.role,
+      is_admin: this.getIsAdmin(),
       transporteur_id: this.transporteur_id,
       donneur_ordre_id: this.donneur_ordre_id,
       created_at: this.created_at,

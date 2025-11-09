@@ -1,4 +1,6 @@
 const Utilisateur = require('../models/Utilisateur');
+const Transporteur = require('../models/Transporteur');
+const DonneurOrdre = require('../models/DonneurOrdre');
 const { generateToken, generateRefreshToken } = require('../utils/jwt');
 
 /**
@@ -27,6 +29,32 @@ class UserService {
       throw error;
     }
 
+    let finalTransporteurId = transporteur_id;
+    let finalDonneurOrdreId = donneur_ordre_id;
+
+    // Si le rôle est transporteur et qu'aucun transporteur_id n'est fourni, créer une entité transporteur
+    if (role === 'transporteur' && !transporteur_id) {
+      const transporteur = Transporteur.create();
+      transporteur.setNomEntreprise(`${nom}${prenom ? ' ' + prenom : ''}`); // Utiliser le nom de l'utilisateur par défaut
+      transporteur.setTypeStructure('Individuel'); // Valeur par défaut
+      transporteur.setEmailContact(email);
+      transporteur.setDigitalisationActive(true);
+      
+      await transporteur.save();
+      finalTransporteurId = transporteur.getId();
+    }
+
+    // Si le rôle est donneur_ordre et qu'aucun donneur_ordre_id n'est fourni, créer une entité donneur_ordre
+    if (role === 'donneur_ordre' && !donneur_ordre_id) {
+      const donneurOrdre = DonneurOrdre.create();
+      donneurOrdre.setNomEntreprise(`${nom}${prenom ? ' ' + prenom : ''}`); // Utiliser le nom de l'utilisateur par défaut
+      donneurOrdre.setTypeActeur('Entreprise'); // Valeur par défaut
+      donneurOrdre.setEmailContact(email);
+      
+      await donneurOrdre.save();
+      finalDonneurOrdreId = donneurOrdre.getId();
+    }
+
     // Créer un nouvel utilisateur
     const user = Utilisateur.create();
     user.setUsername(username);
@@ -34,8 +62,8 @@ class UserService {
     user.setNom(nom);
     if (prenom) user.setPrenom(prenom);
     user.setRole(role);
-    if (transporteur_id) user.setTransporteurId(transporteur_id);
-    if (donneur_ordre_id) user.setDonneurOrdreId(donneur_ordre_id);
+    if (finalTransporteurId) user.setTransporteurId(finalTransporteurId);
+    if (finalDonneurOrdreId) user.setDonneurOrdreId(finalDonneurOrdreId);
 
     // Hash du mot de passe
     await user.setPassword(password);
@@ -86,7 +114,8 @@ class UserService {
       userId: user.id,
       username: user.getUsername(),
       email: user.getEmail(),
-      role: user.role
+      role: user.role,
+      is_admin: user.getIsAdmin()
     });
 
     const refreshToken = generateRefreshToken({

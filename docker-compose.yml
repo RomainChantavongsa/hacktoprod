@@ -53,7 +53,6 @@ services:
     environment:
       - VITE_API_URL=${VITE_API_URL}
       - NODE_ENV=${NODE_ENV}
-      - FRONT_MODE=${FRONT_MODE}
     networks:
       - app-network
     depends_on:
