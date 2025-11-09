@@ -114,6 +114,31 @@ db-restore: ## Restaure la base de données (spécifier FILE=backup.sql)
 	@docker exec -i my_postgres_db psql -U myuser mydatabase < $(FILE)
 	@echo "$(GREEN)Restauration terminée !$(NC)"
 
+db-drop: ## Supprime complètement la base de données (⚠️ ATTENTION : perte de données !)
+	@echo "$(RED)⚠️  ATTENTION : Cette commande va SUPPRIMER TOUTES LES DONNÉES de la base de données !$(NC)"
+	@read -p "Êtes-vous ABSOLUMENT sûr ? (tapez 'SUPPRIMER' pour confirmer): " confirm; \
+	if [ "$$confirm" = "SUPPRIMER" ]; then \
+		echo "$(BLUE)Suppression de toutes les tables...$(NC)"; \
+		docker exec -i my_postgres_db psql -U myuser mydatabase -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO myuser; GRANT ALL ON SCHEMA public TO public;"; \
+		echo "$(GREEN)Base de données vidée avec succès !$(NC)"; \
+		echo "$(YELLOW)Pour réinitialiser la base de données, redémarrez les services avec 'make restart'$(NC)"; \
+	else \
+		echo "$(YELLOW)Opération annulée.$(NC)"; \
+	fi
+
+db-reset: ## Supprime et réinitialise la base de données avec init.sql
+	@echo "$(RED)⚠️  ATTENTION : Cette commande va SUPPRIMER TOUTES LES DONNÉES et réinitialiser la base !$(NC)"
+	@read -p "Êtes-vous ABSOLUMENT sûr ? (tapez 'RESET' pour confirmer): " confirm; \
+	if [ "$$confirm" = "RESET" ]; then \
+		echo "$(BLUE)Suppression de toutes les tables...$(NC)"; \
+		docker exec -i my_postgres_db psql -U myuser mydatabase -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO myuser; GRANT ALL ON SCHEMA public TO public;"; \
+		echo "$(BLUE)Réinitialisation avec init.sql...$(NC)"; \
+		docker exec -i my_postgres_db psql -U myuser mydatabase < backend/init.sql; \
+		echo "$(GREEN)Base de données réinitialisée avec succès !$(NC)"; \
+	else \
+		echo "$(YELLOW)Opération annulée.$(NC)"; \
+	fi
+
 install: ## Installe les dépendances (backend + frontend)
 	@echo "$(BLUE)Installation des dépendances...$(NC)"
 	@cd backend && npm install
