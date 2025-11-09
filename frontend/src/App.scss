@@ -14,13 +14,20 @@
   min-height: calc(100vh - 60px);
 }
 
-/* Quand une sidebar est active, décaler le contenu */
-body:has(.sidebar) .app-content {
-  margin-left: 240px;
+/* Quand une sidebar est active, décaler le contenu (Desktop uniquement) */
+@media (min-width: 1001px) {
+  body:has(.sidebar) .app-content {
+    margin-left: 240px;
+  }
 }
 
-@media (max-width: 768px) {
-  body:has(.sidebar) .app-content {
-    margin-left: 0;
+/* Mobile - pas de décalage */
+@media (max-width: 1000px) {
+  .app {
+    padding-top: 60px;
+  }
+  
+  .app-content {
+    margin-left: 0 !important;
   }
 }

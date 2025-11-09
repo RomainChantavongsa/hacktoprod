@@ -1,35 +1,18 @@
-import { useLocation } from 'react-router-dom'
-import SideBar1 from './sideBar1/sideBar1.jsx'
-import SideBar2 from './sideBar2/sideBar2.jsx'
-import SideBar3 from './sideBar3/sideBar3.jsx'
+import { useAuth } from '../../contexts/AuthContext.jsx'
+import TransporteurSidebarManager from './transporteur/SidebarManager.jsx'
+import DonneurOrdreSidebarManager from './donneurOrdre/SidebarManager.jsx'
 
 function SidebarManager() {
-  const location = useLocation()
+  const { getUserType } = useAuth()
+  const userType = getUserType()
   
-  // Détermine quelle sidebar afficher selon le chemin actuel
-  const getSidebar = () => {
-    const path = location.pathname
-    
-    // Section Transports (Trouver des transports)
-    if (path.startsWith('/transports')) {
-      return <SideBar1 />
-    }
-    
-    // Section Entreprise (Mon Entreprise)
-    if (path.startsWith('/entreprise')) {
-      return <SideBar2 />
-    }
-    
-    // Section Paramètres
-    if (path.startsWith('/parametres')) {
-      return <SideBar3 />
-    }
-    
-    // Pas de sidebar pour les autres pages (login, register, home, etc.)
-    return null
+  // Afficher la sidebar selon le type d'utilisateur
+  if (userType === 'donneurOrdre' || userType === 'donneur_ordre') {
+    return <DonneurOrdreSidebarManager />
   }
   
-  return getSidebar()
+  // Par défaut, afficher la sidebar transporteur
+  return <TransporteurSidebarManager />
 }
 
 export default SidebarManager
