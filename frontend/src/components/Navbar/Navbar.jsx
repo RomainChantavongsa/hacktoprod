@@ -1,10 +1,11 @@
-import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import './Navbar.scss'
 
 function Navbar() {
   const { user, logout, isAuthenticated } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleLogout = () => {
     logout()
@@ -18,21 +19,44 @@ function Navbar() {
           HackToGone
         </Link>
         <ul className="navbar-links">
-          <li>
-            <NavLink to="/" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
-              Accueil
-            </NavLink>
-          </li>
+          {!isAuthenticated() && (
+            <li>
+              <NavLink to="/" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
+                Accueil
+              </NavLink>
+            </li>
+          )}
           
           {isAuthenticated() ? (
             <>
-              <li className="navbar-user">
-                <span className="navbar-username">👤 {user?.username}</span>
+              {/* Sections principales - Navigation par sidebar */}
+              <li>
+                <NavLink 
+                  to="/transports/commandes" 
+                  className={location.pathname.startsWith('/transports') ? 'navbar-link active' : 'navbar-link'}
+                >
+                  Trouver des transports
+                </NavLink>
               </li>
               <li>
-                <NavLink to="/settings" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
+                <NavLink 
+                  to="/entreprise/verification" 
+                  className={location.pathname.startsWith('/entreprise') ? 'navbar-link active' : 'navbar-link'}
+                >
+                  Mon Entreprise
+                </NavLink>
+              </li>
+              <li>
+                <NavLink 
+                  to="/parametres/notifications" 
+                  className={location.pathname.startsWith('/parametres') ? 'navbar-link active' : 'navbar-link'}
+                >
                   Paramètres
                 </NavLink>
+              </li>
+              
+              <li className="navbar-user">
+                <span className="navbar-username">👤 {user?.username}</span>
               </li>
               <li>
                 <button onClick={handleLogout} className="navbar-link navbar-logout-btn">
