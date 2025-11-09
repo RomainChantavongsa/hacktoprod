@@ -1,6 +1,10 @@
+// Charger les variables d'environnement depuis le .env à la racine
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+
 const express = require('express');
 const cors = require('cors');
 const { initDatabase } = require('./config/initDatabase');
+const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -14,6 +18,9 @@ app.use(express.urlencoded({ extended: true })); // Parse les données de formul
 app.use(express.static('.')); // Servir les fichiers statiques depuis le dossier courant
 
 // Import des routes
+const usersRouter = require('./routes/users');
+const transporteursRouter = require('./routes/transporteurs');
+const donneursOrdreRouter = require('./routes/donneurs-ordre');
 const offresFretRouter = require('./routes/offres-fret');
 
 // Routes
@@ -21,13 +28,22 @@ app.get('/', (req, res) => {
   res.json({ 
     message: 'API HackToGone - Backend server is running!',
     endpoints: {
+      users: '/api/users',
+      transporteurs: '/api/transporteurs',
+      donneurs_ordre: '/api/donneurs-ordre',
       offres_fret: '/api/offres-fret'
     }
   });
 });
 
 // Montage des routes
+app.use('/api/users', usersRouter);
+app.use('/api/transporteurs', transporteursRouter);
+app.use('/api/donneurs-ordre', donneursOrdreRouter);
 app.use('/api/offres-fret', offresFretRouter);
+
+// Middleware de gestion des erreurs (DOIT être après les routes)
+app.use(errorHandler);
 
 // Fonction de démarrage asynchrone
 async function startServer() {
@@ -38,6 +54,7 @@ async function startServer() {
     // Démarrer le serveur
     app.listen(port, () => {
       console.log(`✅ Backend server is running on http://localhost:${port}`);
+      console.log(`🔧 Mode: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {
     console.error('❌ Erreur lors du démarrage du serveur:', error);

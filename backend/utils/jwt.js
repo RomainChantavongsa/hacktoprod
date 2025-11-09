@@ -58,8 +58,43 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+/**
+ * Middleware pour vérifier le rôle de l'utilisateur
+ * @param {String} role - Le rôle requis (ex: 'admin', 'transporteur', 'donneur_ordre')
+ */
+const requireRole = (role) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Non authentifié' });
+    }
+    
+    if (req.user.role !== role) {
+      return res.status(403).json({ error: `Accès refusé. Rôle requis: ${role}` });
+    }
+    
+    next();
+  };
+};
+
+/**
+ * Génère un refresh token (token de longue durée)
+ * @param {Object} payload - Les données à inclure dans le token
+ * @returns {String} Le refresh token
+ */
+const generateRefreshToken = (payload) => {
+  if (!config.jwt.secret) {
+    throw new Error('JWT_SECRET n\'est pas défini dans les variables d\'environnement !');
+  }
+  
+  return jwt.sign(payload, config.jwt.secret, {
+    expiresIn: '7d', // 7 jours pour le refresh token
+  });
+};
+
 module.exports = {
   generateToken,
+  generateRefreshToken,
   verifyToken,
   authMiddleware,
+  requireRole,
 };
