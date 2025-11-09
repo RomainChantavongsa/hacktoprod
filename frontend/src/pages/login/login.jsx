@@ -3,7 +3,7 @@ import { useLogin } from './login.ts'
 import './login.css'
 
 function Login() {
-  const { email, setEmail, password, setPassword, errors, loading, handleSubmit } = useLogin()
+  const { username, setUsername, password, setPassword, errors, loading, handleSubmit } = useLogin()
 
   return (
     <div className="login">
@@ -17,20 +17,20 @@ function Login() {
           )}
 
           <div className="login-form-group">
-            <label htmlFor="email" className="login-form-label">
-              Email
+            <label htmlFor="username" className="login-form-label">
+              Nom d'utilisateur
             </label>
             <input
-              type="email"
-              id="email"
+              type="text"
+              id="username"
               className="login-form-input"
-              placeholder="votre@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder="votre nom d'utilisateur"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
-            {errors.email && (
-              <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.email}</span>
+            {errors.username && (
+              <span style={{ color: 'red', fontSize: '0.875rem' }}>{errors.username}</span>
             )}
           </div>
 

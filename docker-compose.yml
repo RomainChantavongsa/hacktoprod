@@ -19,8 +19,9 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - PORT=${BACKEND_PORT}
       
-      # Secrets pour JWT
+      # Secrets pour JWT et encryption
       - JWT_SECRET=${JWT_SECRET}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
       
       # Clés API pour les services externes
       - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
@@ -52,6 +53,7 @@ services:
     environment:
       - VITE_API_URL=${VITE_API_URL}
       - NODE_ENV=${NODE_ENV}
+      - FRONT_MODE=${FRONT_MODE}
     networks:
       - app-network
     depends_on:

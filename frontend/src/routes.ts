@@ -10,6 +10,7 @@ export const routeConfig = [
   { path: '/', folder: 'home' },
   { path: '/login', folder: 'login' },
   { path: '/register', folder: 'register' },
+  { path: '/debug', folder: 'debug' }, // Page de démo du Debug Panel Tracy-like
 ]
 
 // Fonction pour charger dynamiquement un composant de page

@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar/Navbar.jsx'
 import Footer from './components/Footer/Footer.jsx'
+import DevDebugPanel from '@components/DevDebugPanel.jsx'
 import { routes } from './routes.ts'
 import './App.css'
 
@@ -25,6 +26,9 @@ function App() {
         </Suspense>
       </main>
       <Footer />
+      
+      {/* Panel de debug style Tracy - seulement en DEV */}
+      <DevDebugPanel />
     </div>
   )
 }

@@ -1,6 +1,10 @@
+// Charger les variables d'environnement depuis le .env à la racine
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+
 const express = require('express');
 const cors = require('cors');
 const { initDatabase } = require('./config/initDatabase');
+const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
 
@@ -38,6 +42,9 @@ app.use('/api/transporteurs', transporteursRouter);
 app.use('/api/donneurs-ordre', donneursOrdreRouter);
 app.use('/api/offres-fret', offresFretRouter);
 
+// Middleware de gestion des erreurs (DOIT être après les routes)
+app.use(errorHandler);
+
 // Fonction de démarrage asynchrone
 async function startServer() {
   try {
@@ -47,6 +54,7 @@ async function startServer() {
     // Démarrer le serveur
     app.listen(port, () => {
       console.log(`✅ Backend server is running on http://localhost:${port}`);
+      console.log(`🔧 Mode: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {
     console.error('❌ Erreur lors du démarrage du serveur:', error);

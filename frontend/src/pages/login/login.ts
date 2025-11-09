@@ -1,42 +1,21 @@
 import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import apiService from '@services/apiService'
+import { isApiSuccess } from '@models/api'
 
-// Types pour la page de connexion
-export interface LoginFormData {
-  email: string
-  password: string
-}
-
-export interface LoginResponse {
-  success: boolean
-  token?: string
-  user?: {
-    id: number
-    email: string
-    name: string
-  }
-}
-
+// Types pour les erreurs du formulaire
 export interface LoginErrors {
-  email?: string
+  username?: string
   password?: string
   general?: string
 }
 
-export interface LoginResult {
-  success: boolean
-  data?: LoginResponse
-  error?: string
-}
-
 // Fonction de validation
-const validateForm = (email: string, password: string): LoginErrors => {
+const validateForm = (username: string, password: string): LoginErrors => {
   const errors: LoginErrors = {}
   
-  if (!email) {
-    errors.email = 'L\'email est requis'
-  } else if (!/\S+@\S+\.\S+/.test(email)) {
-    errors.email = 'L\'email n\'est pas valide'
+  if (!username) {
+    errors.username = 'Le nom d\'utilisateur est requis'
   }
   
   if (!password) {
@@ -48,41 +27,9 @@ const validateForm = (email: string, password: string): LoginErrors => {
   return errors
 }
 
-// Fonction d'API
-const submitLogin = async (email: string, password: string): Promise<LoginResult> => {
-  try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    })
-    
-    if (!response.ok) {
-      throw new Error('Erreur de connexion')
-    }
-    
-    const data: LoginResponse = await response.json()
-    
-    // Stocker le token
-    if (data.token) {
-      localStorage.setItem('token', data.token)
-    }
-    
-    return { success: true, data }
-  } catch (error) {
-    console.error('Erreur de connexion:', error)
-    return { 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Erreur inconnue'
-    }
-  }
-}
-
 // Custom Hook - TOUTE LA LOGIQUE ICI
 export const useLogin = () => {
-  const [email, setEmail] = useState<string>('')
+  const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [errors, setErrors] = useState<LoginErrors>({})
   const [loading, setLoading] = useState<boolean>(false)
@@ -92,7 +39,7 @@ export const useLogin = () => {
     e.preventDefault()
     
     // Validation
-    const validationErrors = validateForm(email, password)
+    const validationErrors = validateForm(username, password)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
       return
@@ -101,22 +48,22 @@ export const useLogin = () => {
     setLoading(true)
     setErrors({})
     
-    // Soumission
-    const result = await submitLogin(email, password)
+    // Appel API avec le nouveau service
+    const response = await apiService.login({ username, password })
     
-    if (result.success) {
-      console.log('Connexion réussie!')
-      navigate('/')
+    if (isApiSuccess(response)) {
+      console.log('Connexion réussie!', response.data.user)
+      navigate('/') // Rediriger vers la page d'accueil
     } else {
-      setErrors({ general: result.error })
+      setErrors({ general: response.message })
     }
     
     setLoading(false)
   }
 
   return {
-    email,
-    setEmail,
+    username,
+    setUsername,
     password,
     setPassword,
     errors,
@@ -128,11 +75,10 @@ export const useLogin = () => {
 // Fonctions utilitaires
 export const loginUtils = {
   checkAuth: (): boolean => {
-    const token = localStorage.getItem('token')
-    return !!token
+    return !!apiService.getToken()
   },
 
   logout: (): void => {
-    localStorage.removeItem('token')
+    apiService.logout()
   }
 }
