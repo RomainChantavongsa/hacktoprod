@@ -43,6 +43,7 @@ start: ## Démarre tous les services Docker
 	@echo "$(GREEN)Services démarrés !$(NC)"
 	@echo "  - Frontend: http://localhost:3000"
 	@echo "  - Backend:  http://localhost:3001"
+	@echo "  - Adminer:  http://localhost:8081"
 	@echo "  - Database: localhost:5432"
 
 stop: ## Arrête tous les services Docker
