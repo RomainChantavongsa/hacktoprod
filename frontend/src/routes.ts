@@ -17,7 +17,9 @@ export const routeConfig = [
   { path: '/parametres/compte', folder: 'parametres/compte' },
   { path: '/parametres/notifications', folder: 'parametres/notifications' },
   { path: '/parametres/securite', folder: 'parametres/securite' },
-  // Routes pour le transporteur
+  // Route pour le profil entreprise
+  { path: '/parametres/entreprise', folder: 'settings/entreprise' },
+  // Route pour le profil transporteur
   { path: '/entreprise/profil', folder: 'transporteur/profil' },
   { path: '/entreprise/vehicules', folder: 'transporteur/vehicules' },
   { path: '/entreprise/remorques', folder: 'transporteur/remorques' },

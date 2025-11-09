@@ -22,6 +22,7 @@ const usersRouter = require('./routes/users');
 const transporteursRouter = require('./routes/transporteurs');
 const donneursOrdreRouter = require('./routes/donneurs-ordre');
 const offresFretRouter = require('./routes/offres-fret');
+const entreprisesRouter = require('./routes/entreprises');
 
 // Routes
 app.get('/', (req, res) => {
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
     message: 'API HackToGone - Backend server is running!',
     endpoints: {
       users: '/api/users',
+      entreprises: '/api/entreprises',
       transporteurs: '/api/transporteurs',
       donneurs_ordre: '/api/donneurs-ordre',
       offres_fret: '/api/offres-fret'
@@ -38,6 +40,7 @@ app.get('/', (req, res) => {
 
 // Montage des routes
 app.use('/api/users', usersRouter);
+app.use('/api/entreprises', entreprisesRouter);
 app.use('/api/transporteurs', transporteursRouter);
 app.use('/api/donneurs-ordre', donneursOrdreRouter);
 app.use('/api/offres-fret', offresFretRouter);

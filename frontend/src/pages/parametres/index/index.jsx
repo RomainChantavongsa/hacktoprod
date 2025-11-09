@@ -4,6 +4,13 @@ import './index.scss'
 function ParametresIndex() {
   const settingsMenu = [
     {
+      title: 'Profil Entreprise',
+      description: 'Gérez les informations de votre entreprise, flotte et certifications',
+      icon: '🏢',
+      path: '/entreprise/profil',
+      color: '#3D9BA6'
+    },
+    {
       title: 'Compte',
       description: 'Gérez vos informations personnelles',
       icon: '👤',

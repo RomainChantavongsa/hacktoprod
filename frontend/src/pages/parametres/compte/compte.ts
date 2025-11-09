@@ -27,16 +27,36 @@ export const useCompte = () => {
 
   // Charger les données utilisateur au montage
   useEffect(() => {
-    if (user) {
-      setFormData({
-        username: user.username || '',
-        email: user.email || '',
-        nom: user.nom || '',
-        prenom: user.prenom || '',
-        telephone: user.telephone || '',
-        role: user.role || ''
-      })
+    const fetchUserProfile = async () => {
+      if (user) {
+        try {
+          const response = await apiService.getUserProfile()
+          if (response.success && response.data) {
+            setFormData({
+              username: response.data.username || '',
+              email: response.data.email || '',
+              nom: response.data.nom || '',
+              prenom: response.data.prenom || '',
+              telephone: response.data.telephone || '',
+              role: response.data.role || 'transporteur'
+            })
+          }
+        } catch (err) {
+          console.error('Erreur lors du chargement du profil:', err)
+          // Fallback vers AuthContext si l'API échoue
+          setFormData({
+            username: user.username || '',
+            email: user.email || '',
+            nom: user.nom || '',
+            prenom: user.prenom || '',
+            telephone: user.telephone || '',
+            role: user.role || ''
+          })
+        }
+      }
     }
+
+    fetchUserProfile()
   }, [user])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

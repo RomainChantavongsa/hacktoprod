@@ -11,7 +11,11 @@ export interface RegisterFormData {
   confirmPassword: string
   nom: string
   prenom?: string
-  role: 'transporteur' | 'donneur_ordre' | ''
+  telephone?: string
+  type_entreprise: 'transporteur' | 'donneur_ordre' | ''
+  est_particulier?: boolean
+  nom_entreprise?: string
+  siret?: string
 }
 
 export interface RegisterResponse {
@@ -30,7 +34,9 @@ export interface RegisterErrors {
   password?: string
   confirmPassword?: string
   nom?: string
-  role?: string
+  type_entreprise?: string
+  est_particulier?: string
+  nom_entreprise?: string
   general?: string
 }
 
@@ -73,8 +79,21 @@ const validateForm = (formData: RegisterFormData): RegisterErrors => {
     errors.nom = 'Le nom est requis (minimum 2 caractères)'
   }
   
-  if (!formData.role) {
-    errors.role = 'Le rôle est requis'
+  if (!formData.type_entreprise) {
+    errors.type_entreprise = 'Le type de profil est requis'
+  }
+
+  // Validation pour donneur d'ordre
+  if (formData.type_entreprise === 'donneur_ordre' && formData.est_particulier === undefined) {
+    errors.est_particulier = 'Vous devez indiquer si vous êtes un particulier ou une entreprise'
+  }
+
+  // Validation nom entreprise
+  if (formData.type_entreprise === 'transporteur' || 
+      (formData.type_entreprise === 'donneur_ordre' && formData.est_particulier === false)) {
+    if (!formData.nom_entreprise || formData.nom_entreprise.trim().length < 2) {
+      errors.nom_entreprise = 'Le nom de l\'entreprise est requis'
+    }
   }
   
   return errors
@@ -89,13 +108,17 @@ export const useRegister = () => {
     confirmPassword: '',
     nom: '',
     prenom: '',
-    role: ''
+    telephone: '',
+    type_entreprise: '',
+    est_particulier: undefined,
+    nom_entreprise: '',
+    siret: ''
   })
   const [errors, setErrors] = useState<RegisterErrors>({})
   const [loading, setLoading] = useState<boolean>(false)
   const navigate = useNavigate()
 
-  const handleChange = (field: keyof RegisterFormData, value: string) => {
+  const handleChange = (field: keyof RegisterFormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     // Efface les erreurs quand l'utilisateur modifie un champ
     if (Object.keys(errors).length > 0) {
@@ -120,16 +143,16 @@ export const useRegister = () => {
       // Préparer les données pour l'API (sans confirmPassword)
       const { confirmPassword, ...userData } = formData
       
-      // S'assurer que role n'est pas vide (TypeScript safety)
-      if (userData.role !== 'transporteur' && userData.role !== 'donneur_ordre') {
-        setErrors({ general: 'Veuillez sélectionner un rôle valide' })
+      // S'assurer que type_entreprise n'est pas vide (TypeScript safety)
+      if (userData.type_entreprise !== 'transporteur' && userData.type_entreprise !== 'donneur_ordre') {
+        setErrors({ general: 'Veuillez sélectionner un type de profil valide' })
         setLoading(false)
         return
       }
       
       // TypeScript type narrowing après validation
-      const validUserData = userData as Omit<RegisterFormData, 'confirmPassword' | 'role'> & { 
-        role: 'transporteur' | 'donneur_ordre' 
+      const validUserData = userData as Omit<RegisterFormData, 'confirmPassword' | 'type_entreprise'> & { 
+        type_entreprise: 'transporteur' | 'donneur_ordre' 
       }
       
       const response = await apiService.register(validUserData)

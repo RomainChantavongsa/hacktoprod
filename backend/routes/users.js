@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userService = require('../services/UserService');
+const Utilisateur = require('../models/Utilisateur');
 const { authMiddleware, requireRole } = require('../utils/jwt');
 const { validateCreateUser, validateLogin, validateUpdateUser } = require('../middleware/validators/userValidator');
 const { asyncHandler } = require('../middleware/errorHandler');
@@ -32,9 +33,22 @@ router.get('/', authMiddleware, requireRole('admin'), asyncHandler(async (req, r
 }));
 
 /**
+ * GET /api/users/profile - Récupérer le profil de l'utilisateur connecté (protégé)
+ */
+router.get('/profile', authMiddleware, asyncHandler(async (req, res) => {
+  const user = await userService.getUserById(req.user.userId);
+  
+  res.status(200).json({
+    success: true,
+    data: user
+  });
+}));
+
+/**
  * GET /api/users/:id - Récupérer un utilisateur par ID (protégé)
  */
 router.get('/:id', authMiddleware, asyncHandler(async (req, res) => {
+  console.log(req);
   const user = await userService.getUserById(req.params.id);
   
   res.status(200).json({
@@ -69,12 +83,29 @@ router.delete('/:id', authMiddleware, requireRole('admin'), asyncHandler(async (
 }));
 
 /**
+ * GET /api/users/profile - Récupérer le profil complet de l'utilisateur authentifié
+ */
+router.get('/profile', authMiddleware, asyncHandler(async (req, res) => {
+  // Récupérer l'utilisateur depuis le token JWT
+  const userId = req.user.userId;
+  const user = await userService.getUserById(userId);
+
+  // Récupérer les données complètes déchiffrées
+  const fullUser = await Utilisateur.getFromId(userId);
+
+  res.status(200).json({
+    success: true,
+    data: fullUser.toFullObject()
+  });
+}));
+
+/**
  * POST /api/users/login - Authentifier un utilisateur et retourner un token JWT
  */
 router.post('/login', validateLogin, asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   const { token, refreshToken, user } = await userService.loginUser(username, password);
-  
+
   res.status(200).json({
     success: true,
     message: 'Authentification réussie',
