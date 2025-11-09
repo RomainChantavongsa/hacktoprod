@@ -16,6 +16,27 @@ function SideBar3() {
         <ul className="sidebar-menu">
           <li>
             <NavLink 
+              to="/parametres" 
+              className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
+              end
+            >
+              <span className="sidebar-icon">⚙️</span>
+              <span className="sidebar-label">Aperçu</span>
+            </NavLink>
+          </li>
+          
+          <li>
+            <NavLink 
+              to="/parametres/compte" 
+              className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
+            >
+              <span className="sidebar-icon">👤</span>
+              <span className="sidebar-label">Mon compte</span>
+            </NavLink>
+          </li>
+          
+          <li>
+            <NavLink 
               to="/parametres/notifications" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
@@ -26,11 +47,11 @@ function SideBar3() {
           
           <li>
             <NavLink 
-              to="/parametres/compte" 
+              to="/parametres/securite" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">👥</span>
-              <span className="sidebar-label">Account</span>
+              <span className="sidebar-icon">🔒</span>
+              <span className="sidebar-label">Sécurité</span>
             </NavLink>
           </li>
         </ul>

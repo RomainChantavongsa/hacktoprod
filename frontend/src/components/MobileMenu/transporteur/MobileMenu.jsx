@@ -42,8 +42,10 @@ function MobileMenu({ isOpen, onClose }) {
   ]
 
   const parametresLinks = [
+    { to: '/parametres', icon: '⚙️', label: 'Aperçu des paramètres' },
+    { to: '/parametres/compte', icon: '👤', label: 'Mon compte' },
     { to: '/parametres/notifications', icon: '🔔', label: 'Notifications' },
-    { to: '/parametres/compte', icon: '👥', label: 'Account' },
+    { to: '/parametres/securite', icon: '�', label: 'Sécurité' },
   ]
 
   return (

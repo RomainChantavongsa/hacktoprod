@@ -70,7 +70,7 @@ function Navbar() {
                   </li>
                   <li>
                     <NavLink 
-                      to="/parametres/notifications" 
+                      to="/parametres" 
                       className={location.pathname.startsWith('/parametres') ? 'navbar-link active' : 'navbar-link'}
                     >
                       Paramètres
@@ -98,7 +98,7 @@ function Navbar() {
                   </li>
                   <li>
                     <NavLink 
-                      to="/parametres/notifications" 
+                      to="/parametres" 
                       className={location.pathname.startsWith('/parametres') ? 'navbar-link active' : 'navbar-link'}
                     >
                       Paramètres
