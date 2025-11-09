@@ -16,9 +16,9 @@ CREATE TABLE IF NOT EXISTS transporteur (
 ---
 
 -- ******************************************************
--- 2. Table : donneurs_ordre
+-- 2. Table : donneur_ordre
 -- ******************************************************
-CREATE TABLE IF NOT EXISTS donneurs_ordre (
+CREATE TABLE IF NOT EXISTS donneur_ordre (
     id SERIAL PRIMARY KEY, -- Utilisation de SERIAL
     nom_entreprise VARCHAR(255) NOT NULL,
     type_acteur VARCHAR(255) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS donneurs_ordre (
 -- ******************************************************
 -- 3. Table : utilisateurs (renommée depuis acteurs_plateforme)
 -- ******************************************************
-CREATE TABLE IF NOT EXISTS utilisateurs (
+CREATE TABLE IF NOT EXISTS utilisateur (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL, -- Mot de passe hashé
@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS utilisateurs (
     transporteur_id INT,
     FOREIGN KEY (transporteur_id) REFERENCES transporteur(id) ON DELETE SET NULL,
 
-    -- Clé étrangère vers la table donneurs_ordre (optionnelle)
+    -- Clé étrangère vers la table donneur_ordre (optionnelle)
     donneur_ordre_id INT,
-    FOREIGN KEY (donneur_ordre_id) REFERENCES donneurs_ordre(id) ON DELETE SET NULL,
+    FOREIGN KEY (donneur_ordre_id) REFERENCES donneur_ordre(id) ON DELETE SET NULL,
 
     -- Dates de gestion
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
