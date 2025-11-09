@@ -16,7 +16,9 @@ import type {
   Vehicule,
   CreateVehiculeRequest,
   Remorque,
-  CreateRemorqueRequest
+  CreateRemorqueRequest,
+  Conducteur,
+  CreateConducteurRequest
 } from '@models/api';
 
 import { isApiSuccess } from '@models/api';
@@ -174,6 +176,32 @@ class ApiService {
    */
   async deleteUser(id: number): Promise<ApiResponse<{ message: string }>> {
     return this.request<{ message: string }>(`/users/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  /**
+   * Récupérer les conducteurs d'une entreprise
+   */
+  async getConducteurs(): Promise<ApiResponse<Conducteur[]>> {
+    return this.request<Conducteur[]>('/conducteurs');
+  }
+
+  /**
+   * Créer un conducteur
+   */
+  async createConducteur(data: CreateConducteurRequest): Promise<ApiResponse<Conducteur>> {
+    return this.request<Conducteur>('/conducteurs', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Supprimer un conducteur
+   */
+  async deleteConducteur(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/conducteurs/${id}`, {
       method: 'DELETE',
     });
   }

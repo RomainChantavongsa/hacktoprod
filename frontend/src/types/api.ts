@@ -266,6 +266,36 @@ export interface CreateRemorqueRequest {
   capacite_tonnes?: number;
 }
 
+// ============================================
+// CONDUCTEURS
+// ============================================
+
+export interface Conducteur {
+  id: number;
+  entreprise_id: number;
+  nom: string;
+  prenom: string;
+  email?: string;
+  telephone?: string;
+  numero_permis: string;
+  date_naissance?: string;
+  date_embauche?: string;
+  statut: 'actif' | 'inactif' | 'conge' | 'suspendu';
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreateConducteurRequest {
+  nom: string;
+  prenom: string;
+  email?: string;
+  telephone?: string;
+  numero_permis: string;
+  date_naissance?: string;
+  date_embauche?: string;
+  statut?: 'actif' | 'inactif' | 'conge' | 'suspendu';
+}
+
 export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 
 // ============================================

@@ -25,6 +25,7 @@ const offresFretRouter = require('./routes/offres-fret');
 const entreprisesRouter = require('./routes/entreprises');
 const vehiculesRouter = require('./routes/vehicules');
 const remorquesRouter = require('./routes/remorques');
+const conducteursRouter = require('./routes/conducteurs');
 
 // Routes
 app.get('/', (req, res) => {
@@ -37,7 +38,8 @@ app.get('/', (req, res) => {
       donneurs_ordre: '/api/donneurs-ordre',
       offres_fret: '/api/offres-fret',
       vehicules: '/api/vehicules',
-      remorques: '/api/remorques'
+      remorques: '/api/remorques',
+      conducteurs: '/api/conducteurs'
     }
   });
 });
@@ -50,6 +52,7 @@ app.use('/api/donneurs-ordre', donneursOrdreRouter);
 app.use('/api/offres-fret', offresFretRouter);
 app.use('/api/vehicules', vehiculesRouter);
 app.use('/api/remorques', remorquesRouter);
+app.use('/api/conducteurs', conducteursRouter);
 
 // Middleware de gestion des erreurs (DOIT être après les routes)
 app.use(errorHandler);

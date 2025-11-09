@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import apiService from '@services/apiService'
-import type { Vehicule } from '@models/api'
+import type { Vehicule, Conducteur } from '@models/api'
 
 export const useVehicules = () => {
   const [vehicules, setVehicules] = useState<Vehicule[]>([])
+  const [conducteurs, setConducteurs] = useState<Conducteur[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -18,9 +19,17 @@ export const useVehicules = () => {
   const load = async () => {
     setLoading(true)
     setError('')
-    const res = await apiService.getVehicules()
-    if (res.success) setVehicules(res.data)
-    else setError(res.message)
+    const [vehiculesRes, conducteursRes] = await Promise.all([
+      apiService.getVehicules(),
+      apiService.getConducteurs()
+    ])
+    
+    if (vehiculesRes.success) setVehicules(vehiculesRes.data)
+    else setError(vehiculesRes.message)
+
+    if (conducteursRes.success) setConducteurs(conducteursRes.data)
+    else setError(error + (error ? '; ' : '') + conducteursRes.message)
+
     setLoading(false)
   }
 
@@ -57,5 +66,5 @@ export const useVehicules = () => {
 
   const resetForm = () => setForm({ type_vehicule: '', plaque_immatriculation: '', conducteur_attitre: '', capacite_tonnes: '' })
 
-  return { vehicules, loading, error, form, handleChange, create, remove, reload: load, submitting, resetForm }
+  return { vehicules, conducteurs, loading, error, form, handleChange, create, remove, reload: load, submitting, resetForm }
 }

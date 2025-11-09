@@ -3,7 +3,7 @@ import DataTable from '@components/DataTable.jsx'
 import './vehicules.scss'
 
 export default function VehiculesPage() {
-  const { vehicules, loading, error, form, handleChange, create, remove, submitting, resetForm } = useVehicules()
+  const { vehicules, conducteurs, loading, error, form, handleChange, create, remove, submitting, resetForm } = useVehicules()
 
   return (
     <div className="vehicules-page">
@@ -23,7 +23,14 @@ export default function VehiculesPage() {
               <input name="plaque_immatriculation" value={form.plaque_immatriculation} onChange={handleChange} placeholder="Plaque" required />
             </div>
             <div className="field">
-              <input name="conducteur_attitre" value={form.conducteur_attitre} onChange={handleChange} placeholder="Conducteur" />
+              <select name="conducteur_attitre" value={form.conducteur_attitre} onChange={handleChange}>
+                <option value="">Aucun conducteur</option>
+                {conducteurs.map(c => (
+                  <option key={c.id} value={`${c.prenom} ${c.nom}`}>
+                    {c.prenom} {c.nom}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="field">
               <input type="number" step="0.1" name="capacite_tonnes" value={form.capacite_tonnes} onChange={handleChange} placeholder="Capacité (t)" />

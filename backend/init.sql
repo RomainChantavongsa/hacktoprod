@@ -136,6 +136,29 @@ CREATE TABLE IF NOT EXISTS remorque (
 
 CREATE INDEX IF NOT EXISTS idx_remorque_entreprise ON remorque (entreprise_id);
 
+---
+
+-- ******************************************************
+-- 2d. Table : conducteur (conducteurs de l'entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS conducteur (
+    id SERIAL PRIMARY KEY,
+    entreprise_id INT NOT NULL,
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    telephone VARCHAR(20),
+    numero_permis VARCHAR(50) NOT NULL,
+    date_naissance DATE,
+    date_embauche DATE,
+    statut VARCHAR(50) DEFAULT 'actif', -- 'actif', 'inactif', 'conge', 'suspendu'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_conducteur_entreprise ON conducteur (entreprise_id);
+
 -- ******************************************************
 -- 3. Table : offre_fret (Les transactions)
 -- ******************************************************

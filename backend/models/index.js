@@ -12,6 +12,9 @@ const Transporteur = require('./Transporteur');
 const DonneurOrdre = require('./DonneurOrdre');
 const Utilisateur = require('./Utilisateur');
 const OffreFret = require('./OffreFret');
+const Vehicule = require('./Vehicule');
+const Remorque = require('./Remorque');
+const Conducteur = require('./Conducteur');
 
 module.exports = {
   BaseModel,
@@ -19,5 +22,8 @@ module.exports = {
   Transporteur,
   DonneurOrdre,
   Utilisateur,
-  OffreFret
+  OffreFret,
+  Vehicule,
+  Remorque,
+  Conducteur
 };

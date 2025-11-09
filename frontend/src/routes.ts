@@ -24,6 +24,7 @@ export const routeConfig = [
   { path: '/entreprise/vehicules', folder: 'transporteur/vehicules' },
   { path: '/entreprise/remorques', folder: 'transporteur/remorques' },
   { path: '/entreprise/conducteurs', folder: 'transporteur/conducteurs' },
+  { path: '/transporteur/conducteurs', folder: 'transporteur/conducteurs' },
 ]
 
 // Fonction pour charger dynamiquement un composant de page
