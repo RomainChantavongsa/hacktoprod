@@ -109,12 +109,8 @@
 }
 
 // Responsive
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .sidebar3 {
-    transform: translateX(-240px);
-    
-    &.open {
-      transform: translateX(0);
-    }
+    display: none; // Cacher la sidebar sur mobile, utiliser le menu burger à la place
   }
 }

@@ -76,3 +76,47 @@
   background: rgba(255, 255, 255, 0.3);
   opacity: 1;
 }
+
+// Burger Menu Button
+.navbar-burger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-right: 1rem;
+
+  span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  &:hover span {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+// Responsive - Mobile
+@media (max-width: 1000px) {
+  .navbar-burger {
+    display: flex;
+  }
+
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-container {
+    padding: 0 1rem;
+  }
+
+  .navbar-logo {
+    font-size: 1.25rem;
+  }
+}

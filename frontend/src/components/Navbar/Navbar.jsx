@@ -1,24 +1,41 @@
+import { useState } from 'react'
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
+import MobileMenu from '../MobileMenu/MobileMenu.jsx'
 import './Navbar.scss'
 
 function Navbar() {
   const { user, logout, isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   const handleLogout = () => {
     logout()
     navigate('/login')
   }
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
-          HackToGone
-        </Link>
-        <ul className="navbar-links">
+    <>
+      <nav className="navbar">
+        <div className="navbar-container">
+          {/* Burger Menu Button (Mobile Only) */}
+          {isAuthenticated() && (
+            <button className="navbar-burger" onClick={toggleMobileMenu}>
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          )}
+
+          <Link to="/" className="navbar-logo">
+            HackToGone
+          </Link>
+          <ul className="navbar-links">
           {!isAuthenticated() && (
             <li>
               <NavLink to="/" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
@@ -81,6 +98,12 @@ function Navbar() {
         </ul>
       </div>
     </nav>
+
+    {/* Mobile Menu */}
+    {isAuthenticated() && (
+      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+    )}
+    </>
   )
 }
 
