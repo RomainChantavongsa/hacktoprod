@@ -45,8 +45,16 @@ export const AuthProvider = ({ children }) => {
     return !!user && !!localStorage.getItem('token');
   };
 
+  // Fonction pour obtenir le type d'utilisateur (transporteur ou donneurOrdre)
+  const getUserType = () => {
+    if (!user) return null;
+    // Le type peut venir du user.role, user.type, ou user.userType selon ton backend
+    // Pour l'instant, on utilise 'transporteur' par défaut
+    return user.role || user.type || user.userType || 'transporteur';
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, updateUser, isAuthenticated, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, updateUser, isAuthenticated, getUserType, loading }}>
       {children}
     </AuthContext.Provider>
   );

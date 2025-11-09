@@ -1,4 +1,4 @@
-.sidebar {
+.sidebar3 {
   position: fixed;
   left: 0;
   top: 60px; // Hauteur de la navbar
@@ -17,10 +17,20 @@
 }
 
 .sidebar-header {
-  padding: 1rem;
+  padding: 1rem 1.25rem;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #e5e7eb;
+}
+
+.sidebar-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
 }
 
 .sidebar-toggle {
@@ -99,12 +109,8 @@
 }
 
 // Responsive
-@media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-240px);
-    
-    &.open {
-      transform: translateX(0);
-    }
+@media (max-width: 1000px) {
+  .sidebar3 {
+    display: none; // Cacher la sidebar sur mobile, utiliser le menu burger à la place
   }
 }
