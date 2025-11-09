@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './DevDebugPanel.css';
+import './DevDebugPanel.scss';
 
 /**
  * DevDebugPanel - Équivalent de Tracy pour React

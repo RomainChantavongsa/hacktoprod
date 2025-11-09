@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useRegister } from './register.ts'
-import './register.css'
+import './register.scss'
 
 function Register() {
   const {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOffresFret } from './offres';
-import './offres.css';
+import './offres.scss';
 
 /**
  * Page d'affichage des offres de fret

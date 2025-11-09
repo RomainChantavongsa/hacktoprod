@@ -83,6 +83,20 @@ services:
       timeout: 5s
       retries: 5
 
+  # ----------------------------------------
+  # Service Adminer (Interface web pour la BDD)
+  # ----------------------------------------
+  adminer:
+    image: adminer
+    container_name: my_adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080" # Interface accessible sur http://localhost:8080
+    networks:
+      - app-network
+    depends_on:
+      - db
+
 # ----------------------------------------
 # Réseaux et Volumes
 # ----------------------------------------

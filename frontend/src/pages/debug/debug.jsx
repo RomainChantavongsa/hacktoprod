@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './debug.css';
+import './debug.scss';
 
 export default function DebugDemo() {
   const [count, setCount] = useState(0);

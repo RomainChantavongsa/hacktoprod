@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useLogin } from './login.ts'
-import './login.css'
+import './login.scss'
 
 function Login() {
   const { username, setUsername, password, setPassword, errors, loading, successMessage, handleSubmit } = useLogin()
