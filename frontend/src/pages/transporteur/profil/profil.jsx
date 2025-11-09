@@ -187,7 +187,7 @@ function Profil() {
               type="number"
               id="capacite_max_tonnes"
               name="capacite_max_tonnes"
-              value={formData.capacite_max_tonnes || ''}
+              value={formData.capacite_max_tonnes ?? ''}
               onChange={handleChange}
               min="0"
               step="0.1"
@@ -201,7 +201,7 @@ function Profil() {
               type="number"
               id="nombre_vehicules"
               name="nombre_vehicules"
-              value={formData.nombre_vehicules || ''}
+              value={formData.nombre_vehicules ?? ''}
               onChange={handleChange}
               min="0"
               placeholder="Ex: 5"
@@ -214,7 +214,7 @@ function Profil() {
               type="number"
               id="rayon_action_km"
               name="rayon_action_km"
-              value={formData.rayon_action_km || ''}
+              value={formData.rayon_action_km ?? ''}
               onChange={handleChange}
               min="0"
               placeholder="Ex: 500"

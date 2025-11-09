@@ -128,24 +128,18 @@ export const useProfil = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
 
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked
-      setFormData(prev => ({
-        ...prev,
-        [name]: checked
-      }))
-    } else if (type === 'number') {
-      const numValue = value === '' ? undefined : parseFloat(value)
-      setFormData(prev => ({
-        ...prev,
-        [name]: numValue
-      }))
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }))
-    }
+    setFormData(prev => {
+      const updated = { ...prev }
+      if (type === 'checkbox') {
+        ;(updated as any)[name] = (e.target as HTMLInputElement).checked
+      } else if (type === 'number') {
+        // Préserver 0, convertir chaîne vide en undefined
+        ;(updated as any)[name] = value === '' ? undefined : (value.includes('.') ? parseFloat(value) : parseInt(value, 10))
+      } else {
+        ;(updated as any)[name] = value
+      }
+      return updated
+    })
     setError('')
     setSuccess('')
   }
