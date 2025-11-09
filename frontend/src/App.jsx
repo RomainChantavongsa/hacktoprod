@@ -4,7 +4,7 @@ import Navbar from './components/Navbar/Navbar.jsx'
 import Footer from './components/Footer/Footer.jsx'
 import DevDebugPanel from '@components/DevDebugPanel.jsx'
 import { routes } from './routes.ts'
-import './App.css'
+import './App.scss'
 
 function App() {
   return (

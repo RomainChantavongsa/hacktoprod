@@ -1,5 +1,5 @@
 import { useSettings } from './settings.ts'
-import './settings.css'
+import './settings.scss'
 
 function Settings() {
   const {

@@ -1,5 +1,5 @@
 import { homeLogic } from './home.ts'
-import './home.css'
+import './home.scss'
 
 function Home() {
   return (
