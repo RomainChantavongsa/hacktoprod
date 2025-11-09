@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 // Couleurs principales du site GDS - Blanc dominant
 $primary-color: #3D9BA6;      // Turquoise/Teal pour accents
 $secondary-color: #003D52;    // Bleu marine foncé pour textes importants
@@ -26,8 +28,8 @@ $text-light: $gray-500;
 $text-white: $light-color;
 
 // Hover states
-$primary-hover: darken($primary-color, 10%);
-$secondary-hover: darken($secondary-color, 10%);
+$primary-hover: color.adjust($primary-color, $lightness: -10%);
+$secondary-hover: color.adjust($secondary-color, $lightness: -10%);
 
 // États
 $success-color: #28A745;
