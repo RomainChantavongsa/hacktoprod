@@ -228,6 +228,44 @@ export interface ApiErrorResponse {
   errors?: string[];
 }
 
+// ============================================
+// FLOTTE : VEHICULES & REMORQUES
+// ============================================
+
+export interface Vehicule {
+  id: number;
+  entreprise_id: number;
+  type_vehicule: string;
+  plaque_immatriculation: string;
+  conducteur_attitre?: string | null;
+  capacite_tonnes?: number | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreateVehiculeRequest {
+  type_vehicule: string;
+  plaque_immatriculation: string;
+  conducteur_attitre?: string;
+  capacite_tonnes?: number;
+}
+
+export interface Remorque {
+  id: number;
+  entreprise_id: number;
+  type_remorque: string;
+  plaque_immatriculation: string;
+  capacite_tonnes?: number | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreateRemorqueRequest {
+  type_remorque: string;
+  plaque_immatriculation: string;
+  capacite_tonnes?: number;
+}
+
 export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 
 // ============================================
