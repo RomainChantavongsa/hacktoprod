@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../contexts/AuthContext.jsx'
+import { useAuth } from '../../../contexts/AuthContext.jsx'
 import './MobileMenu.scss'
 
 function MobileMenu({ isOpen, onClose }) {
@@ -22,23 +22,20 @@ function MobileMenu({ isOpen, onClose }) {
     onClose()
   }
 
-  const transportLinks = [
-    { to: '/transports/commandes', icon: '📋', label: 'Commandes' },
-    { to: '/transports/encheres', icon: '👁️', label: 'Vos enchères' },
-    { to: '/transports/recu', icon: '🚚', label: 'Reçu' },
-    { to: '/transports/effectue', icon: '✓', label: 'Effectué' },
-    { to: '/transports/non-recu', icon: '⏱️', label: 'Non reçu' },
+  const offresLinks = [
+    { to: '/offres/publier', icon: '➕', label: 'Publier une offre' },
+    { to: '/offres/actives', icon: '📋', label: 'Offres actives' },
+    { to: '/offres/propositions', icon: '👁️', label: 'Propositions reçues' },
+    { to: '/offres/en-cours', icon: '🚚', label: 'En cours' },
+    { to: '/offres/terminees', icon: '✓', label: 'Terminées' },
   ]
 
   const entrepriseLinks = [
-    { to: '/entreprise/verification', icon: '📱', label: 'Guide de vérification' },
     { to: '/entreprise/profil', icon: '👤', label: 'Profil' },
     { to: '/entreprise/documents', icon: '📄', label: 'Documents' },
     { to: '/entreprise/compte-bancaire', icon: '💳', label: 'Compte bancaire' },
-    { to: '/entreprise/vehicules', icon: '🚛', label: 'Véhicules' },
-    { to: '/entreprise/remorques', icon: '🚐', label: 'Remorques' },
-    { to: '/entreprise/telephones', icon: '📞', label: 'Téléphones' },
-    { to: '/entreprise/conducteurs', icon: '👨‍✈️', label: 'Conducteurs' },
+    { to: '/entreprise/entrepots', icon: '🏭', label: 'Entrepôts' },
+    { to: '/entreprise/contacts', icon: '📞', label: 'Contacts' },
   ]
 
   const parametresLinks = [
@@ -68,17 +65,17 @@ function MobileMenu({ isOpen, onClose }) {
         </div>
 
         <nav className="mobile-menu-nav">
-          {/* Section Trouver des transports */}
+          {/* Section Mes offres */}
           <div className="menu-section">
             <button 
-              className={`menu-section-header ${expandedSection === 'transports' ? 'expanded' : ''}`}
-              onClick={() => toggleSection('transports')}
+              className={`menu-section-header ${expandedSection === 'offres' ? 'expanded' : ''}`}
+              onClick={() => toggleSection('offres')}
             >
-              <span>Trouver des transports</span>
-              <span className="menu-arrow">{expandedSection === 'transports' ? '▲' : '▼'}</span>
+              <span>Mes offres de transport</span>
+              <span className="menu-arrow">{expandedSection === 'offres' ? '▲' : '▼'}</span>
             </button>
-            <div className={`menu-section-content ${expandedSection === 'transports' ? 'expanded' : ''}`}>
-              {transportLinks.map((link) => (
+            <div className={`menu-section-content ${expandedSection === 'offres' ? 'expanded' : ''}`}>
+              {offresLinks.map((link) => (
                 <NavLink
                   key={link.to}
                   to={link.to}

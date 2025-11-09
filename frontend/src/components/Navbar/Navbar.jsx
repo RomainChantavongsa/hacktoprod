@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
-import MobileMenu from '../MobileMenu/MobileMenu.jsx'
+import TransporteurMobileMenu from '../MobileMenu/transporteur/MobileMenu.jsx'
+import DonneurOrdreMobileMenu from '../MobileMenu/donneurOrdre/MobileMenu.jsx'
 import './Navbar.scss'
 
 function Navbar() {
-  const { user, logout, isAuthenticated } = useAuth()
+  const { user, logout, isAuthenticated, getUserType } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const userType = getUserType()
 
   const handleLogout = () => {
     logout()
@@ -47,30 +49,63 @@ function Navbar() {
           {isAuthenticated() ? (
             <>
               {/* Sections principales - Navigation par sidebar */}
-              <li>
-                <NavLink 
-                  to="/transports/commandes" 
-                  className={location.pathname.startsWith('/transports') ? 'navbar-link active' : 'navbar-link'}
-                >
-                  Trouver des transports
-                </NavLink>
-              </li>
-              <li>
-                <NavLink 
-                  to="/entreprise/verification" 
-                  className={location.pathname.startsWith('/entreprise') ? 'navbar-link active' : 'navbar-link'}
-                >
-                  Mon Entreprise
-                </NavLink>
-              </li>
-              <li>
-                <NavLink 
-                  to="/parametres/notifications" 
-                  className={location.pathname.startsWith('/parametres') ? 'navbar-link active' : 'navbar-link'}
-                >
-                  Paramètres
-                </NavLink>
-              </li>
+              {userType === 'donneurOrdre' || userType === 'donneur_ordre' ? (
+                <>
+                  {/* Menu Donneur d'Ordre */}
+                  <li>
+                    <NavLink 
+                      to="/offres/publier" 
+                      className={location.pathname.startsWith('/offres') ? 'navbar-link active' : 'navbar-link'}
+                    >
+                      Mes offres de transport
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink 
+                      to="/entreprise/profil" 
+                      className={location.pathname.startsWith('/entreprise') ? 'navbar-link active' : 'navbar-link'}
+                    >
+                      Mon Entreprise
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink 
+                      to="/parametres/notifications" 
+                      className={location.pathname.startsWith('/parametres') ? 'navbar-link active' : 'navbar-link'}
+                    >
+                      Paramètres
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                <>
+                  {/* Menu Transporteur */}
+                  <li>
+                    <NavLink 
+                      to="/transports/commandes" 
+                      className={location.pathname.startsWith('/transports') ? 'navbar-link active' : 'navbar-link'}
+                    >
+                      Trouver des transports
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink 
+                      to="/entreprise/verification" 
+                      className={location.pathname.startsWith('/entreprise') ? 'navbar-link active' : 'navbar-link'}
+                    >
+                      Mon Entreprise
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink 
+                      to="/parametres/notifications" 
+                      className={location.pathname.startsWith('/parametres') ? 'navbar-link active' : 'navbar-link'}
+                    >
+                      Paramètres
+                    </NavLink>
+                  </li>
+                </>
+              )}
               
               <li className="navbar-user">
                 <span className="navbar-username">👤 {user?.username}</span>
@@ -101,7 +136,13 @@ function Navbar() {
 
     {/* Mobile Menu */}
     {isAuthenticated() && (
-      <MobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+      <>
+        {userType === 'donneurOrdre' || userType === 'donneur_ordre' ? (
+          <DonneurOrdreMobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+        ) : (
+          <TransporteurMobileMenu isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
+        )}
+      </>
     )}
     </>
   )
