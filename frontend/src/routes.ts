@@ -17,8 +17,11 @@ export const routeConfig = [
   { path: '/parametres/compte', folder: 'parametres/compte' },
   { path: '/parametres/notifications', folder: 'parametres/notifications' },
   { path: '/parametres/securite', folder: 'parametres/securite' },
-  // Route pour le profil transporteur
+  // Routes pour le transporteur
   { path: '/entreprise/profil', folder: 'transporteur/profil' },
+  { path: '/entreprise/vehicules', folder: 'transporteur/vehicules' },
+  { path: '/entreprise/remorques', folder: 'transporteur/remorques' },
+  { path: '/entreprise/conducteurs', folder: 'transporteur/conducteurs' },
 ]
 
 // Fonction pour charger dynamiquement un composant de page
