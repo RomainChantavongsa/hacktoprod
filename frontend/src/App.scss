@@ -3,10 +3,24 @@
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding-top: 60px; /* Hauteur de la navbar fixe */
 }
 
 .app-content {
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
+  transition: margin-left 0.3s ease;
+  min-height: calc(100vh - 60px);
+}
+
+/* Quand une sidebar est active, décaler le contenu */
+body:has(.sidebar) .app-content {
+  margin-left: 240px;
+}
+
+@media (max-width: 768px) {
+  body:has(.sidebar) .app-content {
+    margin-left: 0;
+  }
 }
