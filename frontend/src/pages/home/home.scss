@@ -1,59 +1,77 @@
+@import '../../styles/variables';
+
 .home {
-  padding: 2rem;
+  padding: $spacing-xl;
   max-width: 1200px;
   margin: 0 auto;
+  background: $background-light;
 }
 
 .home-hero {
   text-align: center;
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
-  color: white;
-  margin-bottom: 3rem;
+  background: $background-light;
+  border-radius: $border-radius-xl;
+  color: $secondary-color;
+  margin-bottom: $spacing-2xl;
+  box-shadow: $shadow-md;
+  border: 2px solid $background-secondary;
 }
 
 .home-hero h1 {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: $spacing-md;
+  color: $secondary-color;
+  font-weight: 700;
 }
 
 .home-hero p {
   font-size: 1.2rem;
-  opacity: 0.9;
+  color: $gray-700;
+  line-height: 1.6;
 }
 
 .home-features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+  gap: $spacing-xl;
+  margin-top: $spacing-2xl;
 }
 
 .home-feature-card {
-  padding: 2rem;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: $spacing-xl;
+  background: $background-light;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
   text-align: center;
-  transition: transform 0.3s;
-}
+  transition: all $transition-normal;
+  border: 2px solid $background-secondary;
+  border-top: 4px solid $primary-color;
 
-.home-feature-card:hover {
-  transform: translateY(-5px);
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+    border-top-color: $secondary-color;
+  }
 }
 
 .home-feature-icon {
   font-size: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: $spacing-md;
+  display: inline-block;
+  padding: $spacing-md;
+  background: linear-gradient(135deg, rgba($primary-color, 0.1) 0%, rgba($secondary-color, 0.1) 100%);
+  border-radius: $border-radius-lg;
 }
 
 .home-feature-card h3 {
   font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #667eea;
+  margin-bottom: $spacing-sm;
+  color: $secondary-color;
+  font-weight: 700;
 }
 
 .home-feature-card p {
-  color: #666;
+  color: $gray-700;
+  line-height: 1.6;
 }

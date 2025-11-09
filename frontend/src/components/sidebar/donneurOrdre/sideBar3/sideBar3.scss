@@ -4,8 +4,8 @@
   top: 60px; // Hauteur de la navbar
   bottom: 0;
   width: 240px;
-  background-color: #ffffff;
-  border-right: 1px solid #e5e7eb;
+  background-color: #003D52;
+  border-right: 1px solid #adb5bd;
   display: flex;
   flex-direction: column;
   z-index: 100;
@@ -27,7 +27,7 @@
 .sidebar-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin: 0;
@@ -38,14 +38,14 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6b7280;
+  color: #ffffff;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
   transition: all 0.2s;
 
   &:hover {
-    background-color: #f3f4f6;
-    color: #111827;
+    background-color: #52B5C2;
+    color: #ffffff;
   }
 }
 
@@ -70,7 +70,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.875rem 1.25rem;
-  color: #374151;
+  color: #ffffff;
   text-decoration: none;
   transition: all 0.2s;
   font-size: 0.9375rem;
@@ -78,14 +78,14 @@
   border-left: 3px solid transparent;
 
   &:hover {
-    background-color: #fef2f2;
-    color: #dc2626;
+    background-color: #52B5C2;
+    color: #ffffff;
   }
 
   &.active {
-    background-color: #fee2e2;
-    color: #dc2626;
-    border-left-color: #dc2626;
+    background-color: #3D9BA6;
+    color: #ffffff;
+    border-left-color: #ffffff;
     font-weight: 500;
 
     .sidebar-icon {
@@ -100,7 +100,7 @@
   align-items: center;
   justify-content: center;
   width: 24px;
-  filter: grayscale(0.3);
+  filter: grayscale(0);
   transition: filter 0.2s;
 }
 

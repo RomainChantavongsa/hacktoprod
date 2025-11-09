@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, path.resolve(__dirname, '..'), '')
   
   return {
+  publicDir: 'statiques',
   plugins: [
     react({
       // Fast Refresh avec meilleure gestion d'erreurs

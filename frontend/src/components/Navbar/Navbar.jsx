@@ -35,7 +35,8 @@ function Navbar() {
           )}
 
           <Link to="/" className="navbar-logo">
-            HackToGone
+            <img src="/images/GDSLogo.svg" alt="GDS Logo" className="navbar-logo-image" />
+            <span className="navbar-logo-text">GDS Transport</span>
           </Link>
           <ul className="navbar-links">
           {!isAuthenticated() && (

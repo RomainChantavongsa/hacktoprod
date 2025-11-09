@@ -1,55 +1,59 @@
+@import '../../../styles/variables';
+
 .compte-page {
   max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: $spacing-xl;
+  background: $background-light;
 
   .page-header {
-    margin-bottom: 2rem;
+    margin-bottom: $spacing-xl;
     
     h1 {
       font-size: 2rem;
-      color: #333;
-      margin-bottom: 0.5rem;
+      color: $secondary-color;
+      margin-bottom: $spacing-sm;
     }
 
     .subtitle {
-      color: #666;
+      color: $gray-600;
       font-size: 1rem;
     }
   }
 
   .alert {
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 1.5rem;
+    padding: $spacing-md;
+    border-radius: $border-radius-md;
+    margin-bottom: $spacing-lg;
 
     &.alert-error {
-      background-color: #fee;
-      color: #c33;
-      border: 1px solid #fcc;
+      background-color: lighten($error-color, 40%);
+      color: $error-color;
+      border: 1px solid lighten($error-color, 30%);
     }
 
     &.alert-success {
-      background-color: #efe;
-      color: #3c3;
-      border: 1px solid #cfc;
+      background-color: lighten($success-color, 50%);
+      color: darken($success-color, 10%);
+      border: 1px solid lighten($success-color, 40%);
     }
   }
 
   .compte-form {
     .form-section {
-      background: white;
-      border-radius: 10px;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: $background-light;
+      border-radius: $border-radius-lg;
+      padding: $spacing-xl;
+      margin-bottom: $spacing-lg;
+      box-shadow: $shadow-sm;
+      border: 1px solid $background-secondary;
 
       h2 {
         font-size: 1.3rem;
-        color: #444;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid #f0f0f0;
+        color: $secondary-color;
+        margin-bottom: $spacing-lg;
+        padding-bottom: $spacing-sm;
+        border-bottom: 2px solid rgba($primary-color, 0.2);
       }
 
       .form-group {
@@ -70,19 +74,19 @@
         input {
           width: 100%;
           padding: 0.75rem;
-          border: 1px solid #ddd;
-          border-radius: 6px;
+          border: 2px solid $gray-300;
+          border-radius: $border-radius-md;
           font-size: 1rem;
-          transition: border-color 0.3s;
+          transition: all $transition-fast;
 
           &:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: $primary-color;
+            box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
           }
 
           &::placeholder {
-            color: #999;
+            color: $gray-400;
           }
         }
       }
@@ -108,10 +112,10 @@
 
         .role-badge {
           display: inline-block;
-          padding: 0.5rem 1rem;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          padding: $spacing-sm $spacing-md;
+          background: linear-gradient(135deg, $secondary-color 0%, darken($secondary-color, 10%) 100%);
           color: white;
-          border-radius: 6px;
+          border-radius: $border-radius-md;
           font-weight: 600;
           font-size: 1rem;
         }
@@ -133,17 +137,17 @@
         transition: all 0.3s;
 
         &.btn-primary {
-          background: #667eea;
+          background: $primary-color;
           color: white;
 
           &:hover:not(:disabled) {
-            background: #5568d3;
+            background: darken($primary-color, 10%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            box-shadow: $shadow-lg;
           }
 
           &:disabled {
-            background: #ccc;
+            background: $gray-400;
             cursor: not-allowed;
           }
         }

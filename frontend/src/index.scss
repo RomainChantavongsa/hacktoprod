@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import './styles/variables';
 
 * {
   margin: 0;
@@ -13,8 +14,57 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: $background-light;
+  color: $dark-color;
 }
 
 #root {
   min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $secondary-color;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: darken($primary-color, 10%);
+  }
+}
+
+button {
+  border-radius: $border-radius-md;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: $primary-color;
+  color: $light-color;
+  cursor: pointer;
+  transition: all $transition-normal;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: 4px auto rgba($primary-color, 0.5);
+  }
+
+  &:disabled {
+    background-color: $gray-400;
+    cursor: not-allowed;
+    
+    &:hover {
+      transform: none;
+    }
+  }
 }
