@@ -70,7 +70,63 @@ CREATE TABLE IF NOT EXISTS entreprise (
 ---
 
 -- ******************************************************
--- 2. Table : utilisateur
+-- 2. Table : document (Documents des entreprises)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS document (
+    id SERIAL PRIMARY KEY,
+    
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+    
+    -- Informations du fichier
+    nom_fichier_original VARCHAR(255) NOT NULL, -- Nom du fichier tel qu'uploadé par l'utilisateur
+    nom_fichier_stockage VARCHAR(255) NOT NULL UNIQUE, -- Nom unique généré pour le stockage (évite les conflits)
+    chemin_stockage VARCHAR(500) NOT NULL, -- Chemin complet où le fichier est stocké
+    
+    -- Métadonnées du document
+    type_document VARCHAR(100) NOT NULL, -- 'Licence de transport', 'Assurance', 'Kbis', 'Carte grise', 'Permis', 'Facture', 'CMR', 'Autre'
+    categorie VARCHAR(100), -- 'Legal', 'Assurance', 'Vehicule', 'Conducteur', 'Commercial', 'Autre'
+    description TEXT, -- Description optionnelle du document
+    
+    -- Informations techniques du fichier
+    extension VARCHAR(10) NOT NULL, -- '.pdf', '.jpg', '.png', '.docx', etc.
+    taille_octets BIGINT NOT NULL, -- Taille du fichier en octets
+    mime_type VARCHAR(100), -- 'application/pdf', 'image/jpeg', etc.
+    
+    -- Gestion des versions
+    version INT DEFAULT 1, -- Numéro de version du document
+    document_parent_id INT, -- Référence au document original si c'est une nouvelle version
+    FOREIGN KEY (document_parent_id) REFERENCES document(id) ON DELETE SET NULL,
+    
+    -- Métadonnées de validité
+    date_emission DATE, -- Date d'émission du document
+    date_expiration DATE, -- Date d'expiration (pour licences, assurances, etc.)
+    est_valide BOOLEAN DEFAULT TRUE, -- Si le document est encore valide
+    
+    -- Utilisateur ayant uploadé le document
+    uploade_par INT, -- ID de l'utilisateur qui a uploadé
+    FOREIGN KEY (uploade_par) REFERENCES utilisateur(id) ON DELETE SET NULL,
+    
+    -- Métadonnées de recherche
+    tags TEXT[], -- Array de tags pour faciliter la recherche
+    
+    -- Dates de gestion
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_document_entreprise ON document (entreprise_id);
+CREATE INDEX IF NOT EXISTS idx_document_type ON document (type_document);
+CREATE INDEX IF NOT EXISTS idx_document_categorie ON document (categorie);
+CREATE INDEX IF NOT EXISTS idx_document_expiration ON document (date_expiration);
+CREATE INDEX IF NOT EXISTS idx_document_parent ON document (document_parent_id);
+
+---
+
+-- ******************************************************
+-- 3. Table : utilisateur
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS utilisateur (
     id SERIAL PRIMARY KEY,

@@ -19,6 +19,16 @@ $gray-700: #495057;
 $gray-800: #343A40;
 $gray-900: #212529;
 
+// Couleurs de texte
+$text-primary: $dark-color;
+$text-secondary: $gray-600;
+$text-light: $gray-500;
+$text-white: $light-color;
+
+// Hover states
+$primary-hover: darken($primary-color, 10%);
+$secondary-hover: darken($secondary-color, 10%);
+
 // États
 $success-color: #28A745;
 $warning-color: #FFC107;

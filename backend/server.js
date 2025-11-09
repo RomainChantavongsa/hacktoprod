@@ -4,6 +4,7 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') }
 const express = require('express');
 const cors = require('cors');
 const { initDatabase } = require('./config/initDatabase');
+const { initDirectories } = require('./config/initDirectories');
 const { errorHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -26,6 +27,7 @@ const entreprisesRouter = require('./routes/entreprises');
 const vehiculesRouter = require('./routes/vehicules');
 const remorquesRouter = require('./routes/remorques');
 const conducteursRouter = require('./routes/conducteurs');
+const documentsRouter = require('./routes/documents');
 
 // Routes
 app.get('/', (req, res) => {
@@ -39,7 +41,8 @@ app.get('/', (req, res) => {
       offres_fret: '/api/offres-fret',
       vehicules: '/api/vehicules',
       remorques: '/api/remorques',
-      conducteurs: '/api/conducteurs'
+      conducteurs: '/api/conducteurs',
+      documents: '/api/documents'
     }
   });
 });
@@ -53,6 +56,7 @@ app.use('/api/offres-fret', offresFretRouter);
 app.use('/api/vehicules', vehiculesRouter);
 app.use('/api/remorques', remorquesRouter);
 app.use('/api/conducteurs', conducteursRouter);
+app.use('/api/documents', documentsRouter);
 
 // Middleware de gestion des erreurs (DOIT être après les routes)
 app.use(errorHandler);
@@ -60,6 +64,9 @@ app.use(errorHandler);
 // Fonction de démarrage asynchrone
 async function startServer() {
   try {
+    // Initialiser les dossiers nécessaires
+    await initDirectories();
+    
     // Initialiser la base de données
     await initDatabase();
     

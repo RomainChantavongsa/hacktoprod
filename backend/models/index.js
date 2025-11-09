@@ -15,6 +15,7 @@ const OffreFret = require('./OffreFret');
 const Vehicule = require('./Vehicule');
 const Remorque = require('./Remorque');
 const Conducteur = require('./Conducteur');
+const Document = require('./Document');
 
 module.exports = {
   BaseModel,
@@ -25,5 +26,6 @@ module.exports = {
   OffreFret,
   Vehicule,
   Remorque,
-  Conducteur
+  Conducteur,
+  Document
 };

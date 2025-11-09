@@ -495,6 +495,102 @@ class ApiService {
       method: 'DELETE',
     });
   }
+
+  // ============================================
+  // DOCUMENT ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer tous les documents de l'entreprise
+   */
+  async getDocuments(queryString: string = ''): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents${queryString}`);
+  }
+
+  /**
+   * Récupérer un document par ID
+   */
+  async getDocumentById(id: number): Promise<ApiResponse<any>> {
+    return this.request<any>(`/documents/${id}`);
+  }
+
+  /**
+   * Uploader un document
+   */
+  async uploadDocument(formData: FormData): Promise<ApiResponse<any>> {
+    const headers: HeadersInit = {};
+    
+    // Ajouter le token si disponible
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/documents`, {
+        method: 'POST',
+        headers,
+        body: formData, // FormData gère automatiquement le Content-Type
+      });
+
+      const data = await response.json();
+
+      if (!response.ok && data.success === undefined) {
+        return {
+          success: false,
+          message: data.message || `Erreur HTTP ${response.status}`,
+        };
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Upload Error:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Erreur lors de l\'upload',
+      };
+    }
+  }
+
+  /**
+   * Télécharger un document
+   */
+  async downloadDocument(id: number): Promise<Blob> {
+    const headers: HeadersInit = {};
+    
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch(`${API_URL}/documents/${id}/download`, {
+      method: 'GET',
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors du téléchargement');
+    }
+
+    return response.blob();
+  }
+
+  /**
+   * Mettre à jour un document
+   */
+  async updateDocument(id: number, documentData: any): Promise<ApiResponse<any>> {
+    return this.request<any>(`/documents/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(documentData),
+    });
+  }
+
+  /**
+   * Supprimer un document
+   */
+  async deleteDocument(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/documents/${id}`, {
+      method: 'DELETE',
+    });
+  }
 }
 
 // Export une instance unique (Singleton)
