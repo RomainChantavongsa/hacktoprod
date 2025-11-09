@@ -14,6 +14,7 @@ class Utilisateur extends BaseModel {
     if (data.email) this._decryptedEmail = cryptoUtils.decrypt(data.email);
     if (data.nom) this._decryptedNom = cryptoUtils.decrypt(data.nom);
     if (data.prenom) this._decryptedPrenom = cryptoUtils.decrypt(data.prenom);
+    if (data.telephone) this._decryptedTelephone = cryptoUtils.decrypt(data.telephone);
   }
 
   // Getters - retournent les valeurs déchiffrées
@@ -35,6 +36,10 @@ class Utilisateur extends BaseModel {
 
   getPrenom() {
     return this._decryptedPrenom || cryptoUtils.decrypt(this.prenom);
+  }
+
+  getTelephone() {
+    return this._decryptedTelephone || cryptoUtils.decrypt(this.telephone);
   }
 
   getRole() {
@@ -83,6 +88,12 @@ class Utilisateur extends BaseModel {
   setPrenom(value) {
     this._decryptedPrenom = value;
     this.prenom = cryptoUtils.encrypt(value);
+    return this;
+  }
+
+  setTelephone(value) {
+    this._decryptedTelephone = value;
+    this.telephone = cryptoUtils.encrypt(value);
     return this;
   }
 
@@ -206,6 +217,7 @@ class Utilisateur extends BaseModel {
       email: this.getEmail(),
       nom: this.getNom(),
       prenom: this.getPrenom(),
+      telephone: this.getTelephone(),
       role: this.role,
       is_admin: this.getIsAdmin(),
       transporteur_id: this.transporteur_id,

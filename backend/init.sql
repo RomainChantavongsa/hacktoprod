@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS utilisateur (
     email VARCHAR(255) UNIQUE NOT NULL,
     nom VARCHAR(255) NOT NULL,
     prenom VARCHAR(255),
+    telephone VARCHAR(255),
     role VARCHAR(50) NOT NULL, -- 'transporteur', 'donneur_ordre'
     is_admin BOOLEAN DEFAULT FALSE, -- Flag administrateur (indépendant de l'inscription)
     

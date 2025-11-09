@@ -147,6 +147,16 @@ class ApiService {
   }
 
   /**
+   * Mettre à jour le profil utilisateur
+   */
+  async updateUserProfile(id: number, userData: Partial<User>): Promise<ApiResponse<User>> {
+    return this.request<User>(`/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(userData),
+    });
+  }
+
+  /**
    * Supprimer un utilisateur (admin)
    */
   async deleteUser(id: number): Promise<ApiResponse<{ message: string }>> {

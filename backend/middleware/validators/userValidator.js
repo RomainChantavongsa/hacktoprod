@@ -78,7 +78,7 @@ const validateLogin = (req, res, next) => {
  * Valide les données de mise à jour d'un utilisateur
  */
 const validateUpdateUser = (req, res, next) => {
-  const { email, password, role } = req.body;
+  const { email, password, role, telephone } = req.body;
   const errors = [];
 
   // Validation de l'email si fourni
@@ -94,6 +94,11 @@ const validateUpdateUser = (req, res, next) => {
   // Validation du rôle si fourni
   if (role && !['admin', 'transporteur', 'donneur_ordre'].includes(role)) {
     errors.push('Le rôle doit être: admin, transporteur ou donneur_ordre');
+  }
+
+  // Validation du téléphone si fourni
+  if (telephone && (typeof telephone !== 'string' || telephone.length < 10 || telephone.length > 15)) {
+    errors.push('Le numéro de téléphone doit être une chaîne de 10 à 15 caractères');
   }
 
   if (errors.length > 0) {

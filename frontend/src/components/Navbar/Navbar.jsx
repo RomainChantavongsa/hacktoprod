@@ -30,6 +30,11 @@ function Navbar() {
                 <span className="navbar-username">👤 {user?.username}</span>
               </li>
               <li>
+                <NavLink to="/settings" className={({ isActive }) => isActive ? 'navbar-link active' : 'navbar-link'}>
+                  Paramètres
+                </NavLink>
+              </li>
+              <li>
                 <button onClick={handleLogout} className="navbar-link navbar-logout-btn">
                   Déconnexion
                 </button>
