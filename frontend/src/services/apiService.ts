@@ -12,7 +12,11 @@ import type {
   CreateOffreFretRequest,
   UpdateOffreFretRequest,
   Entreprise,
-  ApiResponse
+  ApiResponse,
+  Vehicule,
+  CreateVehiculeRequest,
+  Remorque,
+  CreateRemorqueRequest
 } from '@models/api';
 
 import { isApiSuccess } from '@models/api';
@@ -304,6 +308,62 @@ class ApiService {
     return this.request<Entreprise>(`/entreprises/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
+    });
+  }
+
+  // ============================================
+  // FLOTTE : VEHICULES
+  // ============================================
+
+  async getVehicules(): Promise<ApiResponse<Vehicule[]>> {
+    return this.request<Vehicule[]>('/vehicules');
+  }
+
+  async createVehicule(data: CreateVehiculeRequest): Promise<ApiResponse<Vehicule>> {
+    return this.request<Vehicule>('/vehicules', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateVehicule(id: number, data: Partial<CreateVehiculeRequest>): Promise<ApiResponse<Vehicule>> {
+    return this.request<Vehicule>(`/vehicules/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteVehicule(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/vehicules/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // ============================================
+  // FLOTTE : REMORQUES
+  // ============================================
+
+  async getRemorques(): Promise<ApiResponse<Remorque[]>> {
+    return this.request<Remorque[]>('/remorques');
+  }
+
+  async createRemorque(data: CreateRemorqueRequest): Promise<ApiResponse<Remorque>> {
+    return this.request<Remorque>('/remorques', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateRemorque(id: number, data: Partial<CreateRemorqueRequest>): Promise<ApiResponse<Remorque>> {
+    return this.request<Remorque>(`/remorques/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteRemorque(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/remorques/${id}`, {
+      method: 'DELETE',
     });
   }
 

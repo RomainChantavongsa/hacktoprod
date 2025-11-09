@@ -98,6 +98,44 @@ CREATE TABLE IF NOT EXISTS utilisateur (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+---
+
+-- ******************************************************
+-- 2b. Table : vehicule (flotte de l'entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS vehicule (
+    id SERIAL PRIMARY KEY,
+    entreprise_id INT NOT NULL,
+    type_vehicule VARCHAR(100) NOT NULL, -- ex: Fourgon, 12T, Semi, etc.
+    plaque_immatriculation VARCHAR(50) UNIQUE NOT NULL,
+    conducteur_attitre VARCHAR(255), -- nom du conducteur principal
+    capacite_tonnes DECIMAL(10,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE
+);
+
+-- Index utiles
+CREATE INDEX IF NOT EXISTS idx_vehicule_entreprise ON vehicule (entreprise_id);
+
+---
+
+-- ******************************************************
+-- 2c. Table : remorque (rattachée à une entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS remorque (
+    id SERIAL PRIMARY KEY,
+    entreprise_id INT NOT NULL,
+    type_remorque VARCHAR(100) NOT NULL, -- ex: Plateau, Frigo, Tautliner
+    plaque_immatriculation VARCHAR(50) UNIQUE NOT NULL,
+    capacite_tonnes DECIMAL(10,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_remorque_entreprise ON remorque (entreprise_id);
+
 -- ******************************************************
 -- 3. Table : offre_fret (Les transactions)
 -- ******************************************************
