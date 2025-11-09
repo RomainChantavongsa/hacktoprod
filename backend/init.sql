@@ -70,7 +70,38 @@ CREATE TABLE IF NOT EXISTS entreprise (
 ---
 
 -- ******************************************************
--- 2. Table : document (Documents des entreprises)
+-- 2. Table : utilisateur
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS utilisateur (
+    id SERIAL PRIMARY KEY,
+    
+    -- Identifiants personnels
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL, -- Mot de passe hashé
+    email VARCHAR(255) UNIQUE NOT NULL, -- Email personnel
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255),
+    telephone VARCHAR(255), -- Téléphone personnel
+    
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+    
+    -- Rôle dans l'entreprise
+    role_entreprise VARCHAR(50) NOT NULL DEFAULT 'employe', -- 'admin', 'employe', 'viewer'
+    
+    -- Rôle plateforme (admin global)
+    is_admin BOOLEAN DEFAULT FALSE,
+    
+    -- Dates
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+---
+
+-- ******************************************************
+-- 3. Table : document (Documents des entreprises)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS document (
     id SERIAL PRIMARY KEY,
@@ -126,38 +157,7 @@ CREATE INDEX IF NOT EXISTS idx_document_parent ON document (document_parent_id);
 ---
 
 -- ******************************************************
--- 3. Table : utilisateur
--- ******************************************************
-CREATE TABLE IF NOT EXISTS utilisateur (
-    id SERIAL PRIMARY KEY,
-    
-    -- Identifiants personnels
-    username VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL, -- Mot de passe hashé
-    email VARCHAR(255) UNIQUE NOT NULL, -- Email personnel
-    nom VARCHAR(255) NOT NULL,
-    prenom VARCHAR(255),
-    telephone VARCHAR(255), -- Téléphone personnel
-    
-    -- Lien avec l'entreprise
-    entreprise_id INT NOT NULL,
-    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
-    
-    -- Rôle dans l'entreprise
-    role_entreprise VARCHAR(50) NOT NULL DEFAULT 'employe', -- 'admin', 'employe', 'viewer'
-    
-    -- Rôle plateforme (admin global)
-    is_admin BOOLEAN DEFAULT FALSE,
-    
-    -- Dates
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
----
-
--- ******************************************************
--- 2b. Table : vehicule (flotte de l'entreprise)
+-- 4. Table : vehicule (flotte de l'entreprise)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS vehicule (
     id SERIAL PRIMARY KEY,
@@ -177,7 +177,7 @@ CREATE INDEX IF NOT EXISTS idx_vehicule_entreprise ON vehicule (entreprise_id);
 ---
 
 -- ******************************************************
--- 2c. Table : remorque (rattachée à une entreprise)
+-- 5. Table : remorque (rattachée à une entreprise)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS remorque (
     id SERIAL PRIMARY KEY,
@@ -195,7 +195,7 @@ CREATE INDEX IF NOT EXISTS idx_remorque_entreprise ON remorque (entreprise_id);
 ---
 
 -- ******************************************************
--- 2d. Table : conducteur (conducteurs de l'entreprise)
+-- 6. Table : conducteur (conducteurs de l'entreprise)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS conducteur (
     id SERIAL PRIMARY KEY,
@@ -215,8 +215,10 @@ CREATE TABLE IF NOT EXISTS conducteur (
 
 CREATE INDEX IF NOT EXISTS idx_conducteur_entreprise ON conducteur (entreprise_id);
 
+---
+
 -- ******************************************************
--- 3. Table : offre_fret (Les transactions)
+-- 7. Table : offre_fret (Les transactions)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS offre_fret (
     id SERIAL PRIMARY KEY,
