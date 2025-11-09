@@ -8,12 +8,61 @@
 
 export interface User {
   id: number;
-  username: string; // Seule donnée déchiffrée envoyée au client
-  // Note: email, nom, prenom restent chiffrés côté serveur pour la sécurité
-  role: 'transporteur' | 'donneur_ordre';
-  is_admin?: boolean; // Flag administrateur (indépendant de l'inscription)
-  transporteur_id?: number;
-  donneur_ordre_id?: number;
+  username: string;
+  entreprise_id: number;
+  role_entreprise: 'admin' | 'employe' | 'viewer';
+  is_admin?: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface UserProfile extends User {
+  email: string;
+  nom: string;
+  prenom?: string;
+  telephone?: string;
+}
+
+export interface Entreprise {
+  id: number;
+  nom_entreprise: string;
+  type_entreprise: 'transporteur' | 'donneur_ordre';
+  est_particulier: boolean;
+  siret?: string;
+  tva?: string;
+  registre_commerce?: string;
+  email_contact: string;
+  telephone?: string;
+  adresse_siege?: string;
+  complement_adresse?: string;
+  code_postal?: string;
+  ville?: string;
+  pays?: string;
+  logo_url?: string;
+  // Champs spécifiques transporteur
+  type_structure?: string;
+  capacite_max_tonnes?: number;
+  digitalisation_active?: boolean;
+  nombre_vehicules?: number;
+  types_vehicules?: string[];
+  zones_intervention?: string[];
+  rayon_action_km?: number;
+  licence_transport?: string;
+  assurance_marchandises?: string;
+  numero_assurance?: string;
+  date_expiration_assurance?: string;
+  certifications?: string[];
+  transport_frigorifique?: boolean;
+  transport_express?: boolean;
+  transport_volumineux?: boolean;
+  transport_dangereuses?: boolean;
+  transport_international?: boolean;
+  hayon_elevateur?: boolean;
+  gerbeur?: boolean;
+  transpalette?: boolean;
+  // Champs spécifiques donneur d'ordre
+  type_acteur?: string;
+  frequence_besoin?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -37,9 +86,12 @@ export interface RegisterRequest {
   password: string;
   nom: string;
   prenom?: string;
-  role: 'transporteur' | 'donneur_ordre';
-  transporteur_id?: number;
-  donneur_ordre_id?: number;
+  telephone?: string;
+  type_entreprise: 'transporteur' | 'donneur_ordre';
+  est_particulier?: boolean;
+  nom_entreprise?: string;
+  siret?: string;
+  entreprise_id?: number;
 }
 
 // ============================================

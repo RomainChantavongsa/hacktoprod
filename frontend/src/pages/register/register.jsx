@@ -94,24 +94,105 @@ function Register() {
           </div>
 
           <div className="register-form-group">
-            <label htmlFor="role" className="register-form-label">
+            <label htmlFor="type_entreprise" className="register-form-label">
               Je suis *
             </label>
             <select
-              id="role"
+              id="type_entreprise"
               className="register-form-input"
-              value={formData.role}
-              onChange={(e) => handleChange('role', e.target.value)}
+              value={formData.type_entreprise}
+              onChange={(e) => handleChange('type_entreprise', e.target.value)}
               required
             >
-              <option value="">-- Sélectionnez votre rôle --</option>
-              <option value="transporteur">Transporteur</option>
+              <option value="">-- Sélectionnez votre profil --</option>
+              <option value="transporteur">Transporteur professionnel</option>
               <option value="donneur_ordre">Donneur d'ordre</option>
             </select>
-            {errors.role && (
-              <span className="error-text">{errors.role}</span>
+            {errors.type_entreprise && (
+              <span className="error-text">{errors.type_entreprise}</span>
             )}
           </div>
+
+          {/* Si donneur d'ordre, demander si particulier ou entreprise */}
+          {formData.type_entreprise === 'donneur_ordre' && (
+            <div className="register-form-group">
+              <label className="register-form-label">
+                Type de compte *
+              </label>
+              <div className="radio-group">
+                <label className="radio-label">
+                  <input
+                    type="radio"
+                    name="est_particulier"
+                    value="true"
+                    checked={formData.est_particulier === true}
+                    onChange={() => handleChange('est_particulier', true)}
+                    required
+                  />
+                  <span>Particulier</span>
+                </label>
+                <label className="radio-label">
+                  <input
+                    type="radio"
+                    name="est_particulier"
+                    value="false"
+                    checked={formData.est_particulier === false}
+                    onChange={() => handleChange('est_particulier', false)}
+                    required
+                  />
+                  <span>Entreprise</span>
+                </label>
+              </div>
+              {errors.est_particulier && (
+                <span className="error-text">{errors.est_particulier}</span>
+              )}
+            </div>
+          )}
+
+          {/* Si entreprise (transporteur ou donneur d'ordre entreprise), demander le nom */}
+          {(formData.type_entreprise === 'transporteur' || 
+            (formData.type_entreprise === 'donneur_ordre' && formData.est_particulier === false)) && (
+            <>
+              <div className="register-form-group">
+                <label htmlFor="nom_entreprise" className="register-form-label">
+                  Nom de l'entreprise *
+                </label>
+                <input
+                  type="text"
+                  id="nom_entreprise"
+                  className="register-form-input"
+                  placeholder="GDS - Global Distribution Services"
+                  value={formData.nom_entreprise}
+                  onChange={(e) => handleChange('nom_entreprise', e.target.value)}
+                  required
+                />
+                {errors.nom_entreprise && (
+                  <span className="error-text">{errors.nom_entreprise}</span>
+                )}
+              </div>
+
+              <div className="register-form-group">
+                <label htmlFor="siret" className="register-form-label">
+                  SIRET
+                </label>
+                <input
+                  type="text"
+                  id="siret"
+                  className="register-form-input"
+                  placeholder="123 456 789 00010"
+                  value={formData.siret}
+                  onChange={(e) => handleChange('siret', e.target.value)}
+                  maxLength={14}
+                />
+                {errors.siret && (
+                  <span className="error-text">{errors.siret}</span>
+                )}
+                <small className="help-text">
+                  Si votre entreprise existe déjà, vous serez automatiquement rattaché
+                </small>
+              </div>
+            </>
+          )}
 
           <div className="register-form-group">
             <label htmlFor="password" className="register-form-label">

@@ -6,7 +6,7 @@
  * Valide les données de création d'un utilisateur
  */
 const validateCreateUser = (req, res, next) => {
-  const { username, email, password, nom, role } = req.body;
+  const { username, email, password, nom, type_entreprise, est_particulier } = req.body;
   const errors = [];
 
   // Validation des champs requis
@@ -30,10 +30,18 @@ const validateCreateUser = (req, res, next) => {
     errors.push('Le nom est requis');
   }
 
-  if (!role || role.trim() === '') {
-    errors.push('Le rôle est requis');
-  } else if (!['admin', 'transporteur', 'donneur_ordre'].includes(role)) {
-    errors.push('Le rôle doit être: admin, transporteur ou donneur_ordre');
+  if (!type_entreprise || type_entreprise.trim() === '') {
+    errors.push('Le type d\'entreprise est requis');
+  } else if (!['transporteur', 'donneur_ordre'].includes(type_entreprise)) {
+    errors.push('Le type d\'entreprise doit être: transporteur ou donneur_ordre');
+  }
+
+  // Validation spécifique pour donneur_ordre
+  if (type_entreprise === 'donneur_ordre') {
+    // est_particulier peut être true/false, accepter les deux
+    if (est_particulier === undefined || est_particulier === null) {
+      errors.push('Vous devez indiquer si vous êtes un particulier ou une entreprise');
+    }
   }
 
   // Si des erreurs existent, retourner 400

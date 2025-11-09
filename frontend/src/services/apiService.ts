@@ -1,5 +1,6 @@
 import type {
   User,
+  UserProfile,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
@@ -10,6 +11,7 @@ import type {
   OffreFret,
   CreateOffreFretRequest,
   UpdateOffreFretRequest,
+  Entreprise,
   ApiResponse
 } from '@models/api';
 
@@ -157,6 +159,13 @@ class ApiService {
   }
 
   /**
+   * Récupérer le profil complet de l'utilisateur authentifié
+   */
+  async getUserProfile(): Promise<ApiResponse<UserProfile>> {
+    return this.request<UserProfile>('/users/profile');
+  }
+
+  /**
    * Supprimer un utilisateur (admin)
    */
   async deleteUser(id: number): Promise<ApiResponse<{ message: string }>> {
@@ -263,6 +272,38 @@ class ApiService {
   async deleteDonneurOrdre(id: number): Promise<ApiResponse<{ message: string }>> {
     return this.request<{ message: string }>(`/donneurs-ordre/${id}`, {
       method: 'DELETE',
+    });
+  }
+
+  // ============================================
+  // ENTREPRISES ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer toutes les entreprises
+   */
+  async getEntreprises(type?: string): Promise<ApiResponse<Entreprise[]>> {
+    const params = new URLSearchParams();
+    if (type) params.append('type', type);
+
+    const queryString = params.toString();
+    return this.request<Entreprise[]>(`/entreprises${queryString ? `?${queryString}` : ''}`);
+  }
+
+  /**
+   * Récupérer une entreprise par ID
+   */
+  async getEntrepriseById(id: number): Promise<ApiResponse<Entreprise>> {
+    return this.request<Entreprise>(`/entreprises/${id}`);
+  }
+
+  /**
+   * Mettre à jour une entreprise
+   */
+  async updateEntreprise(id: number, data: Partial<Entreprise>): Promise<ApiResponse<Entreprise>> {
+    return this.request<Entreprise>(`/entreprises/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
     });
   }
 

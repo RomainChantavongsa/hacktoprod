@@ -42,20 +42,16 @@ class Utilisateur extends BaseModel {
     return this._decryptedTelephone || cryptoUtils.decrypt(this.telephone);
   }
 
-  getRole() {
-    return this.role;
+  getEntrepriseId() {
+    return this.entreprise_id;
+  }
+
+  getRoleEntreprise() {
+    return this.role_entreprise || 'employe';
   }
 
   getIsAdmin() {
     return this.is_admin || false;
-  }
-
-  getTransporteurId() {
-    return this.transporteur_id;
-  }
-
-  getDonneurOrdreId() {
-    return this.donneur_ordre_id;
   }
 
   getCreatedAt() {
@@ -97,23 +93,18 @@ class Utilisateur extends BaseModel {
     return this;
   }
 
-  setRole(value) {
-    this.role = value;
+  setEntrepriseId(value) {
+    this.entreprise_id = value;
+    return this;
+  }
+
+  setRoleEntreprise(value) {
+    this.role_entreprise = value;
     return this;
   }
 
   setIsAdmin(value) {
     this.is_admin = value;
-    return this;
-  }
-
-  setTransporteurId(value) {
-    this.transporteur_id = value;
-    return this;
-  }
-
-  setDonneurOrdreId(value) {
-    this.donneur_ordre_id = value;
     return this;
   }
 
@@ -197,10 +188,9 @@ class Utilisateur extends BaseModel {
     return {
       id: this.id,
       username: this.getUsername(), // Déchiffré pour l'affichage
-      role: this.role,
+      entreprise_id: this.entreprise_id,
+      role_entreprise: this.getRoleEntreprise(),
       is_admin: this.getIsAdmin(),
-      transporteur_id: this.transporteur_id,
-      donneur_ordre_id: this.donneur_ordre_id,
       created_at: this.created_at,
       updated_at: this.updated_at
     };
@@ -218,10 +208,9 @@ class Utilisateur extends BaseModel {
       nom: this.getNom(),
       prenom: this.getPrenom(),
       telephone: this.getTelephone(),
-      role: this.role,
+      entreprise_id: this.entreprise_id,
+      role_entreprise: this.getRoleEntreprise(),
       is_admin: this.getIsAdmin(),
-      transporteur_id: this.transporteur_id,
-      donneur_ordre_id: this.donneur_ordre_id,
       created_at: this.created_at,
       updated_at: this.updated_at
     };
