@@ -58,7 +58,6 @@ function MobileMenu({ isOpen, onClose }) {
         <div className="mobile-menu-header">
           <div className="mobile-menu-logo">
             <img src="/images/GDSLogo.svg" alt="GDS Logo" className="logo-image" />
-            <span className="logo-text">GDS Transport</span>
           </div>
           <button className="mobile-menu-close" onClick={onClose}>
             ✕
