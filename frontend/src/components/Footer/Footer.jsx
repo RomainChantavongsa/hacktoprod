@@ -7,7 +7,7 @@ function Footer() {
       <div className="footer-container">
         <div className="footer-content">
           <div className="footer-copyright">
-            © {new Date().getFullYear()} HackToGone. Tous droits réservés.
+            © {new Date().getFullYear()} GDS. Tous droits réservés.
           </div>
           <ul className="footer-links">
             <li>
