@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ChatService = require('../services/chatService');
+const elevenLabsService = require('../services/elevenLabsService');
 const { authMiddleware } = require('../utils/jwt');
 const { asyncHandler } = require('../middleware/errorHandler');
 
@@ -84,6 +85,32 @@ router.post('/close', authMiddleware, asyncHandler(async (req, res) => {
     success: true,
     message: 'Conversazione chiusa'
   });
+}));
+
+/**
+ * POST /api/chat/tts - Convert text to speech using ElevenLabs
+ */
+router.post('/tts', authMiddleware, asyncHandler(async (req, res) => {
+  const { text, language } = req.body;
+
+  if (!text || text.trim().length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'Text is required'
+    });
+  }
+
+  // Generate audio using ElevenLabs
+  const audioBuffer = await elevenLabsService.textToSpeech(text, language);
+
+  // Set response headers for audio streaming
+  res.set({
+    'Content-Type': 'audio/mpeg',
+    'Content-Length': audioBuffer.length,
+    'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
+  });
+
+  res.send(audioBuffer);
 }));
 
 module.exports = router;

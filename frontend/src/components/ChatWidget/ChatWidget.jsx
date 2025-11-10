@@ -42,8 +42,11 @@ const ChatWidget = ({ token, isAuthenticated }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [language, setLanguage] = useState(getPreferredLanguage());
+  const [playingMessageIndex, setPlayingMessageIndex] = useState(null);
+  const [loadingAudioIndex, setLoadingAudioIndex] = useState(null);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const audioRef = useRef(null);
 
   // Auto-scroll verso l'ultimo messaggio
   const scrollToBottom = () => {
@@ -176,6 +179,106 @@ const ChatWidget = ({ token, isAuthenticated }) => {
     setPreferredLanguage(newLang);
   };
 
+  // Riproduci messaggio con TTS
+  const handlePlayMessage = async (messageContent, index) => {
+    try {
+      console.log('🎵 handlePlayMessage called with:', {
+        index,
+        hasToken: !!token,
+        tokenPreview: token ? token.substring(0, 20) + '...' : 'NO TOKEN',
+        isAuthenticated
+      });
+
+      // Se sta già riproducendo questo messaggio, ferma
+      if (playingMessageIndex === index && audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+        setPlayingMessageIndex(null);
+        return;
+      }
+
+      // Ferma qualsiasi audio in riproduzione
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+
+      setLoadingAudioIndex(index);
+      setPlayingMessageIndex(null);
+
+      // Rimuovi i tag HTML dal testo prima di inviarlo al TTS
+      const plainText = messageContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+
+      // Chiamata API per generare audio
+      console.log('🎤 Calling TTS API:', {
+        url: `${import.meta.env.VITE_API_URL}/chat/tts`,
+        text: plainText.substring(0, 50) + '...',
+        language: language
+      });
+
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/chat/tts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          text: plainText,
+          language: language
+        })
+      });
+
+      console.log('📡 TTS API Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        contentType: response.headers.get('content-type')
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ TTS API Error:', errorText);
+        throw new Error(`Failed to generate audio: ${response.status} ${errorText}`);
+      }
+
+      // Converti la risposta in blob e crea un URL
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+
+      // Crea e riproduci l'audio
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+
+      audio.onplay = () => {
+        setLoadingAudioIndex(null);
+        setPlayingMessageIndex(index);
+      };
+
+      audio.onended = () => {
+        setPlayingMessageIndex(null);
+        URL.revokeObjectURL(audioUrl);
+      };
+
+      audio.onerror = () => {
+        setLoadingAudioIndex(null);
+        setPlayingMessageIndex(null);
+        URL.revokeObjectURL(audioUrl);
+        console.error('Error playing audio');
+      };
+
+      await audio.play();
+
+    } catch (error) {
+      console.error('❌ Error with TTS:', {
+        message: error.message,
+        stack: error.stack,
+        error: error
+      });
+      setLoadingAudioIndex(null);
+      setPlayingMessageIndex(null);
+      alert(`Failed to play audio: ${error.message || 'Unknown error'}`);
+    }
+  };
+
   // Non mostrare se non autenticato
   if (!isAuthenticated) {
     return null;
@@ -234,10 +337,34 @@ const ChatWidget = ({ token, isAuthenticated }) => {
               <div key={index} className={`message ${msg.mittente}`}>
                 <div className="message-bubble">
                   {msg.mittente === 'bot' ? (
-                    <div 
-                      className="message-content"
-                      dangerouslySetInnerHTML={{ __html: formatBotMessage(msg.contenuto) }}
-                    />
+                    <>
+                      <div
+                        className="message-content"
+                        dangerouslySetInnerHTML={{ __html: formatBotMessage(msg.contenuto) }}
+                      />
+                      <button
+                        className={`play-audio-btn ${playingMessageIndex === index ? 'playing' : ''}`}
+                        onClick={() => handlePlayMessage(msg.contenuto, index)}
+                        disabled={loadingAudioIndex === index}
+                        aria-label={playingMessageIndex === index ? 'Stop audio' : 'Play audio'}
+                        title={playingMessageIndex === index ? 'Stop' : 'Listen'}
+                      >
+                        {loadingAudioIndex === index ? (
+                          <svg className="spinner" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                          </svg>
+                        ) : playingMessageIndex === index ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                          </svg>
+                        )}
+                      </button>
+                    </>
                   ) : (
                     <p>{msg.contenuto}</p>
                   )}
