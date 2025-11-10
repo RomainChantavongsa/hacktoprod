@@ -1,3 +1,5 @@
+@import '../../../styles/variables';
+
 /* Modern refreshed styles for vehicules page */
 .vehicules-page {
   --bg: #ffffff;
@@ -6,16 +8,16 @@
   --border: #e1e5e8;
   --text-primary: #1f2d3d;
   --text-secondary: #596778;
-  --accent: #3498db;
-  --accent-hover: #2980b9;
-  --danger: #e74c3c;
-  --danger-hover: #c0392b;
+  --accent: #{$primary-color};
+  --accent-hover: #{$primary-hover};
+  --danger: #{$error-color};
+  --danger-hover: #{darken($error-color, 10%)};
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 14px;
   --shadow-sm: 0 1px 2px rgba(0,0,0,.04), 0 0 0 1px rgba(0,0,0,.02);
   --shadow-md: 0 4px 12px rgba(0,0,0,.08);
-  --gradient: linear-gradient(135deg,#3c8ce7 0%,#00eaff 100%);
+  --gradient: linear-gradient(135deg, #{$primary-color} 0%, #{$secondary-color} 100%);
   padding: 2.5rem clamp(1rem,2vw,2rem);
   max-width: 1320px;
   margin: 0 auto;
@@ -100,7 +102,7 @@
       outline: none;
       border-color: var(--accent);
       background: #fff;
-      box-shadow: 0 0 0 3px rgba(52,152,219,.25);
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.25);
     }
   }
 }
@@ -198,8 +200,8 @@
     box-shadow: none;
 
     &:hover:not(:disabled) {
-      background: rgba(61, 155, 166, 0.1);
-      box-shadow: 0 2px 6px rgba(61, 155, 166, 0.2);
+      background: rgba($primary-color, 0.1);
+      box-shadow: 0 2px 6px rgba($primary-color, 0.2);
     }
   }
 
@@ -245,11 +247,11 @@
 
 .add-bar .field { flex: 1 1 200px; display: flex; flex-direction: column; gap: .45rem; }
 .add-bar .field input, .add-bar .field select { width: 100%; padding: .65rem .8rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-alt); font-size: .9rem; }
-.add-bar .field input:focus, .add-bar .field select:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 2px rgba(52,152,219,.25); }
+.add-bar .field input:focus, .add-bar .field select:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 2px rgba($primary-color, 0.25); }
 .add-bar .file-upload-group { display: flex; flex-direction: column; gap: .45rem; }
 .add-bar .file-upload-group label { font-size: .75rem; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; color: var(--text-secondary); }
 .add-bar .file-upload-group input[type="file"] { padding: .4rem .8rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-alt); font-size: .8rem; }
-.add-bar .file-upload-group input[type="file"]:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 2px rgba(52,152,219,.25); }
+.add-bar .file-upload-group input[type="file"]:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 2px rgba($primary-color, 0.25); }
 .add-bar .actions { display: flex; flex-direction: column; gap: .6rem; justify-content: flex-start; }
 
 @media (max-width: 1000px) {
@@ -276,13 +278,15 @@
   text-transform: uppercase;
 
   &.present {
-    background-color: #d4edda;
-    color: #155724;
+    background-color: rgba($success-color, 0.1);
+    color: darken($success-color, 15%);
+    border: 1px solid rgba($success-color, 0.3);
   }
 
   &.missing {
-    background-color: #f8d7da;
-    color: #721c24;
+    background-color: rgba($error-color, 0.1);
+    color: darken($error-color, 10%);
+    border: 1px solid rgba($error-color, 0.3);
   }
 }
 

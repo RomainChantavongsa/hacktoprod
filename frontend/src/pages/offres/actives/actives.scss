@@ -1,3 +1,4 @@
+@import '../../../styles/variables';
 .offres-actives-page {
   padding: 2rem;
   max-width: 1400px;
@@ -37,11 +38,11 @@
   transition: all 0.15s ease-in-out;
 
   &.btn-primary {
-    background-color: #3b82f6;
+    background-color: $primary-color;
     color: white;
 
     &:hover:not(:disabled) {
-      background-color: #2563eb;
+      background-color: $primary-hover;
     }
   }
 
