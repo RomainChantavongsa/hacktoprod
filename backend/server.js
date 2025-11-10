@@ -3,11 +3,27 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') }
 
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
 const { initDatabase } = require('./config/initDatabase');
 const { initDirectories } = require('./config/initDirectories');
 const { errorHandler } = require('./middleware/errorHandler');
+const { setupChatSocketHandlers } = require('./services/chatSocketHandler');
 
 const app = express();
+const server = http.createServer(app);
+
+// Configurazione Socket.io con CORS
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
+
+// Setup handler Socket.io per il chat
+setupChatSocketHandlers(io);
 
 // Utilisation des variables d'environnement
 const port = process.env.PORT || 3001;
@@ -28,10 +44,11 @@ const vehiculesRouter = require('./routes/vehicules');
 const remorquesRouter = require('./routes/remorques');
 const conducteursRouter = require('./routes/conducteurs');
 const documentsRouter = require('./routes/documents');
+const chatRouter = require('./routes/chat');
 
 // Routes
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'API HackToGone - Backend server is running!',
     endpoints: {
       users: '/api/users',
@@ -42,7 +59,8 @@ app.get('/', (req, res) => {
       vehicules: '/api/vehicules',
       remorques: '/api/remorques',
       conducteurs: '/api/conducteurs',
-      documents: '/api/documents'
+      documents: '/api/documents',
+      chat: '/api/chat'
     }
   });
 });
@@ -57,6 +75,7 @@ app.use('/api/vehicules', vehiculesRouter);
 app.use('/api/remorques', remorquesRouter);
 app.use('/api/conducteurs', conducteursRouter);
 app.use('/api/documents', documentsRouter);
+app.use('/api/chat', chatRouter);
 
 // Middleware de gestion des erreurs (DOIT être après les routes)
 app.use(errorHandler);
@@ -70,9 +89,10 @@ async function startServer() {
     // Initialiser la base de données
     await initDatabase();
     
-    // Démarrer le serveur
-    app.listen(port, () => {
+    // Démarrer le serveur (usa server invece di app per Socket.io)
+    server.listen(port, () => {
       console.log(`✅ Backend server is running on http://localhost:${port}`);
+      console.log(`💬 Chat WebSocket is ready`);
       console.log(`🔧 Mode: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {
