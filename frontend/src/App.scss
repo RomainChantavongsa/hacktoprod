@@ -16,9 +16,10 @@
   min-height: calc(100vh - 60px);
 }
 
-/* Quand une sidebar est active, décaler le contenu (Desktop uniquement) */
+/* Quand une sidebar est active, décaler le contenu et le footer (Desktop uniquement) */
 @media (min-width: 1001px) {
-  body:has(.sidebar) .app-content {
+  body:has(.sidebar) .app-content,
+  body:has(.sidebar) .footer {
     margin-left: 240px;
   }
 }
