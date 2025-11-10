@@ -6,23 +6,6 @@
 // USER TYPES
 // ============================================
 
-export interface User {
-  id: number;
-  username: string;
-  entreprise_id: number;
-  role_entreprise: 'admin' | 'employe' | 'viewer';
-  is_admin?: boolean;
-  created_at?: string;
-  updated_at?: string;
-}
-
-export interface UserProfile extends User {
-  email: string;
-  nom: string;
-  prenom?: string;
-  telephone?: string;
-}
-
 export interface Entreprise {
   id: number;
   nom_entreprise: string;
@@ -65,6 +48,25 @@ export interface Entreprise {
   frequence_besoin?: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  entreprise_id: number;
+  role_entreprise: 'admin' | 'employe' | 'viewer';
+  is_admin?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  entreprise?: Entreprise; // Objet entreprise retourné par le backend lors du login
+}
+
+export interface UserProfile extends User {
+  email: string;
+  nom: string;
+  prenom?: string;
+  telephone?: string;
+  type_entreprise?: 'transporteur' | 'donneur_ordre';
 }
 
 export interface LoginRequest {

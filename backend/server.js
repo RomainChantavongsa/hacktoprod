@@ -30,6 +30,7 @@ const conducteursRouter = require('./routes/conducteurs');
 const documentsRouter = require('./routes/documents');
 const compteBancaireRouter = require('./routes/compte-bancaire');
 const annuaireRouter = require('./routes/annuaire');
+const entrepotsRouter = require('./routes/entrepots');
 
 // Routes
 app.get('/', (req, res) => {
@@ -46,7 +47,8 @@ app.get('/', (req, res) => {
       conducteurs: '/api/conducteurs',
       documents: '/api/documents',
       compte_bancaire: '/api/compte-bancaire',
-      annuaire: '/api/annuaire'
+      annuaire: '/api/annuaire',
+      entrepots: '/api/entrepots'
     }
   });
 });
@@ -63,6 +65,7 @@ app.use('/api/conducteurs', conducteursRouter);
 app.use('/api/documents', documentsRouter);
 app.use('/api/compte-bancaire', compteBancaireRouter);
 app.use('/api/annuaire', annuaireRouter);
+app.use('/api/entrepots', entrepotsRouter);
 
 // Middleware de gestion des erreurs (DOIT être après les routes)
 app.use(errorHandler);

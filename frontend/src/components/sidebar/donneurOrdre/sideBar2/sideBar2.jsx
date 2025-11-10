@@ -9,8 +9,8 @@ function SideBar2() {
       <nav className="sidebar-nav">
         <ul className="sidebar-menu">
           <li>
-            <NavLink 
-              to="/entreprise/profil" 
+            <NavLink
+              to="/donneurOrdre/profil"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon">👤</span>
@@ -48,6 +48,16 @@ function SideBar2() {
             </NavLink>
           </li>
           
+          <li>
+            <NavLink
+              to="/entreprise/entrepots"
+              className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
+            >
+              <span className="sidebar-icon">🏭</span>
+              <span className="sidebar-label">Entrepôts</span>
+            </NavLink>
+          </li>
+
           <li>
             <NavLink
               to="/entreprise/annuaire"
