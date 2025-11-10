@@ -18,7 +18,9 @@ import type {
   Remorque,
   CreateRemorqueRequest,
   Conducteur,
-  CreateConducteurRequest
+  CreateConducteurRequest,
+  Entrepot,
+  CreateEntrepotRequest
 } from '@models/api';
 
 import { isApiSuccess } from '@models/api';
@@ -674,6 +676,69 @@ class ApiService {
    */
   async getComptePrincipal(): Promise<ApiResponse<any>> {
     return this.request<any>('/compte-bancaire/principal');
+  }
+
+  // ============================================
+  // ENTREPOTS ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer tous les entrepôts de l'entreprise
+   */
+  async getEntrepots(): Promise<ApiResponse<Entrepot[]>> {
+    return this.request<Entrepot[]>('/entrepots');
+  }
+
+  /**
+   * Récupérer les entrepôts actifs
+   */
+  async getEntrepotsActifs(): Promise<ApiResponse<Entrepot[]>> {
+    return this.request<Entrepot[]>('/entrepots/actifs');
+  }
+
+  /**
+   * Récupérer un entrepôt par ID
+   */
+  async getEntrepotById(id: number): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>(`/entrepots/${id}`);
+  }
+
+  /**
+   * Créer un entrepôt
+   */
+  async createEntrepot(data: CreateEntrepotRequest): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>('/entrepots', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  /**
+   * Mettre à jour un entrepôt
+   */
+  async updateEntrepot(id: number, data: Partial<CreateEntrepotRequest>): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>(`/entrepots/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  /**
+   * Activer / Désactiver un entrepôt
+   */
+  async toggleEntrepotStatus(id: number): Promise<ApiResponse<{ id: number; est_actif: boolean; message: string }>> {
+    return this.request<{ id: number; est_actif: boolean; message: string }>(`/entrepots/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  /**
+   * Supprimer un entrepôt
+   */
+  async deleteEntrepot(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/entrepots/${id}`, {
+      method: 'DELETE'
+    });
   }
 }
 

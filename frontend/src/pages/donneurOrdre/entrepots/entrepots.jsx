@@ -1,4 +1,5 @@
 import { useEntrepots } from './entrepots.ts'
+import DataTable from '../../../components/DataTable.jsx'
 import './entrepots.scss'
 
 function Entrepots() {
@@ -236,47 +237,72 @@ function Entrepots() {
             </button>
           </div>
         ) : (
-          <div className="entrepots-grid">
-            {entrepots.map((entrepot) => (
-              <div key={entrepot.id} className={`entrepot-card ${!entrepot.est_actif ? 'inactive' : ''}`}>
-                <div className="entrepot-header">
-                  <h3>{entrepot.nom_entrepot}</h3>
-                  <span className={`status-badge ${entrepot.est_actif ? 'active' : 'inactive'}`}>
-                    {entrepot.est_actif ? 'Actif' : 'Inactif'}
-                  </span>
-                </div>
+          <>
+            <div style={{ marginBottom: 16 }}>
+              <DataTable
+                columns={[
+                  { key: 'nom_entrepot', header: "Nom", sortable: true },
+                  { key: 'type_entrepot', header: 'Type', sortable: true },
+                  { key: 'ville', header: 'Ville', sortable: true },
+                  { key: 'code_postal', header: 'CP', sortable: true, width: 100 },
+                  { key: 'capacite_stockage_m3', header: 'Capacité (m³)', sortable: true, width: 140 },
+                  { key: 'est_actif', header: 'Actif', width: 90, render: (row) => row.est_actif ? 'Oui' : 'Non' },
+                  { key: 'actions', header: 'Actions', width: 200, render: (row) => (
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button className="btn btn-small btn-secondary" onClick={() => handleEdit(row)}>Modifier</button>
+                      <button className="btn btn-small btn-danger" onClick={() => handleDelete(row.id)}>Supprimer</button>
+                    </div>
+                  )}
+                ]}
+                data={entrepots}
+                loading={isLoading}
+                emptyMessage="Aucun entrepôt"
+                defaultPageSize={10}
+              />
+            </div>
 
-                <div className="entrepot-info">
-                  <p><strong>Type:</strong> {entrepot.type_entrepot || 'Non spécifié'}</p>
-                  <p><strong>Adresse:</strong> {entrepot.adresse}, {entrepot.code_postal} {entrepot.ville}</p>
-                  {entrepot.capacite_stockage_m3 && (
-                    <p><strong>Capacité:</strong> {entrepot.capacite_stockage_m3} m³</p>
-                  )}
-                  {entrepot.telephone && (
-                    <p><strong>Tél:</strong> {entrepot.telephone}</p>
-                  )}
-                  {entrepot.email_contact && (
-                    <p><strong>Email:</strong> {entrepot.email_contact}</p>
-                  )}
-                </div>
+            <div className="entrepots-grid">
+              {entrepots.map((entrepot) => (
+                <div key={entrepot.id} className={`entrepot-card ${!entrepot.est_actif ? 'inactive' : ''}`}>
+                  <div className="entrepot-header">
+                    <h3>{entrepot.nom_entrepot}</h3>
+                    <span className={`status-badge ${entrepot.est_actif ? 'active' : 'inactive'}`}>
+                      {entrepot.est_actif ? 'Actif' : 'Inactif'}
+                    </span>
+                  </div>
 
-                <div className="entrepot-actions">
-                  <button
-                    className="btn btn-small btn-secondary"
-                    onClick={() => handleEdit(entrepot)}
-                  >
-                    Modifier
-                  </button>
-                  <button
-                    className="btn btn-small btn-danger"
-                    onClick={() => handleDelete(entrepot.id)}
-                  >
-                    Supprimer
-                  </button>
+                  <div className="entrepot-info">
+                    <p><strong>Type:</strong> {entrepot.type_entrepot || 'Non spécifié'}</p>
+                    <p><strong>Adresse:</strong> {entrepot.adresse}, {entrepot.code_postal} {entrepot.ville}</p>
+                    {entrepot.capacite_stockage_m3 && (
+                      <p><strong>Capacité:</strong> {entrepot.capacite_stockage_m3} m³</p>
+                    )}
+                    {entrepot.telephone && (
+                      <p><strong>Tél:</strong> {entrepot.telephone}</p>
+                    )}
+                    {entrepot.email_contact && (
+                      <p><strong>Email:</strong> {entrepot.email_contact}</p>
+                    )}
+                  </div>
+
+                  <div className="entrepot-actions">
+                    <button
+                      className="btn btn-small btn-secondary"
+                      onClick={() => handleEdit(entrepot)}
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      className="btn btn-small btn-danger"
+                      onClick={() => handleDelete(entrepot.id)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>

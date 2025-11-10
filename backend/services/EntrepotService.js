@@ -24,7 +24,8 @@ class EntrepotService {
       est_actif = true
     } = entrepotData;
 
-    const entrepot = await Entrepot.create({
+    // Important: BaseModel.create() ne persiste pas; on instancie avec les données puis on save()
+    const entrepot = new Entrepot({
       entreprise_id,
       nom_entrepot,
       type_entrepot,
@@ -39,6 +40,7 @@ class EntrepotService {
       equipements_speciaux,
       est_actif
     });
+    await entrepot.save();
 
     return this._formatEntrepot(entrepot);
   }

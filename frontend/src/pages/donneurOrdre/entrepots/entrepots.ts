@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
 import apiService from '../../../services/apiService'
+import { isApiSuccess } from '../../../types/api'
 
 interface Entrepot {
   id: number
@@ -67,14 +68,14 @@ export const useEntrepots = () => {
 
   const loadEntrepots = async () => {
     if (!user?.entreprise_id) return
-
     setIsLoading(true)
     try {
-      // TODO: Remplacer par l'appel API réel quand disponible
-      // const response = await apiService.getEntrepots()
-      // Simulation pour l'instant
-      const mockEntrepots: Entrepot[] = []
-      setEntrepots(mockEntrepots)
+      const response = await apiService.getEntrepots()
+      if (isApiSuccess(response)) {
+        setEntrepots(response.data)
+      } else {
+        setError(response.message || 'Erreur lors du chargement des entrepôts')
+      }
     } catch (err: any) {
       setError('Erreur lors du chargement des entrepôts')
     } finally {
@@ -118,15 +119,21 @@ export const useEntrepots = () => {
       }
 
       if (editingEntrepot) {
-        // TODO: Mise à jour
-        // const response = await apiService.updateEntrepot(editingEntrepot.id, payload)
-        console.log('Mise à jour entrepôt:', payload)
-        setSuccess('Entrepôt mis à jour avec succès !')
+        const response = await apiService.updateEntrepot(editingEntrepot.id, payload)
+        if (isApiSuccess(response)) {
+          setSuccess('Entrepôt mis à jour avec succès !')
+        } else {
+          setError(response.message || 'Erreur lors de la mise à jour')
+          return
+        }
       } else {
-        // TODO: Création
-        // const response = await apiService.createEntrepot(payload)
-        console.log('Création entrepôt:', payload)
-        setSuccess('Entrepôt créé avec succès !')
+        const response = await apiService.createEntrepot(payload)
+        if (isApiSuccess(response)) {
+          setSuccess('Entrepôt créé avec succès !')
+        } else {
+          setError(response.message || 'Erreur lors de la création')
+          return
+        }
       }
 
       // Recharger la liste
@@ -167,14 +174,13 @@ export const useEntrepots = () => {
 
     setIsLoading(true)
     try {
-      // TODO: Suppression
-      // await apiService.deleteEntrepot(entrepotId)
-      console.log('Suppression entrepôt:', entrepotId)
-      setSuccess('Entrepôt supprimé avec succès !')
-
-      // Recharger la liste
-      await loadEntrepots()
-
+      const response = await apiService.deleteEntrepot(entrepotId)
+      if (isApiSuccess(response)) {
+        setSuccess(response.message || 'Entrepôt supprimé avec succès !')
+        await loadEntrepots()
+      } else {
+        setError(response.message || 'Erreur lors de la suppression')
+      }
     } catch (err: any) {
       setError('Erreur lors de la suppression')
     } finally {

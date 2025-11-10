@@ -311,3 +311,41 @@ export function isApiSuccess<T>(response: ApiResponse<T>): response is ApiSucces
 export function isApiError(response: ApiResponse<unknown>): response is ApiErrorResponse {
   return response.success === false;
 }
+
+// ============================================
+// ENTREPOTS
+// ============================================
+
+export interface Entrepot {
+  id: number;
+  entreprise_id: number;
+  nom_entrepot: string;
+  type_entrepot?: string;
+  adresse: string;
+  ville: string;
+  code_postal: string;
+  pays?: string;
+  capacite_stockage_m3?: number;
+  telephone?: string;
+  email_contact?: string;
+  horaires_ouverture?: string;
+  equipements_speciaux?: string;
+  est_actif: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreateEntrepotRequest {
+  nom_entrepot: string;
+  type_entrepot?: string;
+  adresse: string;
+  ville: string;
+  code_postal: string;
+  pays?: string;
+  capacite_stockage_m3?: number;
+  telephone?: string;
+  email_contact?: string;
+  horaires_ouverture?: string;
+  equipements_speciaux?: string;
+  est_actif?: boolean;
+}

@@ -3,6 +3,7 @@ const router = express.Router();
 const entrepotService = require('../services/EntrepotService');
 const { authMiddleware, requireRole } = require('../utils/jwt');
 const { asyncHandler } = require('../middleware/errorHandler');
+const { validateCreateEntrepot, validateUpdateEntrepot } = require('../middleware/validators/entrepotValidator');
 
 /**
  * GET /api/entrepots - Récupérer tous les entrepôts de l'entreprise connectée
@@ -71,7 +72,7 @@ router.get('/:id', authMiddleware, asyncHandler(async (req, res) => {
 /**
  * POST /api/entrepots - Créer un nouvel entrepôt
  */
-router.post('/', authMiddleware, asyncHandler(async (req, res) => {
+router.post('/', authMiddleware, validateCreateEntrepot, asyncHandler(async (req, res) => {
   const { entreprise_id } = req.user;
 
   if (!entreprise_id) {
@@ -98,7 +99,7 @@ router.post('/', authMiddleware, asyncHandler(async (req, res) => {
 /**
  * PUT /api/entrepots/:id - Mettre à jour un entrepôt
  */
-router.put('/:id', authMiddleware, asyncHandler(async (req, res) => {
+router.put('/:id', authMiddleware, validateUpdateEntrepot, asyncHandler(async (req, res) => {
   // Vérifier que l'entrepôt existe et appartient à l'entreprise
   const existingEntrepot = await entrepotService.getEntrepotById(req.params.id);
 

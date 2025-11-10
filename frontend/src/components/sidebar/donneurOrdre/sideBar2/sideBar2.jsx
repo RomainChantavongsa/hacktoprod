@@ -47,16 +47,6 @@ function SideBar2() {
               <span className="sidebar-label">Entrepôts</span>
             </NavLink>
           </li>
-          
-          <li>
-            <NavLink
-              to="/entreprise/entrepots"
-              className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
-            >
-              <span className="sidebar-icon">🏭</span>
-              <span className="sidebar-label">Entrepôts</span>
-            </NavLink>
-          </li>
 
           <li>
             <NavLink

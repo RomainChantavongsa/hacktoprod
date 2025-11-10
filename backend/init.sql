@@ -346,3 +346,44 @@ CREATE TABLE IF NOT EXISTS annuaire (
 CREATE INDEX IF NOT EXISTS idx_annuaire_entreprise ON annuaire (entreprise_id);
 CREATE INDEX IF NOT EXISTS idx_annuaire_nom ON annuaire (nom);
 CREATE INDEX IF NOT EXISTS idx_annuaire_email ON annuaire (email);
+
+---
+
+-- ******************************************************
+-- 10. Table : entrepot (Entrepôts rattachés à une entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS entrepot (
+    id SERIAL PRIMARY KEY,
+
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+
+    -- Informations principales
+    nom_entrepot VARCHAR(255) NOT NULL,
+    type_entrepot VARCHAR(100), -- ex: Stockage, Chargement, Livraison, Transit
+
+    -- Adresse
+    adresse VARCHAR(255) NOT NULL,
+    ville VARCHAR(100) NOT NULL,
+    code_postal VARCHAR(10) NOT NULL,
+    pays VARCHAR(100) DEFAULT 'France',
+
+    -- Capacités et contacts
+    capacite_stockage_m3 DECIMAL(12,2),
+    telephone VARCHAR(50),
+    email_contact VARCHAR(255),
+
+    -- Détails opérationnels
+    horaires_ouverture TEXT,
+    equipements_speciaux TEXT,
+    est_actif BOOLEAN DEFAULT TRUE,
+
+    -- Dates
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_entrepot_entreprise ON entrepot (entreprise_id);
+CREATE INDEX IF NOT EXISTS idx_entrepot_actif ON entrepot (est_actif);
