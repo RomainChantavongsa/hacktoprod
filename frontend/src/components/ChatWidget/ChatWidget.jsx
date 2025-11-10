@@ -318,14 +318,6 @@ const ChatWidget = ({ token, isAuthenticated }) => {
                 {isConnected ? t(language, 'online') : t(language, 'offline')}
               </span>
             </div>
-            <button 
-              onClick={toggleLanguage} 
-              className="language-btn" 
-              aria-label="Change language"
-              title={`Switch to ${language === 'en' ? 'French' : 'English'}`}
-            >
-              {language === 'en' ? '🇫🇷' : '🇬🇧'}
-            </button>
             <button onClick={toggleChat} className="close-btn" aria-label={t(language, 'closeChat')}>
               ×
             </button>
@@ -418,14 +410,22 @@ const ChatWidget = ({ token, isAuthenticated }) => {
               disabled={!isConnected}
             />
             <button
+              type="button"
+              className="language-flag-btn"
+              onClick={toggleLanguage}
+              aria-label={language === 'en' ? 'Switch to French' : 'Switch to English'}
+              title={language === 'en' ? 'Français' : 'English'}
+            >
+              <span className="flag-icon">{language === 'en' ? 'GB' : 'FR'}</span>
+            </button>
+            <button
               type="submit"
               className="send-btn"
               disabled={!inputMessage.trim() || !isConnected}
               aria-label={t(language, 'sendMessage')}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="228" height="328" viewBox="0 0 241 241" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
               </svg>
             </button>
           </form>

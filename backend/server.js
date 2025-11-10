@@ -63,7 +63,7 @@ app.get('/', (req, res) => {
       remorques: '/api/remorques',
       conducteurs: '/api/conducteurs',
       documents: '/api/documents',
-      chat: '/api/chat'
+      chat: '/api/chat',
       compte_bancaire: '/api/compte-bancaire',
       annuaire: '/api/annuaire',
       entrepots: '/api/entrepots'

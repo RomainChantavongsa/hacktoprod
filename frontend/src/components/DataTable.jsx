@@ -132,7 +132,7 @@ export default function DataTable({
               pageSlice.map((row) => (
                 <tr key={row.id}>
                   {columns.map((col) => (
-                    <td key={col.key}>
+                    <td key={col.key} data-label={col.header}>
                       {col.render ? col.render(row) : (row[col.key] ?? '-')}
                     </td>
                   ))}

@@ -135,3 +135,72 @@
     color: #9ca3af;
   }
 }
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .en-cours-page {
+    padding: 1rem;
+  }
+
+  .page-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+    }
+  }
+
+  .route-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+
+    .route-arrow {
+      transform: rotate(90deg);
+      font-size: 1rem;
+    }
+  }
+
+  .dates-cell {
+    font-size: 0.8rem;
+
+    div {
+      margin: 0.2rem 0;
+    }
+  }
+
+  .transporteur-cell .transporteur-id {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .statut-badge {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  .prix-cell {
+    font-size: 0.9rem;
+  }
+
+  .loading, .empty-state {
+    padding: 2rem 1rem;
+
+    p {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* Responsive pour tablette */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .en-cours-page {
+    padding: 1.5rem;
+  }
+}
