@@ -222,37 +222,66 @@ CREATE INDEX IF NOT EXISTS idx_conducteur_entreprise ON conducteur (entreprise_i
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS offre_fret (
     id SERIAL PRIMARY KEY,
-    
+
     -- Entreprises impliquées
     entreprise_donneur_ordre_id INT NOT NULL,
     entreprise_transporteur_id INT,
-    
+
     -- Utilisateur qui a créé l'offre
     createur_id INT NOT NULL,
-    
+
     date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     statut_offre VARCHAR(50) NOT NULL DEFAULT 'Publiee', -- 'Publiee', 'Attribuee', 'EnCours', 'Completee', 'Annulee'
-    
+
     poids_marchandise_kg DECIMAL(10, 2) NOT NULL,
     volume_m3 DECIMAL(10, 2),
     type_marchandise VARCHAR(100) NOT NULL,
-    
+
     -- Lieux de Chargement
     adresse_chargement VARCHAR(255) NOT NULL,
     ville_chargement VARCHAR(100) NOT NULL,
     code_postal_chargement VARCHAR(10) NOT NULL,
-    
+
     -- Lieux de Livraison
     adresse_livraison VARCHAR(255) NOT NULL,
     ville_livraison VARCHAR(100) NOT NULL,
     code_postal_livraison VARCHAR(10) NOT NULL,
-    
+
     type_vehicule_souhaite VARCHAR(100),
     date_chargement_prevue DATE NOT NULL,
     conditions_speciales VARCHAR(500),
     prix_propose DECIMAL(10, 2),
-    
+
     FOREIGN KEY (entreprise_donneur_ordre_id) REFERENCES entreprise(id) ON DELETE CASCADE,
     FOREIGN KEY (entreprise_transporteur_id) REFERENCES entreprise(id) ON DELETE SET NULL,
     FOREIGN KEY (createur_id) REFERENCES utilisateur(id) ON DELETE SET NULL
 );
+
+---
+
+-- ******************************************************
+-- 8. Table : compte_bancaire (Comptes bancaires des entreprises)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS compte_bancaire (
+    id SERIAL PRIMARY KEY,
+
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+
+    -- Informations bancaires
+    iban VARCHAR(34) UNIQUE NOT NULL, -- IBAN (jusqu'à 34 caractères)
+    bic VARCHAR(11), -- BIC/SWIFT (optionnel)
+    nom_banque VARCHAR(255) NOT NULL, -- Nom de la banque
+    titulaire VARCHAR(255) NOT NULL, -- Titulaire du compte
+
+    -- Statut du compte
+    est_principal BOOLEAN DEFAULT FALSE, -- TRUE si c'est le compte principal de l'entreprise
+
+    -- Métadonnées
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_compte_bancaire_entreprise ON compte_bancaire (entreprise_id);

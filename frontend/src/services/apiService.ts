@@ -591,6 +591,69 @@ class ApiService {
       method: 'DELETE',
     });
   }
+
+  // ============================================
+  // COMPTE BANCAIRE ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer tous les comptes bancaires de l'entreprise
+   */
+  async getComptesBancaires(): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>('/compte-bancaire');
+  }
+
+  /**
+   * Récupérer un compte bancaire par ID
+   */
+  async getCompteBancaireById(id: number): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}`);
+  }
+
+  /**
+   * Créer un compte bancaire
+   */
+  async createCompteBancaire(data: any): Promise<ApiResponse<any>> {
+    return this.request<any>('/compte-bancaire', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Mettre à jour un compte bancaire
+   */
+  async updateCompteBancaire(id: number, data: any): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Supprimer un compte bancaire
+   */
+  async deleteCompteBancaire(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/compte-bancaire/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  /**
+   * Définir un compte bancaire comme principal
+   */
+  async setCompteAsPrincipal(id: number): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}/set-principal`, {
+      method: 'POST',
+    });
+  }
+
+  /**
+   * Récupérer le compte bancaire principal
+   */
+  async getComptePrincipal(): Promise<ApiResponse<any>> {
+    return this.request<any>('/compte-bancaire/principal');
+  }
 }
 
 // Export une instance unique (Singleton)

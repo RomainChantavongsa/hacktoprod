@@ -21,6 +21,8 @@ export const routeConfig = [
   { path: '/parametres/entreprise', folder: 'settings/entreprise' },
   // Route pour les documents
   { path: '/entreprise/documents', folder: 'settings/documents' },
+  // Route pour les comptes bancaires
+  { path: '/entreprise/compte-bancaire', folder: 'settings/compte-bancaire' },
   // Route pour le profil transporteur
   { path: '/entreprise/profil', folder: 'transporteur/profil' },
   { path: '/entreprise/vehicules', folder: 'transporteur/vehicules' },
