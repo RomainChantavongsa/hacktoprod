@@ -10,51 +10,41 @@ function SideBar1() {
         <ul className="sidebar-menu">
           <li>
             <NavLink
-              to="/transports/commandes"
+              to="/offres/disponibles"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">📋</span>
-              <span className="sidebar-label">Commandes</span>
+              <span className="sidebar-icon">�</span>
+              <span className="sidebar-label">Offres disponibles</span>
             </NavLink>
           </li>
           
           <li>
             <NavLink 
-              to="/transports/encheres" 
+              to="/offres/mes-propositions" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">👁️</span>
-              <span className="sidebar-label">Vos enchères</span>
+              <span className="sidebar-icon">�</span>
+              <span className="sidebar-label">Mes propositions</span>
             </NavLink>
           </li>
           
           <li>
             <NavLink 
-              to="/transports/recu" 
+              to="/missions/en-cours" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon">🚚</span>
-              <span className="sidebar-label">Reçu</span>
+              <span className="sidebar-label">Missions en cours</span>
             </NavLink>
           </li>
           
           <li>
             <NavLink 
-              to="/transports/effectue" 
+              to="/missions/terminees" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon">✓</span>
-              <span className="sidebar-label">Effectué</span>
-            </NavLink>
-          </li>
-          
-          <li>
-            <NavLink 
-              to="/transports/non-recu" 
-              className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
-            >
-              <span className="sidebar-icon">⏱️</span>
-              <span className="sidebar-label">Non reçu</span>
+              <span className="sidebar-label">Missions terminées</span>
             </NavLink>
           </li>
         </ul>

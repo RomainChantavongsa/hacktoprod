@@ -10,8 +10,8 @@ function SidebarManager() {
   const getSidebar = () => {
     const path = location.pathname
 
-    // Section Offres (Mes offres de transport)
-    if (path.startsWith('/offres')) {
+    // Section Offres (Mes offres de transport) et Missions
+    if (path.startsWith('/offres') || path.startsWith('/missions')) {
       return <SideBar1 />
     }
 

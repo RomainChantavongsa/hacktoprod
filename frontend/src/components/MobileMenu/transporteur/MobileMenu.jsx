@@ -23,11 +23,10 @@ function MobileMenu({ isOpen, onClose }) {
   }
 
   const transportLinks = [
-    { to: '/transports/commandes', icon: '📋', label: 'Commandes' },
-    { to: '/transports/encheres', icon: '👁️', label: 'Vos enchères' },
-    { to: '/transports/recu', icon: '🚚', label: 'Reçu' },
-    { to: '/transports/effectue', icon: '✓', label: 'Effectué' },
-    { to: '/transports/non-recu', icon: '⏱️', label: 'Non reçu' },
+    { to: '/offres/disponibles', icon: '🔍', label: 'Offres disponibles' },
+    { to: '/offres/mes-propositions', icon: '📝', label: 'Mes propositions' },
+    { to: '/missions/en-cours', icon: '🚚', label: 'Missions en cours' },
+    { to: '/missions/terminees', icon: '✓', label: 'Missions terminées' },
   ]
 
   const entrepriseLinks = [

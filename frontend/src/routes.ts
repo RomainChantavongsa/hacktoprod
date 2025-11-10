@@ -39,6 +39,13 @@ export const routeConfig = [
   { path: '/offres/propositions', folder: 'offres/propositions' },
   { path: '/offres/en-cours', folder: 'offres/en-cours' },
   { path: '/offres/terminees', folder: 'offres/terminees' },
+  // Routes pour les transporteurs
+  { path: '/offres/disponibles', folder: 'offres/disponibles' },
+  { path: '/offres/:offreId/proposer', folder: 'offres/proposer' },
+  { path: '/offres/mes-propositions', folder: 'offres/mes-propositions' },
+  // Routes des missions (partagées transporteur/donneur d'ordre)
+  { path: '/missions/en-cours', folder: 'missions/en-cours' },
+  { path: '/missions/terminees', folder: 'missions/terminees' },
 ]
 
 // Fonction pour charger dynamiquement un composant de page

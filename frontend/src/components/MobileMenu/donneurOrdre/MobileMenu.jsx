@@ -26,8 +26,8 @@ function MobileMenu({ isOpen, onClose }) {
     { to: '/offres/publier', icon: '➕', label: 'Publier une offre' },
     { to: '/offres/actives', icon: '📋', label: 'Offres actives' },
     { to: '/offres/propositions', icon: '👁️', label: 'Propositions reçues' },
-    { to: '/offres/en-cours', icon: '🚚', label: 'En cours' },
-    { to: '/offres/terminees', icon: '✓', label: 'Terminées' },
+    { to: '/missions/en-cours', icon: '🚚', label: 'Missions en cours' },
+    { to: '/missions/terminees', icon: '✓', label: 'Missions terminées' },
   ]
 
   const entrepriseLinks = [

@@ -40,21 +40,21 @@ function SideBar1() {
           
           <li>
             <NavLink 
-              to="/offres/en-cours" 
+              to="/missions/en-cours" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon">🚚</span>
-              <span className="sidebar-label">En cours</span>
+              <span className="sidebar-label">Missions en cours</span>
             </NavLink>
           </li>
           
           <li>
             <NavLink 
-              to="/offres/terminees" 
+              to="/missions/terminees" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon">✓</span>
-              <span className="sidebar-label">Terminées</span>
+              <span className="sidebar-label">Missions terminées</span>
             </NavLink>
           </li>
         </ul>
