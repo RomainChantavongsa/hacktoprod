@@ -20,8 +20,8 @@ function SideBar3() {
           </li>
           
           <li>
-            <NavLink 
-              to="/parametres/compte" 
+            <NavLink
+              to="/parametres/compte"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon">👤</span>

@@ -9,6 +9,7 @@ interface CompteFormData {
   prenom: string
   telephone: string
   role: 'transporteur' | 'donneur_ordre'
+  type_entreprise?: string
 }
 
 export const useCompte = () => {
@@ -19,7 +20,8 @@ export const useCompte = () => {
     nom: '',
     prenom: '',
     telephone: '',
-    role: 'transporteur'
+    role: 'transporteur',
+    type_entreprise: ''
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -38,7 +40,8 @@ export const useCompte = () => {
               nom: response.data.nom || '',
               prenom: response.data.prenom || '',
               telephone: response.data.telephone || '',
-              role: response.data.role || 'transporteur'
+              role: response.data.type_entreprise || 'transporteur',
+              type_entreprise: response.data.type_entreprise || ''
             })
           }
         } catch (err) {
@@ -50,7 +53,8 @@ export const useCompte = () => {
             nom: user.nom || '',
             prenom: user.prenom || '',
             telephone: user.telephone || '',
-            role: user.role || ''
+            role: user.type_entreprise || user.role || '',
+            type_entreprise: user.type_entreprise || ''
           })
         }
       }

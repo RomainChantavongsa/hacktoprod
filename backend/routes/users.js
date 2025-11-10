@@ -119,9 +119,17 @@ router.get('/profile', authMiddleware, asyncHandler(async (req, res) => {
   // Récupérer les données complètes déchiffrées
   const fullUser = await Utilisateur.getFromId(userId);
 
+  // Récupérer l'entreprise pour obtenir le type
+  const Entreprise = require('../models/Entreprise');
+  const entreprise = await Entreprise.getFromId(fullUser.getEntrepriseId());
+
+  // Ajouter le type d'entreprise aux données utilisateur
+  const userData = fullUser.toFullObject();
+  userData.type_entreprise = entreprise ? entreprise.getTypeEntreprise() : null;
+
   res.status(200).json({
     success: true,
-    data: fullUser.toFullObject()
+    data: userData
   });
 }));
 

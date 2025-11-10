@@ -222,37 +222,115 @@ CREATE INDEX IF NOT EXISTS idx_conducteur_entreprise ON conducteur (entreprise_i
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS offre_fret (
     id SERIAL PRIMARY KEY,
-    
+
     -- Entreprises impliquées
     entreprise_donneur_ordre_id INT NOT NULL,
     entreprise_transporteur_id INT,
-    
+
     -- Utilisateur qui a créé l'offre
     createur_id INT NOT NULL,
-    
+
     date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     statut_offre VARCHAR(50) NOT NULL DEFAULT 'Publiee', -- 'Publiee', 'Attribuee', 'EnCours', 'Completee', 'Annulee'
-    
+
     poids_marchandise_kg DECIMAL(10, 2) NOT NULL,
     volume_m3 DECIMAL(10, 2),
     type_marchandise VARCHAR(100) NOT NULL,
-    
+
     -- Lieux de Chargement
     adresse_chargement VARCHAR(255) NOT NULL,
     ville_chargement VARCHAR(100) NOT NULL,
     code_postal_chargement VARCHAR(10) NOT NULL,
-    
+
     -- Lieux de Livraison
     adresse_livraison VARCHAR(255) NOT NULL,
     ville_livraison VARCHAR(100) NOT NULL,
     code_postal_livraison VARCHAR(10) NOT NULL,
-    
+
     type_vehicule_souhaite VARCHAR(100),
     date_chargement_prevue DATE NOT NULL,
     conditions_speciales VARCHAR(500),
     prix_propose DECIMAL(10, 2),
-    
+
     FOREIGN KEY (entreprise_donneur_ordre_id) REFERENCES entreprise(id) ON DELETE CASCADE,
     FOREIGN KEY (entreprise_transporteur_id) REFERENCES entreprise(id) ON DELETE SET NULL,
     FOREIGN KEY (createur_id) REFERENCES utilisateur(id) ON DELETE SET NULL
 );
+
+---
+
+-- ******************************************************
+-- 8. Table : compte_bancaire (Comptes bancaires des entreprises)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS compte_bancaire (
+    id SERIAL PRIMARY KEY,
+
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+
+    -- Informations bancaires
+    iban VARCHAR(34) UNIQUE NOT NULL, -- IBAN (jusqu'à 34 caractères)
+    bic VARCHAR(11), -- BIC/SWIFT (optionnel)
+    nom_banque VARCHAR(255) NOT NULL, -- Nom de la banque
+    titulaire VARCHAR(255) NOT NULL, -- Titulaire du compte
+
+    -- Statut du compte
+    est_principal BOOLEAN DEFAULT FALSE, -- TRUE si c'est le compte principal de l'entreprise
+
+    -- Métadonnées
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_compte_bancaire_entreprise ON compte_bancaire (entreprise_id);
+
+---
+
+-- ******************************************************
+-- 9. Table : annuaire (Coordonnées des membres de l'entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS annuaire (
+    id SERIAL PRIMARY KEY,
+
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+
+    -- Informations de la personne
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255),
+    fonction VARCHAR(255), -- Poste occupé dans l'entreprise
+    service VARCHAR(255), -- Service/département
+
+    -- Coordonnées
+    email VARCHAR(255),
+    telephone_fixe VARCHAR(50),
+    telephone_mobile VARCHAR(50),
+    telephone_professionnel VARCHAR(50),
+
+    -- Adresse professionnelle (si différente du siège)
+    adresse_professionnelle VARCHAR(255),
+    code_postal_professionnel VARCHAR(10),
+    ville_professionnelle VARCHAR(100),
+
+    -- Informations complémentaires
+    notes TEXT, -- Notes supplémentaires
+    est_actif BOOLEAN DEFAULT TRUE, -- Si la personne est encore active
+
+    -- Métadonnées
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Utilisateur qui a créé/modifié l'entrée
+    created_by INT,
+    FOREIGN KEY (created_by) REFERENCES utilisateur(id) ON DELETE SET NULL,
+    updated_by INT,
+    FOREIGN KEY (updated_by) REFERENCES utilisateur(id) ON DELETE SET NULL
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_annuaire_entreprise ON annuaire (entreprise_id);
+CREATE INDEX IF NOT EXISTS idx_annuaire_nom ON annuaire (nom);
+CREATE INDEX IF NOT EXISTS idx_annuaire_email ON annuaire (email);
