@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useAuth } from '../../../contexts/AuthContext'
-import apiService from '../../../services/apiService'
-import type { Entreprise } from '../../../types/api'
+import { useAuth } from '../../contexts/AuthContext'
+import apiService from '../../services/apiService'
+import type { Entreprise } from '../../types/api'
 
 interface ProfilFormData {
   nom_entreprise: string
@@ -61,9 +61,9 @@ export const useProfil = () => {
               code_postal: response.data.code_postal || '',
               ville: response.data.ville || '',
               pays: response.data.pays || 'France',
-              secteur_activite: response.data.secteur_activite || '',
-              taille_entreprise: response.data.taille_entreprise || '',
-              frequence_expeditions: response.data.frequence_expeditions || '',
+              secteur_activite: response.data.type_acteur || '',
+              taille_entreprise: '',
+              frequence_expeditions: response.data.frequence_besoin || '',
               digitalisation_active: response.data.digitalisation_active || false
             })
           } else {
@@ -108,9 +108,22 @@ export const useProfil = () => {
         return
       }
 
-      const payload = {
-        ...formData
-      } as Partial<Entreprise>
+      const payload: Partial<Entreprise> = {
+        nom_entreprise: formData.nom_entreprise,
+        type_structure: formData.type_structure || undefined,
+        siret: formData.siret,
+        email_contact: formData.email_contact,
+        telephone: formData.telephone || undefined,
+        adresse_siege: formData.adresse_siege || undefined,
+        complement_adresse: formData.complement_adresse || undefined,
+        code_postal: formData.code_postal || undefined,
+        ville: formData.ville || undefined,
+        pays: formData.pays || undefined,
+        digitalisation_active: formData.digitalisation_active,
+        // Mapping champs spécifiques Donneur d'ordre
+        type_acteur: formData.secteur_activite || undefined,
+        frequence_besoin: formData.frequence_expeditions || undefined
+      }
 
       // Appel API pour mettre à jour le profil
       const response = await apiService.updateEntreprise(user.entreprise_id, payload)

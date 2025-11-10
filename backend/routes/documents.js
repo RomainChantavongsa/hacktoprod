@@ -286,7 +286,10 @@ router.post('/', extractEntrepriseId, upload.single('file'), async (req, res) =>
       date_emission: req.body.date_emission || null,
       date_expiration: req.body.date_expiration || null,
       uploade_par: req.user_id || null,
-      tags: req.body.tags ? JSON.parse(req.body.tags) : null
+      tags: req.body.tags ? JSON.parse(req.body.tags) : null,
+      // Informations supplémentaires pour le nommage des fichiers
+      plaque_immatriculation: req.body.plaque_immatriculation || null,
+      reference: req.body.reference || null
     };
 
     const document = await DocumentService.createDocument(documentData, req.file);

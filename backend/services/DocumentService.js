@@ -40,11 +40,30 @@ class DocumentService {
   /**
    * Générer un nom de fichier unique
    */
-  generateUniqueFilename(originalName) {
+  generateUniqueFilename(originalName, typeDocument = '', additionalInfo = '') {
     const ext = path.extname(originalName);
     const timestamp = Date.now();
     const randomString = crypto.randomBytes(8).toString('hex');
-    return `${timestamp}-${randomString}${ext}`;
+    
+    // Créer un nom descriptif si des infos supplémentaires sont fournies
+    let descriptiveName = '';
+    if (typeDocument) {
+      // Nettoyer le type de document (enlever espaces et caractères spéciaux)
+      const cleanType = typeDocument.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+      descriptiveName += cleanType;
+    }
+    if (additionalInfo) {
+      // Nettoyer les infos additionnelles (plaque d'immatriculation par exemple)
+      const cleanInfo = additionalInfo.replace(/[^a-zA-Z0-9]/g, '_');
+      descriptiveName += descriptiveName ? `_${cleanInfo}` : cleanInfo;
+    }
+    
+    // Format final: typeDocument_info_timestamp_random.ext
+    const finalName = descriptiveName 
+      ? `${descriptiveName}_${timestamp}_${randomString}${ext}`
+      : `${timestamp}-${randomString}${ext}`;
+    
+    return finalName;
   }
 
   /**
@@ -55,8 +74,10 @@ class DocumentService {
       // S'assurer que le dossier de l'entreprise existe
       const entrepriseDir = await this.ensureEntrepriseDirExists(documentData.entreprise_id);
 
-      // Générer un nom unique pour le fichier
-      const uniqueFilename = this.generateUniqueFilename(file.originalname);
+      // Générer un nom unique pour le fichier avec des informations descriptives
+      const typeDoc = documentData.type_document || 'Document';
+      const additionalInfo = documentData.plaque_immatriculation || documentData.reference || '';
+      const uniqueFilename = this.generateUniqueFilename(file.originalname, typeDoc, additionalInfo);
       const filePath = path.join(entrepriseDir, uniqueFilename);
 
       // Sauvegarder le fichier
