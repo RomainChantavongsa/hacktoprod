@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useVehicules } from './vehicules.ts'
 import DataTable from '@components/DataTable.jsx'
+import DocumentViewerModal from '@components/DocumentViewerModal.jsx'
 import apiService from '../../../services/apiService'
 import './vehicules.scss'
 
@@ -20,20 +21,22 @@ export default function VehiculesPage() {
     handleFileChange
   } = useVehicules()
 
+  const [documentModalOpen, setDocumentModalOpen] = useState(false)
+  const [currentDocuments, setCurrentDocuments] = useState([])
+  const [currentVehiculeInfo, setCurrentVehiculeInfo] = useState('')
+
   const handleFileInputChange = (e, type) => {
     const file = e.target.files[0]
     handleFileChange(file, type)
   }
 
-  const viewDocuments = async (vehiculeId) => {
+  const viewDocuments = async (vehicule) => {
     try {
-      const response = await apiService.getDocumentsVehicule(vehiculeId)
+      const response = await apiService.getDocumentsVehicule(vehicule.id)
       if (response.success && response.data) {
-        const documents = response.data
-        const message = documents.length > 0
-          ? `Documents pour le véhicule ${vehiculeId}:\n${documents.map(d => `- ${d.nom_fichier_original} (${d.type_document})`).join('\n')}`
-          : `Aucun document trouvé pour le véhicule ${vehiculeId}`
-        alert(message)
+        setCurrentDocuments(response.data)
+        setCurrentVehiculeInfo(`Véhicule ${vehicule.type_vehicule} - ${vehicule.plaque_immatriculation}`)
+        setDocumentModalOpen(true)
       } else {
         alert('Erreur lors de la récupération des documents')
       }
@@ -133,7 +136,7 @@ export default function VehiculesPage() {
             ) },
           { key: 'actions', header: 'Actions', render: (r) => (
               <div className="actions-group">
-                <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r.id)}>📄 Docs</button>
+                <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r)}>📄 Docs</button>
                 <button className="btn btn-danger btn-sm" onClick={() => remove(r.id)}>Supprimer</button>
               </div>
             ) }
@@ -142,6 +145,13 @@ export default function VehiculesPage() {
         loading={loading}
         emptyMessage="Aucun véhicule"
         defaultPageSize={10}
+      />
+
+      <DocumentViewerModal
+        isOpen={documentModalOpen}
+        onClose={() => setDocumentModalOpen(false)}
+        documents={currentDocuments}
+        title={currentVehiculeInfo}
       />
     </div>
   )

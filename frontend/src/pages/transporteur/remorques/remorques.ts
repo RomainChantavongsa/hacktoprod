@@ -44,8 +44,10 @@ export const useRemorques = () => {
       if (uploadedFile) {
         const documentFormData = new FormData()
         documentFormData.append('file', uploadedFile)
-        documentFormData.append('type_document', 'Document remorque')
+        documentFormData.append('type_document', 'Document_remorque')
         documentFormData.append('categorie', 'Remorque')
+        documentFormData.append('plaque_immatriculation', form.plaque_immatriculation)
+        documentFormData.append('nom_fichier_original', `Document_remorque_${form.plaque_immatriculation}`)
 
         const documentResponse = await apiService.uploadDocument(documentFormData)
         if (documentResponse.success) {

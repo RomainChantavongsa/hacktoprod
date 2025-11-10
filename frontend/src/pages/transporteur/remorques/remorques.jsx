@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useRemorques } from './remorques.ts'
 import DataTable from '@components/DataTable.jsx'
+import DocumentViewerModal from '@components/DocumentViewerModal.jsx'
 import apiService from '../../../services/apiService'
 import './remorques.scss'
 
@@ -18,20 +20,22 @@ export default function RemorquesPage() {
     handleFileChange
   } = useRemorques()
 
+  const [documentModalOpen, setDocumentModalOpen] = useState(false)
+  const [currentDocuments, setCurrentDocuments] = useState([])
+  const [currentRemorqueInfo, setCurrentRemorqueInfo] = useState('')
+
   const handleFileInputChange = (e) => {
     const file = e.target.files[0]
     handleFileChange(file)
   }
 
-  const viewDocuments = async (remorqueId) => {
+  const viewDocuments = async (remorque) => {
     try {
-      const response = await apiService.getDocumentsRemorque(remorqueId)
+      const response = await apiService.getDocumentsRemorque(remorque.id)
       if (response.success && response.data) {
-        const documents = response.data
-        const message = documents.length > 0
-          ? `Documents pour la remorque ${documents[0]?.type_remorque}:\n${documents.map(d => `- ${d.nom_fichier_original} (${d.type_document})`).join('\n')}`
-          : `Aucun document trouvé pour cette remorque`
-        alert(message)
+        setCurrentDocuments(response.data)
+        setCurrentRemorqueInfo(`Remorque ${remorque.type_remorque} - ${remorque.plaque_immatriculation}`)
+        setDocumentModalOpen(true)
       } else {
         alert('Erreur lors de la récupération des documents')
       }
@@ -94,7 +98,7 @@ export default function RemorquesPage() {
           )},
           { key: 'actions', header: 'Actions', render: (r) => (
             <div className="actions-group">
-              <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r.id)}>📄 Docs</button>
+              <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r)}>📄 Docs</button>
               <button className="btn btn-danger btn-sm" onClick={() => remove(r.id)}>Supprimer</button>
             </div>
           )}
@@ -103,6 +107,13 @@ export default function RemorquesPage() {
         loading={loading}
         emptyMessage="Aucune remorque"
         defaultPageSize={10}
+      />
+
+      <DocumentViewerModal
+        isOpen={documentModalOpen}
+        onClose={() => setDocumentModalOpen(false)}
+        documents={currentDocuments}
+        title={currentRemorqueInfo}
       />
     </div>
   )

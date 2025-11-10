@@ -1,4 +1,5 @@
 import { useDocuments } from './documents.ts'
+import DataTable from '@components/DataTable.jsx'
 import './documents.scss'
 
 function Documents() {
@@ -127,107 +128,118 @@ function Documents() {
         </div>
       </div>
 
-      {/* Liste des documents */}
-      {documents.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">📁</div>
-          <h3>Aucun document</h3>
-          <p>Commencez par ajouter vos premiers documents</p>
-        </div>
-      ) : (
-        <div className="documents-list">
-          {documents.map((doc) => {
-            const expiringSoon = isExpiringSoon(doc.date_expiration)
-            const expired = isExpired(doc.date_expiration)
-            
-            return (
-              <div 
-                key={doc.id} 
-                className={`document-card ${expired ? 'expired' : ''} ${expiringSoon ? 'expiring' : ''}`}
-              >
-                <div className="document-icon">
-                  {getDocumentIcon(doc.extension)}
-                </div>
-
-                <div className="document-info">
-                  <div className="document-header-info">
-                    <h3 className="document-name">{doc.nom_fichier_original}</h3>
-                    <div className="document-badges">
-                      <span className="badge badge-type">{doc.type_document}</span>
-                      {doc.categorie && (
-                        <span className="badge badge-categorie">{doc.categorie}</span>
+      {/* Vue "database" sous forme de DataTable */}
+      <div className="documents-database">
+        <DataTable
+          columns={[
+            {
+              key: 'nom_fichier_original',
+              header: 'Document',
+              sortable: true,
+              render: (doc) => {
+                const expiringSoon = isExpiringSoon(doc.date_expiration)
+                const expired = isExpired(doc.date_expiration)
+                return (
+                  <div className={`dt-doc-main ${expired ? 'expired' : ''} ${expiringSoon ? 'expiring' : ''}`}> 
+                    <span className="dt-doc-icon">{getDocumentIcon(doc.extension)}</span>
+                    <div className="dt-doc-names">
+                      <span className="dt-doc-name">{doc.nom_fichier_original}</span>
+                      <div className="dt-doc-badges">
+                        <span className="badge badge-type">{doc.type_document}</span>
+                        {doc.categorie && <span className="badge badge-categorie">{doc.categorie}</span>}
+                        {doc.version > 1 && <span className="badge badge-version">v{doc.version}</span>}
+                      </div>
+                      {doc.description && (
+                        <div className="dt-doc-desc">{doc.description}</div>
                       )}
-                      {doc.version > 1 && (
-                        <span className="badge badge-version">v{doc.version}</span>
+                      {doc.tags && doc.tags.length > 0 && (
+                        <div className="dt-doc-tags">
+                          {doc.tags.map((t,i) => <span key={i} className="tag">#{t}</span>)}
+                        </div>
                       )}
                     </div>
                   </div>
-
-                  {doc.description && (
-                    <p className="document-description">{doc.description}</p>
-                  )}
-
-                  <div className="document-meta">
-                    <span className="meta-item">
-                      <span className="meta-icon">📦</span>
-                      {formatFileSize(doc.taille_octets)}
-                    </span>
-                    <span className="meta-item">
-                      <span className="meta-icon">📅</span>
-                      Ajouté le {formatDate(doc.created_at)}
-                    </span>
-                    {doc.date_expiration && (
-                      <span className={`meta-item ${expired ? 'text-error' : expiringSoon ? 'text-warning' : ''}`}>
-                        <span className="meta-icon">{expired ? '❌' : expiringSoon ? '⚠️' : '✅'}</span>
-                        {expired ? 'Expiré le' : 'Expire le'} {formatDate(doc.date_expiration)}
-                      </span>
-                    )}
-                  </div>
-
-                  {doc.tags && doc.tags.length > 0 && (
-                    <div className="document-tags">
-                      {doc.tags.map((tag, index) => (
-                        <span key={index} className="tag">#{tag}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div className="document-actions">
+                )
+              }
+            },
+            {
+              key: 'taille_octets',
+              header: 'Taille',
+              sortable: true,
+              width: '90px',
+              render: (doc) => <span>{formatFileSize(doc.taille_octets)}</span>
+            },
+            {
+              key: 'created_at',
+              header: 'Ajouté',
+              sortable: true,
+              width: '110px',
+              render: (doc) => <span>{formatDate(doc.created_at)}</span>
+            },
+            {
+              key: 'date_expiration',
+              header: 'Expiration',
+              sortable: true,
+              width: '130px',
+              render: (doc) => {
+                if (!doc.date_expiration) return <span>-</span>
+                const expiringSoon = isExpiringSoon(doc.date_expiration)
+                const expired = isExpired(doc.date_expiration)
+                return (
+                  <span className={`dt-expiration ${expired ? 'text-error' : expiringSoon ? 'text-warning' : 'text-success'}`}>
+                    {expired ? '❌' : expiringSoon ? '⚠️' : '✅'} {formatDate(doc.date_expiration)}
+                  </span>
+                )
+              }
+            },
+            {
+              key: 'est_valide',
+              header: 'Statut',
+              width: '110px',
+              render: (doc) => {
+                const expiringSoon = isExpiringSoon(doc.date_expiration)
+                const expired = isExpired(doc.date_expiration)
+                if (expired) return <span className="badge badge-error">Expiré</span>
+                if (expiringSoon) return <span className="badge badge-warning">Expire bientôt</span>
+                return <span className="badge badge-success">Valide</span>
+              }
+            },
+            {
+              key: 'actions',
+              header: 'Actions',
+              width: '140px',
+              render: (doc) => (
+                <div className="dt-actions">
                   <button
                     className="btn-action btn-preview"
                     onClick={() => handlePreviewDocument(doc)}
                     title="Prévisualiser"
-                  >
-                    <span>👁️</span>
-                  </button>
+                  >👁️</button>
                   <button
                     className="btn-action btn-edit"
                     onClick={() => handleEditDocument(doc)}
                     title="Modifier"
-                  >
-                    <span>✏️</span>
-                  </button>
+                  >✏️</button>
                   <button
                     className="btn-action btn-download"
                     onClick={() => handleDownloadDocument(doc)}
                     title="Télécharger"
-                  >
-                    <span>⬇️</span>
-                  </button>
+                  >⬇️</button>
                   <button
                     className="btn-action btn-delete"
                     onClick={() => handleDeleteDocument(doc.id)}
                     title="Supprimer"
-                  >
-                    <span>🗑️</span>
-                  </button>
+                  >🗑️</button>
                 </div>
-              </div>
-            )
-          })}
-        </div>
-      )}
+              )
+            }
+          ]}
+          data={documents}
+          loading={loading}
+          emptyMessage="Aucun document"
+          defaultPageSize={10}
+        />
+      </div>
 
       {/* Statistiques */}
       <div className="documents-stats">

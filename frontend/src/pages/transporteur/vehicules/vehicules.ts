@@ -59,8 +59,10 @@ export const useVehicules = () => {
       if (uploadedFiles.carte_grise) {
         const carteGriseFormData = new FormData()
         carteGriseFormData.append('file', uploadedFiles.carte_grise)
-        carteGriseFormData.append('type_document', 'Carte grise')
+        carteGriseFormData.append('type_document', 'Carte_grise')
         carteGriseFormData.append('categorie', 'Vehicule')
+        carteGriseFormData.append('plaque_immatriculation', form.plaque_immatriculation)
+        carteGriseFormData.append('nom_fichier_original', `Carte_grise_${form.plaque_immatriculation}`)
 
         const carteGriseResponse = await apiService.uploadDocument(carteGriseFormData)
         if (carteGriseResponse.success) {
@@ -76,6 +78,8 @@ export const useVehicules = () => {
         assuranceFormData.append('file', uploadedFiles.assurance)
         assuranceFormData.append('type_document', 'Assurance')
         assuranceFormData.append('categorie', 'Assurance')
+        assuranceFormData.append('plaque_immatriculation', form.plaque_immatriculation)
+        assuranceFormData.append('nom_fichier_original', `Assurance_${form.plaque_immatriculation}`)
 
         const assuranceResponse = await apiService.uploadDocument(assuranceFormData)
         if (assuranceResponse.success) {
