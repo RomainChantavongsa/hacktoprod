@@ -33,6 +33,8 @@ export const useConducteurs = () => {
     statut: 'actif' as 'actif' | 'inactif' | 'conge' | 'suspendu'
   })
 
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null)
+
   const load = async () => {
     setLoading(true)
     setError('')
@@ -57,35 +59,61 @@ export const useConducteurs = () => {
     e.preventDefault()
     setError('')
     setSubmitting(true)
-    
-    const payload = {
-      nom: form.nom,
-      prenom: form.prenom,
-      email: form.email || undefined,
-      telephone: form.telephone || undefined,
-      numero_permis: form.numero_permis,
-      date_naissance: form.date_naissance || undefined,
-      date_embauche: form.date_embauche || undefined,
-      statut: form.statut
+
+    try {
+      // Étape 1: Uploader le permis de conduire
+      let permisDocId = null
+
+      if (uploadedFile) {
+        const permisFormData = new FormData()
+        permisFormData.append('file', uploadedFile)
+        permisFormData.append('type_document', 'Permis')
+        permisFormData.append('categorie', 'Conducteur')
+
+        const permisResponse = await apiService.uploadDocument(permisFormData)
+        if (permisResponse.success) {
+          permisDocId = permisResponse.data.id
+        } else {
+          throw new Error('Erreur lors de l\'upload du permis de conduire')
+        }
+      }
+
+      // Étape 2: Créer le conducteur avec la référence du document
+      const payload = {
+        nom: form.nom,
+        prenom: form.prenom,
+        email: form.email || undefined,
+        telephone: form.telephone || undefined,
+        numero_permis: form.numero_permis,
+        date_naissance: form.date_naissance || undefined,
+        date_embauche: form.date_embauche || undefined,
+        statut: form.statut,
+        permis_document_id: permisDocId
+      }
+
+      const res = await apiService.createConducteur(payload)
+      if (res.success) {
+        setForm({
+          nom: '',
+          prenom: '',
+          email: '',
+          telephone: '',
+          numero_permis: '',
+          date_naissance: '',
+          date_embauche: '',
+          statut: 'actif'
+        })
+        setUploadedFile(null)
+        await load()
+      } else {
+        setError(res.message)
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création du conducteur:', error)
+      setError(error.message || 'Erreur lors de la création du conducteur')
+    } finally {
+      setSubmitting(false)
     }
-    
-    const res = await apiService.createConducteur(payload)
-    if (res.success) {
-      setForm({ 
-        nom: '', 
-        prenom: '', 
-        email: '', 
-        telephone: '', 
-        numero_permis: '', 
-        date_naissance: '', 
-        date_embauche: '', 
-        statut: 'actif' 
-      })
-      await load()
-    } else {
-      setError(res.message)
-    }
-    setSubmitting(false)
   }
 
   const remove = async (id: number) => {
@@ -100,28 +128,35 @@ export const useConducteurs = () => {
   }
 
   const resetForm = () => {
-    setForm({ 
-      nom: '', 
-      prenom: '', 
-      email: '', 
-      telephone: '', 
-      numero_permis: '', 
-      date_naissance: '', 
-      date_embauche: '', 
-      statut: 'actif' 
+    setForm({
+      nom: '',
+      prenom: '',
+      email: '',
+      telephone: '',
+      numero_permis: '',
+      date_naissance: '',
+      date_embauche: '',
+      statut: 'actif'
     })
+    setUploadedFile(null)
   }
 
-  return { 
-    conducteurs, 
-    loading, 
-    error, 
-    form, 
-    handleChange, 
-    create, 
-    remove, 
-    reload: load, 
-    submitting, 
-    resetForm 
+  const handleFileChange = (file: File | null) => {
+    setUploadedFile(file)
+  }
+
+  return {
+    conducteurs,
+    loading,
+    error,
+    form,
+    handleChange,
+    create,
+    remove,
+    reload: load,
+    submitting,
+    resetForm,
+    uploadedFile,
+    handleFileChange
   }
 }

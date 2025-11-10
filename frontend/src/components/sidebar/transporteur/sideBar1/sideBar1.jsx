@@ -9,8 +9,8 @@ function SideBar1() {
       <nav className="sidebar-nav">
         <ul className="sidebar-menu">
           <li>
-            <NavLink 
-              to="/transports/commandes" 
+            <NavLink
+              to="/transports/commandes"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon">📋</span>

@@ -58,12 +58,15 @@ const extractEntrepriseId = [
  */
 router.get('/', extractEntrepriseId, async (req, res) => {
   try {
-    const { type, categorie, statut } = req.query;
-    
+    const { type, categorie, statut, vehicule_id, conducteur_id, remorque_id } = req.query;
+
     const filters = {};
     if (type) filters.type = type;
     if (categorie) filters.categorie = categorie;
     if (statut) filters.statut = statut;
+    if (vehicule_id) filters.vehicule_id = parseInt(vehicule_id);
+    if (conducteur_id) filters.conducteur_id = parseInt(conducteur_id);
+    if (remorque_id) filters.remorque_id = parseInt(remorque_id);
 
     const documents = await DocumentService.getDocumentsByEntreprise(req.entreprise_id, filters);
 

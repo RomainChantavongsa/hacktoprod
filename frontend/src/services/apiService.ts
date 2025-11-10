@@ -508,6 +508,27 @@ class ApiService {
   }
 
   /**
+   * Récupérer les documents d'un véhicule spécifique
+   */
+  async getDocumentsVehicule(vehiculeId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?vehicule_id=${vehiculeId}`);
+  }
+
+  /**
+   * Récupérer les documents d'un conducteur spécifique
+   */
+  async getDocumentsConducteur(conducteurId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?conducteur_id=${conducteurId}`);
+  }
+
+  /**
+   * Récupérer les documents d'une remorque spécifique
+   */
+  async getDocumentsRemorque(remorqueId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?remorque_id=${remorqueId}`);
+  }
+
+  /**
    * Récupérer un document par ID
    */
   async getDocumentById(id: number): Promise<ApiResponse<any>> {

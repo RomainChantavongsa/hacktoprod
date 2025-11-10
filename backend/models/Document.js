@@ -61,38 +61,62 @@ class Document extends BaseModel {
    */
   async getByEntreprise(entrepriseId, filters = {}) {
     let query = `
-      SELECT * FROM document 
-      WHERE entreprise_id = $1
+      SELECT d.* FROM document d
+      WHERE d.entreprise_id = $1
     `;
     const values = [entrepriseId];
     let paramIndex = 2;
 
     // Filtrer par type de document
     if (filters.type) {
-      query += ` AND type_document = $${paramIndex}`;
+      query += ` AND d.type_document = $${paramIndex}`;
       values.push(filters.type);
       paramIndex++;
     }
 
     // Filtrer par catégorie
     if (filters.categorie) {
-      query += ` AND categorie = $${paramIndex}`;
+      query += ` AND d.categorie = $${paramIndex}`;
       values.push(filters.categorie);
+      paramIndex++;
+    }
+
+    // Filtrer par véhicule (jointure avec la table vehicule)
+    if (filters.vehicule_id) {
+      query += ` AND (
+        d.id = (SELECT carte_grise_document_id FROM vehicule WHERE id = $${paramIndex} AND entreprise_id = $1) OR
+        d.id = (SELECT assurance_document_id FROM vehicule WHERE id = $${paramIndex} AND entreprise_id = $1)
+      )`;
+      values.push(filters.vehicule_id);
+      paramIndex++;
+    }
+
+    // Filtrer par conducteur (jointure avec la table conducteur)
+    if (filters.conducteur_id) {
+      query += ` AND d.id = (SELECT permis_document_id FROM conducteur WHERE id = $${paramIndex} AND entreprise_id = $1)`;
+      values.push(filters.conducteur_id);
+      paramIndex++;
+    }
+
+    // Filtrer par remorque (jointure avec la table remorque)
+    if (filters.remorque_id) {
+      query += ` AND d.id = (SELECT document_id FROM remorque WHERE id = $${paramIndex} AND entreprise_id = $1)`;
+      values.push(filters.remorque_id);
       paramIndex++;
     }
 
     // Filtrer par statut (valide, expire_bientot, expire)
     if (filters.statut) {
       if (filters.statut === 'valide') {
-        query += ` AND est_valide = true AND (date_expiration IS NULL OR date_expiration > CURRENT_DATE)`;
+        query += ` AND d.est_valide = true AND (d.date_expiration IS NULL OR d.date_expiration > CURRENT_DATE)`;
       } else if (filters.statut === 'expire_bientot') {
-        query += ` AND date_expiration IS NOT NULL AND date_expiration > CURRENT_DATE AND date_expiration <= CURRENT_DATE + INTERVAL '30 days'`;
+        query += ` AND d.date_expiration IS NOT NULL AND d.date_expiration > CURRENT_DATE AND d.date_expiration <= CURRENT_DATE + INTERVAL '30 days'`;
       } else if (filters.statut === 'expire') {
-        query += ` AND date_expiration IS NOT NULL AND date_expiration < CURRENT_DATE`;
+        query += ` AND d.date_expiration IS NOT NULL AND d.date_expiration < CURRENT_DATE`;
       }
     }
 
-    query += ` ORDER BY created_at DESC`;
+    query += ` ORDER BY d.created_at DESC`;
 
     const result = await this._pool.query(query, values);
     return result.rows;

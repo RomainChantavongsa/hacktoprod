@@ -166,6 +166,13 @@ CREATE TABLE IF NOT EXISTS vehicule (
     plaque_immatriculation VARCHAR(50) UNIQUE NOT NULL,
     conducteur_attitre VARCHAR(255), -- nom du conducteur principal
     capacite_tonnes DECIMAL(10,2),
+
+    -- Documents liés au véhicule
+    carte_grise_document_id INT, -- Référence vers la table document
+    assurance_document_id INT, -- Référence vers la table document
+    FOREIGN KEY (carte_grise_document_id) REFERENCES document(id) ON DELETE SET NULL,
+    FOREIGN KEY (assurance_document_id) REFERENCES document(id) ON DELETE SET NULL,
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE
@@ -208,6 +215,11 @@ CREATE TABLE IF NOT EXISTS conducteur (
     date_naissance DATE,
     date_embauche DATE,
     statut VARCHAR(50) DEFAULT 'actif', -- 'actif', 'inactif', 'conge', 'suspendu'
+
+    -- Document lié au conducteur (permis de conduire)
+    permis_document_id INT, -- Référence vers la table document
+    FOREIGN KEY (permis_document_id) REFERENCES document(id) ON DELETE SET NULL,
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE

@@ -1,9 +1,45 @@
 import { useConducteurs } from './conducteurs.ts'
 import DataTable from '@components/DataTable.jsx'
+import apiService from '../../../services/apiService'
 import './conducteurs.scss'
 
 export default function ConducteursPage() {
-  const { conducteurs, loading, error, form, handleChange, create, remove, submitting, resetForm } = useConducteurs()
+  const {
+    conducteurs,
+    loading,
+    error,
+    form,
+    handleChange,
+    create,
+    remove,
+    submitting,
+    resetForm,
+    uploadedFiles,
+    handleFileChange
+  } = useConducteurs()
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0]
+    handleFileChange(file)
+  }
+
+  const viewDocuments = async (conducteurId) => {
+    try {
+      const response = await apiService.getDocumentsConducteur(conducteurId)
+      if (response.success && response.data) {
+        const documents = response.data
+        const message = documents.length > 0
+          ? `Documents pour ${documents[0]?.nom} ${documents[0]?.prenom}:\n${documents.map(d => `- ${d.nom_fichier_original} (${d.type_document})`).join('\n')}`
+          : `Aucun document trouvé pour ce conducteur`
+        alert(message)
+      } else {
+        alert('Erreur lors de la récupération des documents')
+      }
+    } catch (error) {
+      console.error('Erreur:', error)
+      alert('Erreur lors de la récupération des documents')
+    }
+  }
 
   const getStatutBadge = (statut) => {
     const badges = {
@@ -110,10 +146,10 @@ export default function ConducteursPage() {
             
             <div className="field">
               <label htmlFor="statut">Statut</label>
-              <select 
+              <select
                 id="statut"
-                name="statut" 
-                value={form.statut} 
+                name="statut"
+                value={form.statut}
                 onChange={handleChange}
               >
                 <option value="actif">Actif</option>
@@ -121,6 +157,16 @@ export default function ConducteursPage() {
                 <option value="conge">En congé</option>
                 <option value="suspendu">Suspendu</option>
               </select>
+            </div>
+
+            <div className="field">
+              <label>Permis de conduire *</label>
+              <input
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={handleFileInputChange}
+                required
+              />
             </div>
           </div>
           
@@ -147,10 +193,18 @@ export default function ConducteursPage() {
               {r.statut.charAt(0).toUpperCase() + r.statut.slice(1)}
             </span>
           )},
+          { key: 'documents', header: 'Documents', render: (r) => (
+            <span className={`doc-status ${r.permis_document_id ? 'present' : 'missing'}`}>
+              📄 Permis
+            </span>
+          )},
           { key: 'actions', header: 'Actions', render: (r) => (
-            <button className="btn btn-danger btn-sm" onClick={() => remove(r.id)}>
-              Supprimer
-            </button>
+            <div className="actions-group">
+              <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r.id)}>📄 Docs</button>
+              <button className="btn btn-danger btn-sm" onClick={() => remove(r.id)}>
+                Supprimer
+              </button>
+            </div>
           )}
         ]}
         data={conducteurs}
