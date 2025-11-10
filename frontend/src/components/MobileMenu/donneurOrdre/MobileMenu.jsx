@@ -35,7 +35,7 @@ function MobileMenu({ isOpen, onClose }) {
     { to: '/entreprise/documents', icon: '📄', label: 'Documents' },
     { to: '/entreprise/compte-bancaire', icon: '💳', label: 'Compte bancaire' },
     { to: '/entreprise/entrepots', icon: '🏭', label: 'Entrepôts' },
-    { to: '/entreprise/contacts', icon: '📞', label: 'Contacts' },
+    { to: '/entreprise/annuaire', icon: '📇', label: 'Annuaire' },
   ]
 
   const parametresLinks = [

@@ -37,7 +37,7 @@ function MobileMenu({ isOpen, onClose }) {
     { to: '/entreprise/compte-bancaire', icon: '💳', label: 'Compte bancaire' },
     { to: '/entreprise/vehicules', icon: '🚛', label: 'Véhicules' },
     { to: '/entreprise/remorques', icon: '🚐', label: 'Remorques' },
-    { to: '/entreprise/telephones', icon: '📞', label: 'Téléphones' },
+    { to: '/entreprise/annuaire', icon: '📇', label: 'Annuaire' },
     { to: '/entreprise/conducteurs', icon: '👨‍✈️', label: 'Conducteurs' },
   ]
 

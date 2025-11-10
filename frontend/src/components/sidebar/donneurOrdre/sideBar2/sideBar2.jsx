@@ -49,12 +49,12 @@ function SideBar2() {
           </li>
           
           <li>
-            <NavLink 
-              to="/entreprise/contacts" 
+            <NavLink
+              to="/entreprise/annuaire"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">📞</span>
-              <span className="sidebar-label">Contacts</span>
+              <span className="sidebar-icon">📇</span>
+              <span className="sidebar-label">Annuaire</span>
             </NavLink>
           </li>
         </ul>

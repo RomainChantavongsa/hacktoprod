@@ -285,3 +285,52 @@ CREATE TABLE IF NOT EXISTS compte_bancaire (
 
 -- Index pour améliorer les performances
 CREATE INDEX IF NOT EXISTS idx_compte_bancaire_entreprise ON compte_bancaire (entreprise_id);
+
+---
+
+-- ******************************************************
+-- 9. Table : annuaire (Coordonnées des membres de l'entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS annuaire (
+    id SERIAL PRIMARY KEY,
+
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+
+    -- Informations de la personne
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255),
+    fonction VARCHAR(255), -- Poste occupé dans l'entreprise
+    service VARCHAR(255), -- Service/département
+
+    -- Coordonnées
+    email VARCHAR(255),
+    telephone_fixe VARCHAR(50),
+    telephone_mobile VARCHAR(50),
+    telephone_professionnel VARCHAR(50),
+
+    -- Adresse professionnelle (si différente du siège)
+    adresse_professionnelle VARCHAR(255),
+    code_postal_professionnel VARCHAR(10),
+    ville_professionnelle VARCHAR(100),
+
+    -- Informations complémentaires
+    notes TEXT, -- Notes supplémentaires
+    est_actif BOOLEAN DEFAULT TRUE, -- Si la personne est encore active
+
+    -- Métadonnées
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Utilisateur qui a créé/modifié l'entrée
+    created_by INT,
+    FOREIGN KEY (created_by) REFERENCES utilisateur(id) ON DELETE SET NULL,
+    updated_by INT,
+    FOREIGN KEY (updated_by) REFERENCES utilisateur(id) ON DELETE SET NULL
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_annuaire_entreprise ON annuaire (entreprise_id);
+CREATE INDEX IF NOT EXISTS idx_annuaire_nom ON annuaire (nom);
+CREATE INDEX IF NOT EXISTS idx_annuaire_email ON annuaire (email);
