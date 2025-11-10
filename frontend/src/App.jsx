@@ -4,10 +4,15 @@ import Navbar from './components/Navbar/Navbar.jsx'
 import Footer from './components/Footer/Footer.jsx'
 import SidebarManager from './components/sidebar/SidebarManager.jsx'
 import DevDebugPanel from '@components/DevDebugPanel.jsx'
+import ChatWidget from './components/ChatWidget/ChatWidget.jsx'
+import { useAuth } from './contexts/AuthContext.jsx'
 import { routes } from './routes.ts'
 import './App.scss'
 
 function App() {
+  const { isAuthenticated } = useAuth();
+  const token = localStorage.getItem('token');
+
   return (
     <div className="app">
       <Navbar />
@@ -17,10 +22,10 @@ function App() {
           <Routes>
             {routes.map((route, index) => (
               route.Component && (
-                <Route 
-                  key={index} 
-                  path={route.path} 
-                  element={<route.Component />} 
+                <Route
+                  key={index}
+                  path={route.path}
+                  element={<route.Component />}
                 />
               )
             ))}
@@ -28,9 +33,12 @@ function App() {
         </Suspense>
       </main>
       <Footer />
-      
+
       {/* Panel de debug style Tracy - seulement en DEV */}
       <DevDebugPanel />
+
+      {/* Chatbot assistente - solo per utenti autenticati */}
+      <ChatWidget token={token} isAuthenticated={isAuthenticated()} />
     </div>
   )
 }

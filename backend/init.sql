@@ -406,3 +406,60 @@ CREATE TABLE IF NOT EXISTS entrepot (
 -- Index pour améliorer les performances
 CREATE INDEX IF NOT EXISTS idx_entrepot_entreprise ON entrepot (entreprise_id);
 CREATE INDEX IF NOT EXISTS idx_entrepot_actif ON entrepot (est_actif);
+
+---
+
+-- ******************************************************
+-- 8. Table : chat_conversation (Conversations chat)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS chat_conversation (
+    id SERIAL PRIMARY KEY,
+
+    -- Utilisateur qui discute
+    utilisateur_id INT NOT NULL,
+    FOREIGN KEY (utilisateur_id) REFERENCES utilisateur(id) ON DELETE CASCADE,
+
+    -- Metadata
+    derniere_activite TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    statut VARCHAR(50) DEFAULT 'active', -- 'active', 'fermee', 'archivee'
+
+    -- Context
+    context_data JSONB, -- Données additionnelles sur le contexte de la conversation
+
+    -- Dates
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_conversation_utilisateur ON chat_conversation (utilisateur_id);
+CREATE INDEX IF NOT EXISTS idx_conversation_statut ON chat_conversation (statut);
+
+---
+
+-- ******************************************************
+-- 9. Table : chat_message (Messages du chat)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS chat_message (
+    id SERIAL PRIMARY KEY,
+
+    -- Conversation d'appartenance
+    conversation_id INT NOT NULL,
+    FOREIGN KEY (conversation_id) REFERENCES chat_conversation(id) ON DELETE CASCADE,
+
+    -- Message
+    expediteur VARCHAR(50) NOT NULL, -- 'user' ou 'bot'
+    contenu TEXT NOT NULL,
+
+    -- Metadata
+    intention_reconnue VARCHAR(100), -- Intention identifiée par le bot
+
+    -- Feedback utilisateur
+    utile BOOLEAN, -- L'utilisateur a-t-il trouvé cette réponse utile?
+
+    -- Dates
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_message_conversation ON chat_message (conversation_id);
+CREATE INDEX IF NOT EXISTS idx_message_expediteur ON chat_message (expediteur);
+CREATE INDEX IF NOT EXISTS idx_message_created ON chat_message (created_at);

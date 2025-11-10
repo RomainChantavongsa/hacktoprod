@@ -30,7 +30,16 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_S3_BUCKET_NAME=${AWS_S3_BUCKET_NAME}
       - AWS_REGION=${AWS_REGION}
-      
+
+      # AI Chatbot - Google Gemini
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL}
+
+      # ElevenLabs TTS
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY}
+      - ELEVENLABS_VOICE_ID_EN=${ELEVENLABS_VOICE_ID_EN}
+      - ELEVENLABS_VOICE_ID_FR=${ELEVENLABS_VOICE_ID_FR}
+
       - NODE_ENV=${NODE_ENV}
     networks:
       - app-network
