@@ -1,0 +1,9 @@
+# Ignorer tous les fichiers uploadés
+*
+
+# Mais garder le .gitkeep et .gitignore
+!.gitkeep
+!.gitignore
+
+# Ignorer les sous-dossiers mais garder leur structure
+!*/

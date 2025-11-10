@@ -6,23 +6,6 @@
 // USER TYPES
 // ============================================
 
-export interface User {
-  id: number;
-  username: string;
-  entreprise_id: number;
-  role_entreprise: 'admin' | 'employe' | 'viewer';
-  is_admin?: boolean;
-  created_at?: string;
-  updated_at?: string;
-}
-
-export interface UserProfile extends User {
-  email: string;
-  nom: string;
-  prenom?: string;
-  telephone?: string;
-}
-
 export interface Entreprise {
   id: number;
   nom_entreprise: string;
@@ -65,6 +48,25 @@ export interface Entreprise {
   frequence_besoin?: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface User {
+  id: number;
+  username: string;
+  entreprise_id: number;
+  role_entreprise: 'admin' | 'employe' | 'viewer';
+  is_admin?: boolean;
+  created_at?: string;
+  updated_at?: string;
+  entreprise?: Entreprise; // Objet entreprise retourné par le backend lors du login
+}
+
+export interface UserProfile extends User {
+  email: string;
+  nom: string;
+  prenom?: string;
+  telephone?: string;
+  type_entreprise?: 'transporteur' | 'donneur_ordre';
 }
 
 export interface LoginRequest {
@@ -211,6 +213,27 @@ export interface UpdateOffreFretRequest {
   statut_offre?: StatutOffre;
 }
 
+// PROPOSITION TYPES
+// ============================================
+
+export type StatutProposition = 'Soumise' | 'Acceptee' | 'Refusee';
+
+export interface PropositionOffre {
+  id: number;
+  offre_fret_id: number;
+  entreprise_transporteur_id: number;
+  prix_propose: number;
+  message?: string;
+  statut_proposition: StatutProposition;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreatePropositionRequest {
+  prix_propose: number;
+  message?: string;
+}
+
 // ============================================
 // API RESPONSE TYPES
 // ============================================
@@ -266,6 +289,36 @@ export interface CreateRemorqueRequest {
   capacite_tonnes?: number;
 }
 
+// ============================================
+// CONDUCTEURS
+// ============================================
+
+export interface Conducteur {
+  id: number;
+  entreprise_id: number;
+  nom: string;
+  prenom: string;
+  email?: string;
+  telephone?: string;
+  numero_permis: string;
+  date_naissance?: string;
+  date_embauche?: string;
+  statut: 'actif' | 'inactif' | 'conge' | 'suspendu';
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreateConducteurRequest {
+  nom: string;
+  prenom: string;
+  email?: string;
+  telephone?: string;
+  numero_permis: string;
+  date_naissance?: string;
+  date_embauche?: string;
+  statut?: 'actif' | 'inactif' | 'conge' | 'suspendu';
+}
+
 export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 
 // ============================================
@@ -278,4 +331,42 @@ export function isApiSuccess<T>(response: ApiResponse<T>): response is ApiSucces
 
 export function isApiError(response: ApiResponse<unknown>): response is ApiErrorResponse {
   return response.success === false;
+}
+
+// ============================================
+// ENTREPOTS
+// ============================================
+
+export interface Entrepot {
+  id: number;
+  entreprise_id: number;
+  nom_entrepot: string;
+  type_entrepot?: string;
+  adresse: string;
+  ville: string;
+  code_postal: string;
+  pays?: string;
+  capacite_stockage_m3?: number;
+  telephone?: string;
+  email_contact?: string;
+  horaires_ouverture?: string;
+  equipements_speciaux?: string;
+  est_actif: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreateEntrepotRequest {
+  nom_entrepot: string;
+  type_entrepot?: string;
+  adresse: string;
+  ville: string;
+  code_postal: string;
+  pays?: string;
+  capacite_stockage_m3?: number;
+  telephone?: string;
+  email_contact?: string;
+  horaires_ouverture?: string;
+  equipements_speciaux?: string;
+  est_actif?: boolean;
 }

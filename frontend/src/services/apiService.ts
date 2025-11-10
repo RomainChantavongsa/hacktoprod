@@ -11,12 +11,18 @@ import type {
   OffreFret,
   CreateOffreFretRequest,
   UpdateOffreFretRequest,
+  PropositionOffre,
+  CreatePropositionRequest,
   Entreprise,
   ApiResponse,
   Vehicule,
   CreateVehiculeRequest,
   Remorque,
-  CreateRemorqueRequest
+  CreateRemorqueRequest,
+  Conducteur,
+  CreateConducteurRequest,
+  Entrepot,
+  CreateEntrepotRequest
 } from '@models/api';
 
 import { isApiSuccess } from '@models/api';
@@ -174,6 +180,32 @@ class ApiService {
    */
   async deleteUser(id: number): Promise<ApiResponse<{ message: string }>> {
     return this.request<{ message: string }>(`/users/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  /**
+   * Récupérer les conducteurs d'une entreprise
+   */
+  async getConducteurs(): Promise<ApiResponse<Conducteur[]>> {
+    return this.request<Conducteur[]>('/conducteurs');
+  }
+
+  /**
+   * Créer un conducteur
+   */
+  async createConducteur(data: CreateConducteurRequest): Promise<ApiResponse<Conducteur>> {
+    return this.request<Conducteur>('/conducteurs', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Supprimer un conducteur
+   */
+  async deleteConducteur(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/conducteurs/${id}`, {
       method: 'DELETE',
     });
   }
@@ -465,6 +497,279 @@ class ApiService {
   async deleteOffreFret(id: number): Promise<ApiResponse<{ message: string }>> {
     return this.request<{ message: string }>(`/offres-fret/${id}`, {
       method: 'DELETE',
+    });
+  }
+
+  // ============================================
+  // PROPOSITION ENDPOINTS
+  // ============================================
+
+  /**
+   * Soumettre une proposition pour une offre (transporteur)
+   */
+  async soumettreProposition(offreId: number, data: CreatePropositionRequest): Promise<ApiResponse<PropositionOffre>> {
+    return this.request<PropositionOffre>(`/offres-fret/${offreId}/propositions`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Lister les propositions reçues pour une offre (donneur d'ordre)
+   */
+  async getPropositionsPourOffre(offreId: number): Promise<ApiResponse<PropositionOffre[]>> {
+    return this.request<PropositionOffre[]>(`/offres-fret/${offreId}/propositions`);
+  }
+
+  /**
+   * Accepter une proposition (donneur d'ordre)
+   */
+  async accepterProposition(offreId: number, propositionId: number): Promise<ApiResponse<{ offre: any; proposition: PropositionOffre }>> {
+    return this.request(`/offres-fret/${offreId}/propositions/${propositionId}/accepter`, {
+      method: 'POST',
+    });
+  }
+
+  // ============================================
+  // DOCUMENT ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer tous les documents de l'entreprise
+   */
+  async getDocuments(queryString: string = ''): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents${queryString}`);
+  }
+
+  /**
+   * Récupérer les documents d'un véhicule spécifique
+   */
+  async getDocumentsVehicule(vehiculeId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?vehicule_id=${vehiculeId}`);
+  }
+
+  /**
+   * Récupérer les documents d'un conducteur spécifique
+   */
+  async getDocumentsConducteur(conducteurId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?conducteur_id=${conducteurId}`);
+  }
+
+  /**
+   * Récupérer les documents d'une remorque spécifique
+   */
+  async getDocumentsRemorque(remorqueId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?remorque_id=${remorqueId}`);
+  }
+
+  /**
+   * Récupérer un document par ID
+   */
+  async getDocumentById(id: number): Promise<ApiResponse<any>> {
+    return this.request<any>(`/documents/${id}`);
+  }
+
+  /**
+   * Uploader un document
+   */
+  async uploadDocument(formData: FormData): Promise<ApiResponse<any>> {
+    const headers: HeadersInit = {};
+    
+    // Ajouter le token si disponible
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/documents`, {
+        method: 'POST',
+        headers,
+        body: formData, // FormData gère automatiquement le Content-Type
+      });
+
+      const data = await response.json();
+
+      if (!response.ok && data.success === undefined) {
+        return {
+          success: false,
+          message: data.message || `Erreur HTTP ${response.status}`,
+        };
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Upload Error:', error);
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Erreur lors de l\'upload',
+      };
+    }
+  }
+
+  /**
+   * Télécharger un document
+   */
+  async downloadDocument(id: number): Promise<Blob> {
+    const headers: HeadersInit = {};
+    
+    if (this.token) {
+      headers['Authorization'] = `Bearer ${this.token}`;
+    }
+
+    const response = await fetch(`${API_URL}/documents/${id}/download`, {
+      method: 'GET',
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors du téléchargement');
+    }
+
+    return response.blob();
+  }
+
+  /**
+   * Mettre à jour un document
+   */
+  async updateDocument(id: number, documentData: any): Promise<ApiResponse<any>> {
+    return this.request<any>(`/documents/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(documentData),
+    });
+  }
+
+  /**
+   * Supprimer un document
+   */
+  async deleteDocument(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/documents/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // ============================================
+  // COMPTE BANCAIRE ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer tous les comptes bancaires de l'entreprise
+   */
+  async getComptesBancaires(): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>('/compte-bancaire');
+  }
+
+  /**
+   * Récupérer un compte bancaire par ID
+   */
+  async getCompteBancaireById(id: number): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}`);
+  }
+
+  /**
+   * Créer un compte bancaire
+   */
+  async createCompteBancaire(data: any): Promise<ApiResponse<any>> {
+    return this.request<any>('/compte-bancaire', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Mettre à jour un compte bancaire
+   */
+  async updateCompteBancaire(id: number, data: any): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Supprimer un compte bancaire
+   */
+  async deleteCompteBancaire(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/compte-bancaire/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  /**
+   * Définir un compte bancaire comme principal
+   */
+  async setCompteAsPrincipal(id: number): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}/set-principal`, {
+      method: 'POST',
+    });
+  }
+
+  /**
+   * Récupérer le compte bancaire principal
+   */
+  async getComptePrincipal(): Promise<ApiResponse<any>> {
+    return this.request<any>('/compte-bancaire/principal');
+  }
+
+  // ============================================
+  // ENTREPOTS ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer tous les entrepôts de l'entreprise
+   */
+  async getEntrepots(): Promise<ApiResponse<Entrepot[]>> {
+    return this.request<Entrepot[]>('/entrepots');
+  }
+
+  /**
+   * Récupérer les entrepôts actifs
+   */
+  async getEntrepotsActifs(): Promise<ApiResponse<Entrepot[]>> {
+    return this.request<Entrepot[]>('/entrepots/actifs');
+  }
+
+  /**
+   * Récupérer un entrepôt par ID
+   */
+  async getEntrepotById(id: number): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>(`/entrepots/${id}`);
+  }
+
+  /**
+   * Créer un entrepôt
+   */
+  async createEntrepot(data: CreateEntrepotRequest): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>('/entrepots', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  /**
+   * Mettre à jour un entrepôt
+   */
+  async updateEntrepot(id: number, data: Partial<CreateEntrepotRequest>): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>(`/entrepots/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  /**
+   * Activer / Désactiver un entrepôt
+   */
+  async toggleEntrepotStatus(id: number): Promise<ApiResponse<{ id: number; est_actif: boolean; message: string }>> {
+    return this.request<{ id: number; est_actif: boolean; message: string }>(`/entrepots/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  /**
+   * Supprimer un entrepôt
+   */
+  async deleteEntrepot(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/entrepots/${id}`, {
+      method: 'DELETE'
     });
   }
 }

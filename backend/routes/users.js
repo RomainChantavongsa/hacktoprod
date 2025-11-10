@@ -33,6 +33,32 @@ router.get('/', authMiddleware, requireRole('admin'), asyncHandler(async (req, r
 }));
 
 /**
+ * GET /api/users/conducteurs - Récupérer tous les conducteurs d'une entreprise
+ */
+router.get('/conducteurs', authMiddleware, requireRole('transporteur'), asyncHandler(async (req, res) => {
+    const entrepriseId = req.user.entrepriseId;
+    const conducteurs = await userService.getConducteursByEntreprise(entrepriseId);
+    res.status(200).json({
+        success: true,
+        data: conducteurs
+    });
+}));
+
+/**
+ * POST /api/users/conducteurs - Créer un nouveau conducteur pour une entreprise
+ */
+router.post('/conducteurs', authMiddleware, requireRole('transporteur'), validateCreateUser, asyncHandler(async (req, res) => {
+    const entrepriseId = req.user.entrepriseId;
+    const userData = { ...req.body, role: 'conducteur', entreprise_id: entrepriseId };
+    const user = await userService.createUser(userData);
+    res.status(201).json({
+        success: true,
+        message: 'Conducteur créé avec succès',
+        data: user
+    });
+}));
+
+/**
  * GET /api/users/profile - Récupérer le profil de l'utilisateur connecté (protégé)
  */
 router.get('/profile', authMiddleware, asyncHandler(async (req, res) => {
@@ -93,9 +119,17 @@ router.get('/profile', authMiddleware, asyncHandler(async (req, res) => {
   // Récupérer les données complètes déchiffrées
   const fullUser = await Utilisateur.getFromId(userId);
 
+  // Récupérer l'entreprise pour obtenir le type
+  const Entreprise = require('../models/Entreprise');
+  const entreprise = await Entreprise.getFromId(fullUser.getEntrepriseId());
+
+  // Ajouter le type d'entreprise aux données utilisateur
+  const userData = fullUser.toFullObject();
+  userData.type_entreprise = entreprise ? entreprise.getTypeEntreprise() : null;
+
   res.status(200).json({
     success: true,
-    data: fullUser.toFullObject()
+    data: userData
   });
 }));
 

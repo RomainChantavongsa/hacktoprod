@@ -62,14 +62,56 @@ const authMiddleware = (req, res, next) => {
  * Middleware pour vérifier le rôle de l'utilisateur
  * @param {String} role - Le rôle requis (ex: 'transporteur', 'donneur_ordre')
  */
-const requireRole = (role) => {
+const requireRole = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ error: 'Non authentifié' });
     }
     
-    if (req.user.role !== role) {
-      return res.status(403).json({ error: `Accès refusé. Rôle requis: ${role}` });
+    // Vérifier le type d'entreprise (transporteur/donneur_ordre)
+    // ou le rôle utilisateur pour admin
+    const userRole = req.user.type_entreprise;
+    const isAdmin = req.user.is_admin;
+    
+    // Admin a accès à tout
+    if (isAdmin && allowedRoles.includes('admin')) {
+      return next();
+    }
+    
+    if (!userRole || !allowedRoles.includes(userRole)) {
+      return res.status(403).json({ 
+        error: `Accès refusé. Type d'entreprise requis: ${allowedRoles.filter(r => r !== 'admin').join(' ou ')}`,
+        userType: userRole
+      });
+    }
+    
+    next();
+  };
+};
+
+/**
+ * Middleware pour vérifier le type d'entreprise de l'utilisateur
+ * Tous les utilisateurs d'une entreprise du bon type ont accès
+ */
+const requireEntrepriseType = (...allowedTypes) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Non authentifié' });
+    }
+    
+    const entrepriseType = req.user.type_entreprise;
+    
+    if (!entrepriseType) {
+      return res.status(403).json({ 
+        error: 'Type d\'entreprise non défini',
+      });
+    }
+    
+    if (!allowedTypes.includes(entrepriseType)) {
+      return res.status(403).json({ 
+        error: `Accès refusé. Cette fonctionnalité est réservée aux entreprises de type: ${allowedTypes.join(' ou ')}`,
+        typeActuel: entrepriseType
+      });
     }
     
     next();
@@ -113,5 +155,6 @@ module.exports = {
   verifyToken,
   authMiddleware,
   requireRole,
+  requireEntrepriseType,
   requireAdmin,
 };

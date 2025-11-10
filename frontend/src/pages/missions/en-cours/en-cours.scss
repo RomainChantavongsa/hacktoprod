@@ -1,0 +1,435 @@
+@import '../../../styles/variables';
+
+.missions-encours-page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .page-header {
+    margin-bottom: 2rem;
+
+    h1 {
+      color: $primary-color;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-description {
+      color: $text-secondary;
+      font-size: 1rem;
+    }
+  }
+
+  .loading-container,
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid $gray-300;
+      border-top-color: $primary-color;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    .error-message {
+      color: $error-color;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-retry {
+      padding: 0.75rem 1.5rem;
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      color: $text-primary;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 1rem;
+    }
+  }
+
+  .missions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .mission-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .mission-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+
+      .mission-ref {
+        .ref-label {
+          font-size: 0.875rem;
+          opacity: 0.9;
+          margin-right: 0.5rem;
+        }
+
+        .ref-value {
+          font-weight: 600;
+          font-size: 1rem;
+        }
+      }
+
+      .mission-status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        background: rgba(255, 255, 255, 0.2);
+
+        &.status-attribuee {
+          background: rgba(33, 150, 243, 0.3);
+        }
+
+        &.status-en_cours {
+          background: rgba(255, 152, 0, 0.3);
+        }
+      }
+    }
+
+    .mission-body {
+      padding: 1.5rem;
+
+      .mission-info {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        .info-row {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem;
+          background: #f5f5f5;
+          border-radius: 8px;
+
+          .info-icon {
+            font-size: 1.5rem;
+          }
+
+          .info-content {
+            display: flex;
+            flex-direction: column;
+
+            .info-label {
+              font-size: 0.75rem;
+              color: $text-secondary;
+              margin-bottom: 0.25rem;
+            }
+
+            .info-value {
+              font-weight: 600;
+              color: $text-primary;
+            }
+          }
+        }
+      }
+
+      .mission-route {
+        margin-bottom: 1.5rem;
+
+        .route-point {
+          display: flex;
+          gap: 1rem;
+
+          .route-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+          }
+
+          .route-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            .route-label {
+              font-size: 0.875rem;
+              color: $text-secondary;
+              font-weight: 600;
+              text-transform: uppercase;
+            }
+
+            .route-location {
+              font-size: 1.1rem;
+              font-weight: 600;
+              color: $text-primary;
+            }
+
+            .route-address {
+              font-size: 0.875rem;
+              color: $text-secondary;
+            }
+
+            .route-date {
+              font-size: 0.875rem;
+              color: $primary-color;
+              font-weight: 500;
+              margin-top: 0.25rem;
+            }
+          }
+
+          &.departure {
+            margin-bottom: 0.5rem;
+          }
+
+          &.arrival {
+            margin-top: 0.5rem;
+          }
+        }
+
+        .route-line {
+          width: 2px;
+          height: 20px;
+          background: linear-gradient(to bottom, #2196f3, #f44336);
+          margin-left: 0.6rem;
+        }
+      }
+
+      .mission-price {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: #e8f5e9;
+        border-radius: 8px;
+        margin-top: 1rem;
+
+        .price-label {
+          font-size: 0.875rem;
+          color: #2e7d32;
+          font-weight: 500;
+        }
+
+        .price-value {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #2e7d32;
+        }
+      }
+    }
+
+    .mission-actions {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      background: #f9f9f9;
+      border-top: 1px solid #e0e0e0;
+
+      button {
+        flex: 1;
+        padding: 0.75rem;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &.btn-secondary {
+          background: white;
+          color: $primary-color;
+          border: 1px solid $primary-color;
+
+          &:hover {
+            background: $primary-color;
+            color: white;
+          }
+        }
+
+        &.btn-primary {
+          background: $primary-color;
+          color: white;
+
+          &:hover {
+            background: darken($primary-color, 10%);
+          }
+        }
+
+        &.btn-success {
+          background: #4caf50;
+          color: white;
+
+          &:hover {
+            background: darken(#4caf50, 10%);
+          }
+        }
+      }
+    }
+  }
+
+  // Modal styles
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+
+  .modal-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      border-bottom: 1px solid #e0e0e0;
+
+      h2 {
+        margin: 0;
+        color: $primary-color;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: $text-secondary;
+        transition: color 0.2s;
+
+        &:hover {
+          color: $text-primary;
+        }
+      }
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+
+      .detail-section {
+        margin-bottom: 2rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        h3 {
+          color: $primary-color;
+          font-size: 1.25rem;
+          margin-bottom: 1rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solid $primary-color;
+        }
+
+        .detail-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
+
+          @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+          }
+
+          .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            &.full-width {
+              grid-column: 1 / -1;
+            }
+
+            .detail-label {
+              font-size: 0.875rem;
+              color: $text-secondary;
+              font-weight: 500;
+            }
+
+            .detail-value {
+              font-size: 1rem;
+              color: $text-primary;
+              font-weight: 600;
+            }
+          }
+        }
+
+        .detail-description {
+          padding: 1rem;
+          background: #f5f5f5;
+          border-radius: 8px;
+          color: $text-primary;
+          line-height: 1.6;
+        }
+      }
+    }
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

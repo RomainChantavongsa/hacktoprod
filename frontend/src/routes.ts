@@ -19,11 +19,33 @@ export const routeConfig = [
   { path: '/parametres/securite', folder: 'parametres/securite' },
   // Route pour le profil entreprise
   { path: '/parametres/entreprise', folder: 'settings/entreprise' },
-  // Route pour le profil transporteur
-  { path: '/entreprise/profil', folder: 'transporteur/profil' },
+  // Route pour les documents
+  { path: '/entreprise/documents', folder: 'settings/documents' },
+  // Route pour les comptes bancaires
+  { path: '/entreprise/compte-bancaire', folder: 'settings/compte-bancaire' },
+  // Route pour l'annuaire
+  { path: '/entreprise/annuaire', folder: 'annuaire' },
+  // Route unifiée du profil entreprise (rend transporteur OU donneur d'ordre selon le rôle)
+  { path: '/entreprise/profil', folder: 'entreprise/profil' },
   { path: '/entreprise/vehicules', folder: 'transporteur/vehicules' },
   { path: '/entreprise/remorques', folder: 'transporteur/remorques' },
   { path: '/entreprise/conducteurs', folder: 'transporteur/conducteurs' },
+  { path: '/transporteur/conducteurs', folder: 'transporteur/conducteurs' },
+  // Route unifiée des entrepôts (rend la page donneur d'ordre si applicable)
+  { path: '/entreprise/entrepots', folder: 'entreprise/entrepots' },
+  // Routes de gestion des offres de fret pour donneur d'ordre
+  { path: '/offres/publier', folder: 'offres/publier' },
+  { path: '/offres/actives', folder: 'offres/actives' },
+  { path: '/offres/propositions', folder: 'offres/propositions' },
+  { path: '/offres/en-cours', folder: 'offres/en-cours' },
+  { path: '/offres/terminees', folder: 'offres/terminees' },
+  // Routes pour les transporteurs
+  { path: '/offres/disponibles', folder: 'offres/disponibles' },
+  { path: '/offres/:offreId/proposer', folder: 'offres/proposer' },
+  { path: '/offres/mes-propositions', folder: 'offres/mes-propositions' },
+  // Routes des missions (partagées transporteur/donneur d'ordre)
+  { path: '/missions/en-cours', folder: 'missions/en-cours' },
+  { path: '/missions/terminees', folder: 'missions/terminees' },
 ]
 
 // Fonction pour charger dynamiquement un composant de page

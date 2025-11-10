@@ -48,9 +48,8 @@ export const AuthProvider = ({ children }) => {
   // Fonction pour obtenir le type d'utilisateur (transporteur ou donneurOrdre)
   const getUserType = () => {
     if (!user) return null;
-    // Le type peut venir du user.role, user.type, ou user.userType selon ton backend
-    // Pour l'instant, on utilise 'transporteur' par défaut
-    return user.role || user.type || user.userType || 'transporteur';
+    // Le type vient de user.entreprise.type_entreprise depuis l'API
+    return user.entreprise?.type_entreprise || user.type_entreprise || user.role || user.type || user.userType || 'transporteur';
   };
 
   return (

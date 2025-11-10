@@ -191,6 +191,18 @@
 
   &.btn-sm { padding: .45rem .75rem; font-size: .7rem; }
 
+  &.btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background: rgba(61, 155, 166, 0.1);
+      box-shadow: 0 2px 6px rgba(61, 155, 166, 0.2);
+    }
+  }
+
   &:disabled { opacity: .55; cursor: not-allowed; }
 }
 
@@ -232,8 +244,12 @@
 }
 
 .add-bar .field { flex: 1 1 200px; display: flex; flex-direction: column; gap: .45rem; }
-.add-bar .field input { width: 100%; padding: .65rem .8rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-alt); font-size: .9rem; }
-.add-bar .field input:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 2px rgba(52,152,219,.25); }
+.add-bar .field input, .add-bar .field select { width: 100%; padding: .65rem .8rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-alt); font-size: .9rem; }
+.add-bar .field input:focus, .add-bar .field select:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 2px rgba(52,152,219,.25); }
+.add-bar .file-upload-group { display: flex; flex-direction: column; gap: .45rem; }
+.add-bar .file-upload-group label { font-size: .75rem; text-transform: uppercase; letter-spacing: .5px; font-weight: 600; color: var(--text-secondary); }
+.add-bar .file-upload-group input[type="file"] { padding: .4rem .8rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-alt); font-size: .8rem; }
+.add-bar .file-upload-group input[type="file"]:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 2px rgba(52,152,219,.25); }
 .add-bar .actions { display: flex; flex-direction: column; gap: .6rem; justify-content: flex-start; }
 
 @media (max-width: 1000px) {
@@ -244,4 +260,34 @@
 @media (max-width: 700px) {
   .add-bar { flex-direction: column; align-items: stretch; padding: 1rem 1rem; }
   .add-bar .actions { flex-direction: row; justify-content: flex-end; }
+}
+
+.documents-status {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.doc-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.present {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  &.missing {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+}
+
+.actions-group {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
 }

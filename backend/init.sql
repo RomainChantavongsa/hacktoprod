@@ -101,7 +101,63 @@ CREATE TABLE IF NOT EXISTS utilisateur (
 ---
 
 -- ******************************************************
--- 2b. Table : vehicule (flotte de l'entreprise)
+-- 3. Table : document (Documents des entreprises)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS document (
+    id SERIAL PRIMARY KEY,
+    
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+    
+    -- Informations du fichier
+    nom_fichier_original VARCHAR(255) NOT NULL, -- Nom du fichier tel qu'uploadé par l'utilisateur
+    nom_fichier_stockage VARCHAR(255) NOT NULL UNIQUE, -- Nom unique généré pour le stockage (évite les conflits)
+    chemin_stockage VARCHAR(500) NOT NULL, -- Chemin complet où le fichier est stocké
+    
+    -- Métadonnées du document
+    type_document VARCHAR(100) NOT NULL, -- 'Licence de transport', 'Assurance', 'Kbis', 'Carte grise', 'Permis', 'Facture', 'CMR', 'Autre'
+    categorie VARCHAR(100), -- 'Legal', 'Assurance', 'Vehicule', 'Conducteur', 'Commercial', 'Autre'
+    description TEXT, -- Description optionnelle du document
+    
+    -- Informations techniques du fichier
+    extension VARCHAR(10) NOT NULL, -- '.pdf', '.jpg', '.png', '.docx', etc.
+    taille_octets BIGINT NOT NULL, -- Taille du fichier en octets
+    mime_type VARCHAR(100), -- 'application/pdf', 'image/jpeg', etc.
+    
+    -- Gestion des versions
+    version INT DEFAULT 1, -- Numéro de version du document
+    document_parent_id INT, -- Référence au document original si c'est une nouvelle version
+    FOREIGN KEY (document_parent_id) REFERENCES document(id) ON DELETE SET NULL,
+    
+    -- Métadonnées de validité
+    date_emission DATE, -- Date d'émission du document
+    date_expiration DATE, -- Date d'expiration (pour licences, assurances, etc.)
+    est_valide BOOLEAN DEFAULT TRUE, -- Si le document est encore valide
+    
+    -- Utilisateur ayant uploadé le document
+    uploade_par INT, -- ID de l'utilisateur qui a uploadé
+    FOREIGN KEY (uploade_par) REFERENCES utilisateur(id) ON DELETE SET NULL,
+    
+    -- Métadonnées de recherche
+    tags TEXT[], -- Array de tags pour faciliter la recherche
+    
+    -- Dates de gestion
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_document_entreprise ON document (entreprise_id);
+CREATE INDEX IF NOT EXISTS idx_document_type ON document (type_document);
+CREATE INDEX IF NOT EXISTS idx_document_categorie ON document (categorie);
+CREATE INDEX IF NOT EXISTS idx_document_expiration ON document (date_expiration);
+CREATE INDEX IF NOT EXISTS idx_document_parent ON document (document_parent_id);
+
+---
+
+-- ******************************************************
+-- 4. Table : vehicule (flotte de l'entreprise)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS vehicule (
     id SERIAL PRIMARY KEY,
@@ -110,6 +166,13 @@ CREATE TABLE IF NOT EXISTS vehicule (
     plaque_immatriculation VARCHAR(50) UNIQUE NOT NULL,
     conducteur_attitre VARCHAR(255), -- nom du conducteur principal
     capacite_tonnes DECIMAL(10,2),
+
+    -- Documents liés au véhicule
+    carte_grise_document_id INT, -- Référence vers la table document
+    assurance_document_id INT, -- Référence vers la table document
+    FOREIGN KEY (carte_grise_document_id) REFERENCES document(id) ON DELETE SET NULL,
+    FOREIGN KEY (assurance_document_id) REFERENCES document(id) ON DELETE SET NULL,
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE
@@ -121,7 +184,7 @@ CREATE INDEX IF NOT EXISTS idx_vehicule_entreprise ON vehicule (entreprise_id);
 ---
 
 -- ******************************************************
--- 2c. Table : remorque (rattachée à une entreprise)
+-- 5. Table : remorque (rattachée à une entreprise)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS remorque (
     id SERIAL PRIMARY KEY,
@@ -136,42 +199,210 @@ CREATE TABLE IF NOT EXISTS remorque (
 
 CREATE INDEX IF NOT EXISTS idx_remorque_entreprise ON remorque (entreprise_id);
 
+---
+
 -- ******************************************************
--- 3. Table : offre_fret (Les transactions)
+-- 6. Table : conducteur (conducteurs de l'entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS conducteur (
+    id SERIAL PRIMARY KEY,
+    entreprise_id INT NOT NULL,
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    telephone VARCHAR(20),
+    numero_permis VARCHAR(50) NOT NULL,
+    date_naissance DATE,
+    date_embauche DATE,
+    statut VARCHAR(50) DEFAULT 'actif', -- 'actif', 'inactif', 'conge', 'suspendu'
+
+    -- Document lié au conducteur (permis de conduire)
+    permis_document_id INT, -- Référence vers la table document
+    FOREIGN KEY (permis_document_id) REFERENCES document(id) ON DELETE SET NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_conducteur_entreprise ON conducteur (entreprise_id);
+
+---
+
+-- ******************************************************
+-- 7. Table : offre_fret (Les transactions)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS offre_fret (
     id SERIAL PRIMARY KEY,
-    
+
     -- Entreprises impliquées
     entreprise_donneur_ordre_id INT NOT NULL,
     entreprise_transporteur_id INT,
-    
+
     -- Utilisateur qui a créé l'offre
     createur_id INT NOT NULL,
-    
+
     date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     statut_offre VARCHAR(50) NOT NULL DEFAULT 'Publiee', -- 'Publiee', 'Attribuee', 'EnCours', 'Completee', 'Annulee'
-    
+
     poids_marchandise_kg DECIMAL(10, 2) NOT NULL,
     volume_m3 DECIMAL(10, 2),
     type_marchandise VARCHAR(100) NOT NULL,
-    
+
     -- Lieux de Chargement
     adresse_chargement VARCHAR(255) NOT NULL,
     ville_chargement VARCHAR(100) NOT NULL,
     code_postal_chargement VARCHAR(10) NOT NULL,
-    
+
     -- Lieux de Livraison
     adresse_livraison VARCHAR(255) NOT NULL,
     ville_livraison VARCHAR(100) NOT NULL,
     code_postal_livraison VARCHAR(10) NOT NULL,
-    
+
     type_vehicule_souhaite VARCHAR(100),
     date_chargement_prevue DATE NOT NULL,
     conditions_speciales VARCHAR(500),
     prix_propose DECIMAL(10, 2),
-    
+
     FOREIGN KEY (entreprise_donneur_ordre_id) REFERENCES entreprise(id) ON DELETE CASCADE,
     FOREIGN KEY (entreprise_transporteur_id) REFERENCES entreprise(id) ON DELETE SET NULL,
     FOREIGN KEY (createur_id) REFERENCES utilisateur(id) ON DELETE SET NULL
 );
+
+-- ******************************************************
+-- 7b. Table : proposition_offre (propositions faites par les transporteurs sur une offre)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS proposition_offre (
+    id SERIAL PRIMARY KEY,
+    offre_fret_id INT NOT NULL,
+    entreprise_transporteur_id INT NOT NULL,
+    prix_propose DECIMAL(10,2) NOT NULL,
+    message VARCHAR(500),
+    statut_proposition VARCHAR(20) NOT NULL DEFAULT 'Soumise', -- 'Soumise','Acceptee','Refusee'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (offre_fret_id) REFERENCES offre_fret(id) ON DELETE CASCADE,
+    FOREIGN KEY (entreprise_transporteur_id) REFERENCES entreprise(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_proposition_offre_offre ON proposition_offre (offre_fret_id);
+CREATE INDEX IF NOT EXISTS idx_proposition_offre_transporteur ON proposition_offre (entreprise_transporteur_id);
+
+---
+
+-- ******************************************************
+-- 8. Table : compte_bancaire (Comptes bancaires des entreprises)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS compte_bancaire (
+    id SERIAL PRIMARY KEY,
+
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+
+    -- Informations bancaires
+    iban VARCHAR(34) UNIQUE NOT NULL, -- IBAN (jusqu'à 34 caractères)
+    bic VARCHAR(11), -- BIC/SWIFT (optionnel)
+    nom_banque VARCHAR(255) NOT NULL, -- Nom de la banque
+    titulaire VARCHAR(255) NOT NULL, -- Titulaire du compte
+
+    -- Statut du compte
+    est_principal BOOLEAN DEFAULT FALSE, -- TRUE si c'est le compte principal de l'entreprise
+
+    -- Métadonnées
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_compte_bancaire_entreprise ON compte_bancaire (entreprise_id);
+
+---
+
+-- ******************************************************
+-- 9. Table : annuaire (Coordonnées des membres de l'entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS annuaire (
+    id SERIAL PRIMARY KEY,
+
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+
+    -- Informations de la personne
+    nom VARCHAR(255) NOT NULL,
+    prenom VARCHAR(255),
+    fonction VARCHAR(255), -- Poste occupé dans l'entreprise
+    service VARCHAR(255), -- Service/département
+
+    -- Coordonnées
+    email VARCHAR(255),
+    telephone_fixe VARCHAR(50),
+    telephone_mobile VARCHAR(50),
+    telephone_professionnel VARCHAR(50),
+
+    -- Adresse professionnelle (si différente du siège)
+    adresse_professionnelle VARCHAR(255),
+    code_postal_professionnel VARCHAR(10),
+    ville_professionnelle VARCHAR(100),
+
+    -- Informations complémentaires
+    notes TEXT, -- Notes supplémentaires
+    est_actif BOOLEAN DEFAULT TRUE, -- Si la personne est encore active
+
+    -- Métadonnées
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Utilisateur qui a créé/modifié l'entrée
+    created_by INT,
+    FOREIGN KEY (created_by) REFERENCES utilisateur(id) ON DELETE SET NULL,
+    updated_by INT,
+    FOREIGN KEY (updated_by) REFERENCES utilisateur(id) ON DELETE SET NULL
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_annuaire_entreprise ON annuaire (entreprise_id);
+CREATE INDEX IF NOT EXISTS idx_annuaire_nom ON annuaire (nom);
+CREATE INDEX IF NOT EXISTS idx_annuaire_email ON annuaire (email);
+
+---
+
+-- ******************************************************
+-- 10. Table : entrepot (Entrepôts rattachés à une entreprise)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS entrepot (
+    id SERIAL PRIMARY KEY,
+
+    -- Lien avec l'entreprise
+    entreprise_id INT NOT NULL,
+    FOREIGN KEY (entreprise_id) REFERENCES entreprise(id) ON DELETE CASCADE,
+
+    -- Informations principales
+    nom_entrepot VARCHAR(255) NOT NULL,
+    type_entrepot VARCHAR(100), -- ex: Stockage, Chargement, Livraison, Transit
+
+    -- Adresse
+    adresse VARCHAR(255) NOT NULL,
+    ville VARCHAR(100) NOT NULL,
+    code_postal VARCHAR(10) NOT NULL,
+    pays VARCHAR(100) DEFAULT 'France',
+
+    -- Capacités et contacts
+    capacite_stockage_m3 DECIMAL(12,2),
+    telephone VARCHAR(50),
+    email_contact VARCHAR(255),
+
+    -- Détails opérationnels
+    horaires_ouverture TEXT,
+    equipements_speciaux TEXT,
+    est_actif BOOLEAN DEFAULT TRUE,
+
+    -- Dates
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour améliorer les performances
+CREATE INDEX IF NOT EXISTS idx_entrepot_entreprise ON entrepot (entreprise_id);
+CREATE INDEX IF NOT EXISTS idx_entrepot_actif ON entrepot (est_actif);

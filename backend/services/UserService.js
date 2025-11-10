@@ -276,6 +276,15 @@ class UserService {
 
     return { message: 'Utilisateur supprimé avec succès' };
   }
+
+  /**
+   * Récupérer les conducteurs d'une entreprise
+   */
+  async getConducteursByEntreprise(entrepriseId) {
+    const users = await Utilisateur.getAll();
+    const conducteurs = users.filter(user => user.getEntrepriseId() === entrepriseId && user.getRole() === 'conducteur');
+    return conducteurs.map(u => u.toSafeObject());
+  }
 }
 
 module.exports = new UserService();
