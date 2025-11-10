@@ -1,9 +1,0 @@
-{
-  "devDependencies": {
-    "sass": "^1.93.3",
-    "sass-embedded": "^1.93.3"
-  },
-  "dependencies": {
-    "@google/genai": "^1.29.0"
-  }
-}

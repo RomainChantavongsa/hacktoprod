@@ -1,165 +1,152 @@
-# Makefile multi-plateforme pour HackToGone3Contrees
-# Fonctionne sur Linux, macOS et Windows (avec make installé)
+# ============================================================================
+# Makefile - HackToGone3Contrees
+# ============================================================================
+# Projet de gestion de transport et logistique
+# 
+# Pre-requis:
+#   - Docker et Docker Compose installes
+#   - Node.js et Yarn installes
+#   - Fichier .env configure avec les variables d'environnement
+#
+# Usage:
+#   make        - Affiche l'aide
+#   make build  - Construit les images Docker
+#   make start  - Demarre l'application complete
+#   make stop   - Arrete l'application
+# ============================================================================
 
-.PHONY: help setup start stop restart logs clean rebuild dev backend frontend db-shell
+.PHONY: help install build start stop restart clean delete-db logs status
 
-# Couleurs pour l'affichage (fonctionne sur Linux/macOS)
-BLUE=\033[0;34m
-GREEN=\033[0;32m
-RED=\033[0;31m
-YELLOW=\033[1;33m
-NC=\033[0m # No Color
+# Commande par defaut - Affiche l'aide
+.DEFAULT_GOAL := help
 
-help: ## Affiche cette aide
-	@echo "$(BLUE)========================================$(NC)"
-	@echo "$(BLUE)HackToGone3Contrees - Commandes disponibles$(NC)"
-	@echo "$(BLUE)========================================$(NC)"
+# ============================================================================
+# COMMANDES PRINCIPALES
+# ============================================================================
+
+help: ## Affiche ce message d'aide
+	@echo "============================================================================"
+	@echo "  HackToGone3Contrees - Commandes Disponibles"
+	@echo "============================================================================"
 	@echo ""
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(GREEN)%-15s$(NC) %s\n", $$1, $$2}'
+	@echo "  Installation & Configuration:"
+	@echo "    make install     - Installe toutes les dependances (backend + frontend)"
+	@echo ""
+	@echo "  Gestion Docker:"
+	@echo "    make build       - Construit les images Docker"
+	@echo "    make start       - Demarre l'application (avec installation des packages)"
+	@echo "    make stop        - Arrete tous les services"
+	@echo "    make restart     - Redémarre tous les services"
+	@echo ""
+	@echo "  Base de donnees:"
+	@echo "    make delete-db   - Supprime completement la base de donnees et volumes"
+	@echo ""
+	@echo "  Maintenance:"
+	@echo "    make logs        - Affiche les logs en temps reel"
+	@echo "    make status      - Affiche l'etat des services"
+	@echo "    make clean       - Nettoie les ressources Docker (images, volumes)"
+	@echo ""
+	@echo "============================================================================"
 	@echo ""
 
-setup: ## Configure l'environnement (copie .env.example vers .env)
-	@echo "$(BLUE)Configuration de l'environnement...$(NC)"
-	@if [ -f .env ]; then \
-		echo "$(YELLOW)Le fichier .env existe déjà !$(NC)"; \
-		read -p "Voulez-vous le remplacer ? (o/n): " confirm; \
-		if [ "$$confirm" = "o" ]; then \
-			cp .env.example .env; \
-			echo "$(GREEN)Fichier .env créé avec succès !$(NC)"; \
-		else \
-			echo "$(RED)Opération annulée.$(NC)"; \
-		fi \
-	else \
-		cp .env.example .env; \
-		echo "$(GREEN)Fichier .env créé avec succès !$(NC)"; \
-	fi
+install: ## Installe toutes les dependances npm/yarn
+	@echo "============================================================================"
+	@echo "  Installation des dependances..."
+	@echo "============================================================================"
 	@echo ""
-	@echo "$(YELLOW)N'oubliez pas de modifier le fichier .env avec vos vraies valeurs !$(NC)"
+	@echo "[1/2] Installation backend (npm)..."
+	@cd backend && npm install
+	@echo ""
+	@echo "[2/2] Installation frontend (yarn)..."
+	@cd frontend && yarn install
+	@echo ""
+	@echo "✓ Installation terminee avec succes!"
+	@echo ""
 
-start: ## Démarre tous les services Docker
-	@echo "$(BLUE)Démarrage des services...$(NC)"
+build: ## Construit les images Docker
+	@echo "============================================================================"
+	@echo "  Construction des images Docker..."
+	@echo "============================================================================"
+	@echo ""
+	@docker-compose build --no-cache
+	@echo ""
+	@echo "✓ Build termine avec succes!"
+	@echo ""
+
+start: install ## Demarre l'application complete
+	@echo "============================================================================"
+	@echo "  Demarrage de l'application..."
+	@echo "============================================================================"
+	@echo ""
 	@docker-compose up -d
 	@echo ""
-	@echo "$(GREEN)Services démarrés !$(NC)"
-	@echo "  - Frontend: http://localhost:3000"
-	@echo "  - Backend:  http://localhost:3001"
-	@echo "  - Adminer:  http://localhost:8081"
-	@echo "  - Database: localhost:5432"
+	@echo "✓ Application demarree avec succes!"
+	@echo ""
+	@echo "  Services disponibles:"
+	@echo "    Frontend:  http://$${HOST:-localhost}:$${FRONTEND_PORT:-5173}"
+	@echo "    Backend:   http://$${HOST:-localhost}:$${BACKEND_PORT:-3001}"
+	@echo "    Adminer:   http://$${HOST:-localhost}:8080"
+	@echo "    Database:  $${HOST:-localhost}:5432"
+	@echo ""
+	@echo "  Commandes utiles:"
+	@echo "    make logs    - Voir les logs en temps reel"
+	@echo "    make status  - Verifier l'etat des services"
+	@echo "    make stop    - Arreter l'application"
+	@echo ""
 
-stop: ## Arrête tous les services Docker
-	@echo "$(BLUE)Arrêt des services...$(NC)"
+stop: ## Arrete tous les services
+	@echo "============================================================================"
+	@echo "  Arret de l'application..."
+	@echo "============================================================================"
+	@echo ""
 	@docker-compose down
-	@echo "$(GREEN)Services arrêtés !$(NC)"
+	@echo ""
+	@echo "✓ Application arretee avec succes!"
+	@echo ""
 
-restart: stop start ## Redémarre tous les services
+restart: stop start ## Redémarre l'application
 
-logs: ## Affiche les logs de tous les services (Ctrl+C pour quitter)
-	@echo "$(BLUE)Affichage des logs...$(NC)"
+# ============================================================================
+# GESTION BASE DE DONNEES
+# ============================================================================
+
+delete-db: ## Supprime completement la base de donnees et ses volumes
+	@echo "============================================================================"
+	@echo "  Suppression de la base de donnees..."
+	@echo "============================================================================"
+	@echo ""
+	@echo "⚠️  ATTENTION: Cette action supprimera toutes les donnees!"
+	@echo ""
+	@docker-compose down -v
+	@echo ""
+	@echo "✓ Base de donnees supprimee avec succes!"
+	@echo ""
+
+# ============================================================================
+# MAINTENANCE & MONITORING
+# ============================================================================
+
+logs: ## Affiche les logs en temps reel (Ctrl+C pour quitter)
+	@echo "Affichage des logs (Ctrl+C pour quitter)..."
+	@echo ""
 	@docker-compose logs -f
 
-logs-backend: ## Affiche les logs du backend uniquement
-	@docker-compose logs -f backend
-
-logs-frontend: ## Affiche les logs du frontend uniquement
-	@docker-compose logs -f frontend
-
-logs-db: ## Affiche les logs de la base de données
-	@docker-compose logs -f db
-
-status: ## Affiche le statut des services
-	@echo "$(BLUE)Statut des services :$(NC)"
+status: ## Affiche l'etat des services Docker
+	@echo "============================================================================"
+	@echo "  Etat des services"
+	@echo "============================================================================"
+	@echo ""
 	@docker-compose ps
+	@echo ""
 
-rebuild: ## Reconstruit et redémarre tous les services
-	@echo "$(BLUE)Reconstruction des services...$(NC)"
-	@docker-compose down
-	@docker-compose build --no-cache
-	@docker-compose up -d
-	@echo "$(GREEN)Reconstruction terminée !$(NC)"
-
-clean: ## Nettoie tout (⚠️ supprime les données !)
-	@echo "$(RED)ATTENTION : Cette commande va supprimer toutes les données !$(NC)"
-	@read -p "Êtes-vous sûr ? (tapez 'oui' pour confirmer): " confirm; \
-	if [ "$$confirm" = "oui" ]; then \
-		docker-compose down -v --rmi all; \
-		echo "$(GREEN)Nettoyage terminé !$(NC)"; \
-	else \
-		echo "$(YELLOW)Opération annulée.$(NC)"; \
-	fi
-
-dev-backend: ## Démarre le backend en mode développement (sans Docker)
-	@echo "$(BLUE)Démarrage du backend en mode développement...$(NC)"
-	@cd backend && npm install && npm run dev
-
-dev-frontend: ## Démarre le frontend en mode développement (sans Docker)
-	@echo "$(BLUE)Démarrage du frontend en mode développement...$(NC)"
-	@cd frontend && npm install && npm run dev
-
-db-shell: ## Se connecte à la base de données PostgreSQL
-	@echo "$(BLUE)Connexion à la base de données...$(NC)"
-	@docker exec -it my_postgres_db psql -U myuser -d mydatabase
-
-db-backup: ## Sauvegarde la base de données
-	@echo "$(BLUE)Sauvegarde de la base de données...$(NC)"
-	@mkdir -p backups
-	@docker exec my_postgres_db pg_dump -U myuser mydatabase > backups/backup_$$(date +%Y%m%d_%H%M%S).sql
-	@echo "$(GREEN)Sauvegarde créée dans le dossier backups/$(NC)"
-
-db-restore: ## Restaure la base de données (spécifier FILE=backup.sql)
-	@if [ -z "$(FILE)" ]; then \
-		echo "$(RED)Erreur : Spécifiez le fichier avec FILE=backup.sql$(NC)"; \
-		exit 1; \
-	fi
-	@echo "$(BLUE)Restauration de la base de données...$(NC)"
-	@docker exec -i my_postgres_db psql -U myuser mydatabase < $(FILE)
-	@echo "$(GREEN)Restauration terminée !$(NC)"
-
-db-drop: ## Supprime complètement la base de données (⚠️ ATTENTION : perte de données !)
-	@echo "$(RED)⚠️  ATTENTION : Cette commande va SUPPRIMER TOUTES LES DONNÉES de la base de données !$(NC)"
-	@read -p "Êtes-vous ABSOLUMENT sûr ? (tapez 'SUPPRIMER' pour confirmer): " confirm; \
-	if [ "$$confirm" = "SUPPRIMER" ]; then \
-		echo "$(BLUE)Suppression de toutes les tables...$(NC)"; \
-		docker exec -i my_postgres_db psql -U myuser mydatabase -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO myuser; GRANT ALL ON SCHEMA public TO public;"; \
-		echo "$(GREEN)Base de données vidée avec succès !$(NC)"; \
-		echo "$(YELLOW)Pour réinitialiser la base de données, redémarrez les services avec 'make restart'$(NC)"; \
-	else \
-		echo "$(YELLOW)Opération annulée.$(NC)"; \
-	fi
-
-db-reset: ## Supprime et réinitialise la base de données avec init.sql
-	@echo "$(RED)⚠️  ATTENTION : Cette commande va SUPPRIMER TOUTES LES DONNÉES et réinitialiser la base !$(NC)"
-	@read -p "Êtes-vous ABSOLUMENT sûr ? (tapez 'RESET' pour confirmer): " confirm; \
-	if [ "$$confirm" = "RESET" ]; then \
-		echo "$(BLUE)Suppression de toutes les tables...$(NC)"; \
-		docker exec -i my_postgres_db psql -U myuser mydatabase -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public; GRANT ALL ON SCHEMA public TO myuser; GRANT ALL ON SCHEMA public TO public;"; \
-		echo "$(BLUE)Réinitialisation avec init.sql...$(NC)"; \
-		docker exec -i my_postgres_db psql -U myuser mydatabase < backend/init.sql; \
-		echo "$(GREEN)Base de données réinitialisée avec succès !$(NC)"; \
-	else \
-		echo "$(YELLOW)Opération annulée.$(NC)"; \
-	fi
-
-install: ## Installe les dépendances (backend + frontend)
-	@echo "$(BLUE)Installation des dépendances...$(NC)"
-	@cd backend && npm install
-	@cd frontend && npm install
-	@echo "$(GREEN)Installation terminée !$(NC)"
-
-test: ## Lance les tests (si configurés)
-	@echo "$(BLUE)Lancement des tests...$(NC)"
-	@cd backend && npm test
-	@cd frontend && npm test
-
-check: ## Vérifie la configuration
-	@echo "$(BLUE)Vérification de la configuration...$(NC)"
-	@echo -n "Docker: "
-	@docker --version > /dev/null 2>&1 && echo "$(GREEN)✓$(NC)" || echo "$(RED)✗$(NC)"
-	@echo -n "Docker Compose: "
-	@docker-compose --version > /dev/null 2>&1 && echo "$(GREEN)✓$(NC)" || echo "$(RED)✗$(NC)"
-	@echo -n "Node.js: "
-	@node --version > /dev/null 2>&1 && echo "$(GREEN)✓$(NC)" || echo "$(RED)✗$(NC)"
-	@echo -n "Fichier .env: "
-	@[ -f .env ] && echo "$(GREEN)✓$(NC)" || echo "$(RED)✗ (exécutez 'make setup')$(NC)"
-
-# Commande par défaut
-.DEFAULT_GOAL := help
+clean: ## Nettoie les ressources Docker (images, conteneurs, volumes)
+	@echo "============================================================================"
+	@echo "  Nettoyage des ressources Docker..."
+	@echo "============================================================================"
+	@echo ""
+	@echo "⚠️  ATTENTION: Cette action supprimera toutes les images et volumes!"
+	@echo ""
+	@docker-compose down -v --rmi all --remove-orphans
+	@echo ""
+	@echo "✓ Nettoyage termine avec succes!"
+	@echo ""
