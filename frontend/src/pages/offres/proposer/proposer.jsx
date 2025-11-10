@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSoumettreProposition } from './proposer.ts';
+import Icon from '../../../components/Icon.jsx';
 import './proposer.scss';
 
 const SoumettreProposition = () => {
@@ -44,7 +45,7 @@ const SoumettreProposition = () => {
     return (
       <div className="proposer-page">
         <div className="success-card">
-          <div className="success-icon">✓</div>
+          <div className="success-icon"><Icon name="check" size={48} /></div>
           <h2>Proposition envoyée avec succès !</h2>
           <p>Le donneur d'ordre a reçu votre proposition et vous contactera si elle est acceptée.</p>
           <div className="success-actions">

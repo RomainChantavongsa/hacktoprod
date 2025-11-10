@@ -323,20 +323,32 @@
             transform: scale(1.1);
           }
 
-          &.btn-download:hover {
-            background: rgba($primary-color, 0.1);
+          &.btn-preview {
+            color: #5f27cd;
+            &:hover {
+              background: rgba(#5f27cd, 0.1);
+            }
           }
 
-          &.btn-preview:hover {
-            background: rgba(#5f27cd, 0.1);
+          &.btn-edit {
+            color: #f39c12;
+            &:hover {
+              background: rgba(#f39c12, 0.1);
+            }
           }
 
-          &.btn-edit:hover {
-            background: rgba(#f39c12, 0.1);
+          &.btn-download {
+            color: $primary-color;
+            &:hover {
+              background: rgba($primary-color, 0.1);
+            }
           }
 
-          &.btn-delete:hover {
-            background: rgba(#ff4757, 0.1);
+          &.btn-delete {
+            color: #ff4757;
+            &:hover {
+              background: rgba(#ff4757, 0.1);
+            }
           }
         }
       }
@@ -372,11 +384,15 @@
     .badge-error { background: #ff4757; color:#fff; }
 
     .dt-actions { display: flex; gap: .35rem; }
-    .dt-actions .btn-action { background: transparent; border:none; padding:.35rem .45rem; border-radius:6px; cursor:pointer; font-size:1rem; transition:background .2s, transform .15s; }
+    .dt-actions .btn-action { background: transparent; border:none; padding:.35rem .45rem; border-radius:6px; cursor:pointer; font-size:1rem; transition:all .2s, transform .15s; }
     .dt-actions .btn-action:hover { transform: scale(1.1); }
+    .dt-actions .btn-preview { color: #5f27cd; }
     .dt-actions .btn-preview:hover { background: rgba(#5f27cd,0.1); }
+    .dt-actions .btn-edit { color: #f39c12; }
     .dt-actions .btn-edit:hover { background: rgba(#f39c12,0.15); }
+    .dt-actions .btn-download { color: $primary-color; }
     .dt-actions .btn-download:hover { background: rgba($primary-color,0.12); }
+    .dt-actions .btn-delete { color: #ff4757; }
     .dt-actions .btn-delete:hover { background: rgba(#ff4757,0.12); }
   }
 

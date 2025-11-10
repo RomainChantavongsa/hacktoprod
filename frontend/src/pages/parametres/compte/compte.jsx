@@ -1,5 +1,6 @@
 import { useCompte } from './compte.ts'
 import './compte.scss'
+import Icon from '../../../components/Icon.jsx'
 
 function Compte() {
   const {
@@ -99,7 +100,7 @@ function Compte() {
           <div className="info-readonly">
             <label>Rôle</label>
             <div className="role-badge">
-              {formData.role === 'transporteur' ? '🚛 Transporteur' : '📦 Donneur d\'ordre'}
+              {formData.role === 'transporteur' ? <><Icon name="truck" size={16} /> Transporteur</> : <><Icon name="package" size={16} /> Donneur d'ordre</>}
             </div>
           </div>
         </div>

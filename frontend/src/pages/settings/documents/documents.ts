@@ -274,21 +274,21 @@ export const useDocuments = () => {
     const ext = extension.toLowerCase().replace('.', '')
     
     const iconMap: { [key: string]: string } = {
-      'pdf': '📕',
-      'doc': '📘',
-      'docx': '📘',
-      'xls': '📗',
-      'xlsx': '📗',
-      'jpg': '🖼️',
-      'jpeg': '🖼️',
-      'png': '🖼️',
-      'gif': '🖼️',
-      'zip': '🗜️',
-      'rar': '🗜️',
-      'txt': '📝',
+      'pdf': 'fileText',
+      'doc': 'fileText',
+      'docx': 'fileText',
+      'xls': 'fileText',
+      'xlsx': 'fileText',
+      'jpg': 'image',
+      'jpeg': 'image',
+      'png': 'image',
+      'gif': 'image',
+      'zip': 'archive',
+      'rar': 'archive',
+      'txt': 'fileText',
     }
     
-    return iconMap[ext] || '📄'
+    return iconMap[ext] || 'document'
   }
 
   const isExpiringSoon = (dateExpiration?: string): boolean => {

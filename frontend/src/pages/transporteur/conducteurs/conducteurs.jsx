@@ -1,6 +1,7 @@
 import { useConducteurs } from './conducteurs.ts'
 import DataTable from '@components/DataTable.jsx'
 import apiService from '../../../services/apiService'
+import Icon from '../../../components/Icon.jsx'
 import './conducteurs.scss'
 
 export default function ConducteursPage() {
@@ -195,12 +196,12 @@ export default function ConducteursPage() {
           )},
           { key: 'documents', header: 'Documents', render: (r) => (
             <span className={`doc-status ${r.permis_document_id ? 'present' : 'missing'}`}>
-              📄 Permis
+              <Icon name="document" size={14} /> Permis
             </span>
           )},
           { key: 'actions', header: 'Actions', render: (r) => (
             <div className="actions-group">
-              <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r.id)}>📄 Docs</button>
+              <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r.id)}><Icon name="document" size={14} /> Docs</button>
               <button className="btn btn-danger btn-sm" onClick={() => remove(r.id)}>
                 Supprimer
               </button>

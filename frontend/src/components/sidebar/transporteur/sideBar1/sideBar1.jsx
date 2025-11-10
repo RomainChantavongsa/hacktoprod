@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import Icon from '../../../Icon.jsx'
 import './sideBar1.scss'
 
 // Sidebar pour la section "Trouver des transports" (Transporteur)
@@ -13,7 +14,7 @@ function SideBar1() {
               to="/offres/disponibles"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">�</span>
+              <span className="sidebar-icon"><Icon name="search" size={18} /></span>
               <span className="sidebar-label">Offres disponibles</span>
             </NavLink>
           </li>
@@ -23,7 +24,7 @@ function SideBar1() {
               to="/offres/mes-propositions" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">�</span>
+              <span className="sidebar-icon"><Icon name="clipboard" size={18} /></span>
               <span className="sidebar-label">Mes propositions</span>
             </NavLink>
           </li>
@@ -33,7 +34,7 @@ function SideBar1() {
               to="/missions/en-cours" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">🚚</span>
+              <span className="sidebar-icon"><Icon name="truck" size={18} /></span>
               <span className="sidebar-label">Missions en cours</span>
             </NavLink>
           </li>
@@ -43,7 +44,7 @@ function SideBar1() {
               to="/missions/terminees" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">✓</span>
+              <span className="sidebar-icon"><Icon name="check" size={18} /></span>
               <span className="sidebar-label">Missions terminées</span>
             </NavLink>
           </li>

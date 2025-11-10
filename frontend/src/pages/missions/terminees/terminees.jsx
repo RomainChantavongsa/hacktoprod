@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import apiService from '../../../services/apiService';
+import Icon from '../../../components/Icon.jsx';
 import './terminees.scss';
 
 function MissionsTerminees() {
@@ -98,7 +99,7 @@ function MissionsTerminees() {
   return (
     <div className="missions-terminees-page">
       <div className="page-header">
-        <h1>✓ Missions terminées</h1>
+        <h1><Icon name="check" size={28} /> Missions terminées</h1>
         <p className="page-description">
           Historique de vos missions complétées et annulées
         </p>
@@ -107,21 +108,21 @@ function MissionsTerminees() {
       {/* Statistiques */}
       <div className="stats-container">
         <div className="stat-card total">
-          <div className="stat-icon">📊</div>
+          <div className="stat-icon"><Icon name="barChart" size={24} /></div>
           <div className="stat-content">
             <span className="stat-value">{stats.total}</span>
             <span className="stat-label">Total</span>
           </div>
         </div>
         <div className="stat-card completees">
-          <div className="stat-icon">✓</div>
+          <div className="stat-icon"><Icon name="check" size={24} /></div>
           <div className="stat-content">
             <span className="stat-value">{stats.completees}</span>
             <span className="stat-label">Complétées</span>
           </div>
         </div>
         <div className="stat-card annulees">
-          <div className="stat-icon">✕</div>
+          <div className="stat-icon"><Icon name="close" size={24} /></div>
           <div className="stat-content">
             <span className="stat-value">{stats.annulees}</span>
             <span className="stat-label">Annulées</span>
@@ -153,7 +154,7 @@ function MissionsTerminees() {
 
       {filteredMissions.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">📋</div>
+          <div className="empty-icon"><Icon name="clipboard" size={48} /></div>
           <h3>Aucune mission {filterStatut !== 'all' ? (filterStatut === 'Completee' ? 'complétée' : 'annulée') : 'terminée'}</h3>
           <p>Vous n'avez pas encore de mission dans cette catégorie.</p>
         </div>
@@ -168,13 +169,13 @@ function MissionsTerminees() {
                     <span className="ref-value">{mission.reference_interne || 'N/A'}</span>
                   </div>
                   <span className={`mission-badge badge-${mission.statut.toLowerCase()}`}>
-                    {mission.statut === 'Completee' ? '✓ Complétée' : '✕ Annulée'}
+                    {mission.statut === 'Completee' ? <><Icon name="check" size={14} /> Complétée</> : <><Icon name="close" size={14} /> Annulée</>}
                   </span>
                 </div>
 
                 <div className="mission-details">
                   <div className="detail-col">
-                    <span className="detail-icon">📦</span>
+                    <span className="detail-icon"><Icon name="package" size={18} /></span>
                     <div className="detail-info">
                       <span className="detail-label">Marchandise</span>
                       <span className="detail-value">{mission.type_marchandise || 'Non spécifié'}</span>
@@ -182,7 +183,7 @@ function MissionsTerminees() {
                   </div>
 
                   <div className="detail-col">
-                    <span className="detail-icon">📍</span>
+                    <span className="detail-icon"><Icon name="mapPin" size={18} /></span>
                     <div className="detail-info">
                       <span className="detail-label">Trajet</span>
                       <span className="detail-value">
@@ -192,7 +193,7 @@ function MissionsTerminees() {
                   </div>
 
                   <div className="detail-col">
-                    <span className="detail-icon">📅</span>
+                    <span className="detail-icon"><Icon name="clock" size={18} /></span>
                     <div className="detail-info">
                       <span className="detail-label">Date</span>
                       <span className="detail-value">
@@ -205,7 +206,7 @@ function MissionsTerminees() {
 
                   {mission.prix_propose && (
                     <div className="detail-col">
-                      <span className="detail-icon">💰</span>
+                      <span className="detail-icon"><Icon name="creditCard" size={18} /></span>
                       <div className="detail-info">
                         <span className="detail-label">Prix</span>
                         <span className="detail-value">{mission.prix_propose} €</span>
@@ -220,7 +221,7 @@ function MissionsTerminees() {
                   className="btn-details"
                   onClick={() => openMissionDetails(mission)}
                 >
-                  📋 Voir détails
+                  <Icon name="clipboard" size={16} /> Voir détails
                 </button>
               </div>
             </div>
@@ -236,10 +237,10 @@ function MissionsTerminees() {
               <div>
                 <h2>Détails de la mission</h2>
                 <span className={`modal-badge badge-${selectedMission.statut.toLowerCase()}`}>
-                  {selectedMission.statut === 'Completee' ? '✓ Complétée' : '✕ Annulée'}
+                  {selectedMission.statut === 'Completee' ? <><Icon name="check" size={14} /> Complétée</> : <><Icon name="close" size={14} /> Annulée</>}
                 </span>
               </div>
-              <button className="modal-close" onClick={closeModal}>✕</button>
+              <button className="modal-close" onClick={closeModal}><Icon name="close" size={20} /></button>
             </div>
             
             <div className="modal-body">

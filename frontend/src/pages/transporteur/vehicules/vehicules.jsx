@@ -3,6 +3,7 @@ import { useVehicules } from './vehicules.ts'
 import DataTable from '@components/DataTable.jsx'
 import DocumentViewerModal from '@components/DocumentViewerModal.jsx'
 import apiService from '../../../services/apiService'
+import Icon from '../../../components/Icon.jsx'
 import './vehicules.scss'
 
 export default function VehiculesPage() {
@@ -127,16 +128,16 @@ export default function VehiculesPage() {
           { key: 'documents', header: 'Documents', render: (r) => (
               <div className="documents-status">
                 <span className={`doc-status ${r.carte_grise_document_id ? 'present' : 'missing'}`}>
-                  🗂️ CG
+                  <Icon name="fileText" size={14} /> CG
                 </span>
                 <span className={`doc-status ${r.assurance_document_id ? 'present' : 'missing'}`}>
-                  🛡️ Ass
+                  <Icon name="shield" size={14} /> Ass
                 </span>
               </div>
             ) },
           { key: 'actions', header: 'Actions', render: (r) => (
               <div className="actions-group">
-                <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r)}>📄 Docs</button>
+                <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r)}><Icon name="document" size={14} /> Docs</button>
                 <button className="btn btn-danger btn-sm" onClick={() => remove(r.id)}>Supprimer</button>
               </div>
             ) }

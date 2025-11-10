@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext.jsx'
 import TransporteurMobileMenu from '../MobileMenu/transporteur/MobileMenu.jsx'
 import DonneurOrdreMobileMenu from '../MobileMenu/donneurOrdre/MobileMenu.jsx'
+import Icon from '../Icon.jsx'
 import './Navbar.scss'
 
 function Navbar() {
@@ -114,7 +115,7 @@ function Navbar() {
         <div className="navbar-user">
           {isAuthenticated() ? (
             <>
-              <span className="navbar-username">👤 {user?.username}</span>
+              <span className="navbar-username"><Icon name="user" size={16} /> {user?.username}</span>
               <button onClick={handleLogout} className="navbar-logout-btn">
                 Déconnexion
               </button>

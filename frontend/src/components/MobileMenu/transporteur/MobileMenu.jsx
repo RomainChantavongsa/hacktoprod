@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../../contexts/AuthContext.jsx'
+import Icon from '../../Icon.jsx'
 import './MobileMenu.scss'
 
 function MobileMenu({ isOpen, onClose }) {
@@ -23,28 +24,28 @@ function MobileMenu({ isOpen, onClose }) {
   }
 
   const transportLinks = [
-    { to: '/offres/disponibles', icon: '🔍', label: 'Offres disponibles' },
-    { to: '/offres/mes-propositions', icon: '📝', label: 'Mes propositions' },
-    { to: '/missions/en-cours', icon: '🚚', label: 'Missions en cours' },
-    { to: '/missions/terminees', icon: '✓', label: 'Missions terminées' },
+    { to: '/offres/disponibles', icon: 'search', label: 'Offres disponibles' },
+    { to: '/offres/mes-propositions', icon: 'edit', label: 'Mes propositions' },
+    { to: '/missions/en-cours', icon: 'truck', label: 'Missions en cours' },
+    { to: '/missions/terminees', icon: 'check', label: 'Missions terminées' },
   ]
 
   const entrepriseLinks = [
-    { to: '/entreprise/verification', icon: '📱', label: 'Guide de vérification' },
-    { to: '/entreprise/profil', icon: '👤', label: 'Profil' },
-    { to: '/entreprise/documents', icon: '📄', label: 'Documents' },
-    { to: '/entreprise/compte-bancaire', icon: '💳', label: 'Compte bancaire' },
-    { to: '/entreprise/vehicules', icon: '🚛', label: 'Véhicules' },
-    { to: '/entreprise/remorques', icon: '🚐', label: 'Remorques' },
-    { to: '/entreprise/annuaire', icon: '📇', label: 'Annuaire' },
-    { to: '/entreprise/conducteurs', icon: '👨‍✈️', label: 'Conducteurs' },
+    { to: '/entreprise/verification', icon: 'smartphone', label: 'Guide de vérification' },
+    { to: '/entreprise/profil', icon: 'user', label: 'Profil' },
+    { to: '/entreprise/documents', icon: 'document', label: 'Documents' },
+    { to: '/entreprise/compte-bancaire', icon: 'creditCard', label: 'Compte bancaire' },
+    { to: '/entreprise/vehicules', icon: 'truck', label: 'Véhicules' },
+    { to: '/entreprise/remorques', icon: 'trailer', label: 'Remorques' },
+    { to: '/entreprise/annuaire', icon: 'book', label: 'Annuaire' },
+    { to: '/entreprise/conducteurs', icon: 'users', label: 'Conducteurs' },
   ]
 
   const parametresLinks = [
-    { to: '/parametres', icon: '⚙️', label: 'Aperçu des paramètres' },
-    { to: '/parametres/compte', icon: '👤', label: 'Mon compte' },
-    { to: '/parametres/notifications', icon: '🔔', label: 'Notifications' },
-    { to: '/parametres/securite', icon: '�', label: 'Sécurité' },
+    { to: '/parametres', icon: 'settings', label: 'Aperçu des paramètres' },
+    { to: '/parametres/compte', icon: 'user', label: 'Mon compte' },
+    { to: '/parametres/notifications', icon: 'bell', label: 'Notifications' },
+    { to: '/parametres/securite', icon: 'lock', label: 'Sécurité' },
   ]
 
   return (
@@ -62,7 +63,7 @@ function MobileMenu({ isOpen, onClose }) {
             <img src="/images/GDSLogo.svg" alt="GDS Logo" className="logo-image" />
           </div>
           <button className="mobile-menu-close" onClick={onClose}>
-            ✕
+            <Icon name="close" size={24} />
           </button>
         </div>
 
@@ -84,7 +85,7 @@ function MobileMenu({ isOpen, onClose }) {
                   className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
                   onClick={handleNavClick}
                 >
-                  <span className="menu-item-icon">{link.icon}</span>
+                  <span className="menu-item-icon"><Icon name={link.icon} size={18} /></span>
                   <span className="menu-item-label">{link.label}</span>
                 </NavLink>
               ))}
@@ -108,7 +109,7 @@ function MobileMenu({ isOpen, onClose }) {
                   className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
                   onClick={handleNavClick}
                 >
-                  <span className="menu-item-icon">{link.icon}</span>
+                  <span className="menu-item-icon"><Icon name={link.icon} size={18} /></span>
                   <span className="menu-item-label">{link.label}</span>
                 </NavLink>
               ))}
@@ -132,7 +133,7 @@ function MobileMenu({ isOpen, onClose }) {
                   className={({ isActive }) => `menu-item ${isActive ? 'active' : ''}`}
                   onClick={handleNavClick}
                 >
-                  <span className="menu-item-icon">{link.icon}</span>
+                  <span className="menu-item-icon"><Icon name={link.icon} size={18} /></span>
                   <span className="menu-item-label">{link.label}</span>
                 </NavLink>
               ))}
@@ -143,12 +144,12 @@ function MobileMenu({ isOpen, onClose }) {
         {/* Footer */}
         <div className="mobile-menu-footer">
           <button className="menu-footer-item">
-            <span className="menu-item-icon">🌍</span>
+            <span className="menu-item-icon"><Icon name="globe" size={18} /></span>
             <span className="menu-item-label">Langue</span>
             <span className="menu-arrow">▼</span>
           </button>
           <button className="menu-footer-item" onClick={handleLogout}>
-            <span className="menu-item-icon">🚪</span>
+            <span className="menu-item-icon"><Icon name="logout" size={18} /></span>
             <span className="menu-item-label">Déconnexion</span>
           </button>
         </div>

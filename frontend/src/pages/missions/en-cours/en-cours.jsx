@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import apiService from '../../../services/apiService';
+import Icon from '../../../components/Icon.jsx';
 import './en-cours.scss';
 
 function MissionsEnCours() {
@@ -111,7 +112,7 @@ function MissionsEnCours() {
   return (
     <div className="missions-encours-page">
       <div className="page-header">
-        <h1>🚚 Missions en cours</h1>
+        <h1><Icon name="truck" size={28} /> Missions en cours</h1>
         <p className="page-description">
           {user.type_entreprise === 'transporteur' 
             ? 'Suivez vos missions acceptées et en cours d\'exécution'
@@ -121,7 +122,7 @@ function MissionsEnCours() {
 
       {missions.length === 0 ? (
         <div className="empty-state">
-          <div className="empty-icon">📦</div>
+          <div className="empty-icon"><Icon name="package" size={48} /></div>
           <h3>Aucune mission en cours</h3>
           <p>Vous n'avez pas de mission acceptée actuellement.</p>
         </div>
@@ -142,7 +143,7 @@ function MissionsEnCours() {
               <div className="mission-body">
                 <div className="mission-info">
                   <div className="info-row">
-                    <span className="info-icon">📦</span>
+                    <span className="info-icon"><Icon name="package" size={20} /></span>
                     <div className="info-content">
                       <span className="info-label">Marchandise</span>
                       <span className="info-value">{mission.type_marchandise || 'Non spécifié'}</span>
@@ -150,7 +151,7 @@ function MissionsEnCours() {
                   </div>
 
                   <div className="info-row">
-                    <span className="info-icon">⚖️</span>
+                    <span className="info-icon"><Icon name="package" size={20} /></span>
                     <div className="info-content">
                       <span className="info-label">Poids</span>
                       <span className="info-value">{mission.poids_kg ? `${mission.poids_kg} kg` : 'N/A'}</span>
@@ -160,13 +161,13 @@ function MissionsEnCours() {
 
                 <div className="mission-route">
                   <div className="route-point departure">
-                    <div className="route-icon">🔵</div>
+                    <div className="route-icon"><Icon name="mapPin" size={24} /></div>
                     <div className="route-details">
                       <span className="route-label">Départ</span>
                       <span className="route-location">{mission.ville_chargement || 'Non spécifié'}</span>
                       <span className="route-address">{mission.adresse_chargement || ''}</span>
                       <span className="route-date">
-                        📅 {mission.date_chargement_prevue 
+                        <Icon name="clock" size={14} /> {mission.date_chargement_prevue 
                           ? new Date(mission.date_chargement_prevue).toLocaleDateString('fr-FR', {
                               day: '2-digit',
                               month: 'long',
@@ -180,7 +181,7 @@ function MissionsEnCours() {
                   <div className="route-line"></div>
 
                   <div className="route-point arrival">
-                    <div className="route-icon">🔴</div>
+                    <div className="route-icon"><Icon name="mapPin" size={24} /></div>
                     <div className="route-details">
                       <span className="route-label">Arrivée</span>
                       <span className="route-location">{mission.ville_livraison || 'Non spécifié'}</span>
@@ -202,7 +203,7 @@ function MissionsEnCours() {
                   className="btn-secondary"
                   onClick={() => openMissionDetails(mission)}
                 >
-                  📋 Détails
+                  <Icon name="clipboard" size={16} /> Détails
                 </button>
                 
                 {user.type_entreprise === 'transporteur' && (
@@ -212,7 +213,7 @@ function MissionsEnCours() {
                         className="btn-primary"
                         onClick={() => handleMarquerEnCours(mission.offre_fret_id)}
                       >
-                        🚚 Démarrer transport
+                        <Icon name="truck" size={16} /> Démarrer transport
                       </button>
                     )}
                     {mission.statut === 'En_Cours' && (
@@ -220,7 +221,7 @@ function MissionsEnCours() {
                         className="btn-success"
                         onClick={() => handleMarquerComplete(mission.offre_fret_id)}
                       >
-                        ✓ Marquer complétée
+                        <Icon name="check" size={16} /> Marquer complétée
                       </button>
                     )}
                   </>
@@ -237,7 +238,7 @@ function MissionsEnCours() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Détails de la mission</h2>
-              <button className="modal-close" onClick={closeModal}>✕</button>
+              <button className="modal-close" onClick={closeModal}><Icon name="close" size={20} /></button>
             </div>
             
             <div className="modal-body">

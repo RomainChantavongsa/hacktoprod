@@ -1,5 +1,6 @@
 import { useCompteBancaire } from './compte-bancaire.ts'
 import './compte-bancaire.scss'
+import Icon from '../../../components/Icon.jsx'
 
 function CompteBancaire() {
   const {
@@ -69,7 +70,7 @@ function CompteBancaire() {
                         disabled={isEditing}
                         title="Définir comme compte principal"
                       >
-                        ★ Principal
+                        <Icon name="star" size={16} /> Principal
                       </button>
                     )}
                     <button

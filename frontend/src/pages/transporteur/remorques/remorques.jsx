@@ -3,6 +3,7 @@ import { useRemorques } from './remorques.ts'
 import DataTable from '@components/DataTable.jsx'
 import DocumentViewerModal from '@components/DocumentViewerModal.jsx'
 import apiService from '../../../services/apiService'
+import Icon from '../../../components/Icon.jsx'
 import './remorques.scss'
 
 export default function RemorquesPage() {
@@ -93,12 +94,12 @@ export default function RemorquesPage() {
           { key: 'capacite_tonnes', header: 'Capacité (t)', sortable: true, render: (r) => r.capacite_tonnes ?? '-' },
           { key: 'documents', header: 'Documents', render: (r) => (
             <span className={`doc-status ${r.document_id ? 'present' : 'missing'}`}>
-              📄 Doc
+              <Icon name="document" size={14} /> Doc
             </span>
           )},
           { key: 'actions', header: 'Actions', render: (r) => (
             <div className="actions-group">
-              <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r)}>📄 Docs</button>
+              <button className="btn btn-outline btn-sm" onClick={() => viewDocuments(r)}><Icon name="document" size={14} /> Docs</button>
               <button className="btn btn-danger btn-sm" onClick={() => remove(r.id)}>Supprimer</button>
             </div>
           )}

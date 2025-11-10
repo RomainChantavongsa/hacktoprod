@@ -1,6 +1,7 @@
 import React from 'react';
 import { useOffresTerminees } from './terminees.ts';
 import DataTable from '../../../components/DataTable';
+import Icon from '../../../components/Icon.jsx';
 import './terminees.scss';
 
 const OffresTerminees = () => {
@@ -61,9 +62,9 @@ const OffresTerminees = () => {
       render: (offre) => (
         <span className={`statut-badge ${offre.statut_offre.toLowerCase()}`}>
           {offre.statut_offre === 'Completee' ? (
-            <>✓ Complétée</>
+            <><Icon name="check" size={14} /> Complétée</>
           ) : (
-            <>✗ Annulée</>
+            <><Icon name="close" size={14} /> Annulée</>
           )}
         </span>
       ),

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Icon from './Icon.jsx'
 import './DocumentViewerModal.scss'
 
 export default function DocumentViewerModal({ isOpen, onClose, documents, title }) {
@@ -59,7 +60,7 @@ export default function DocumentViewerModal({ isOpen, onClose, documents, title 
       return (
         <div className="document-preview no-preview">
           <div className="no-preview-content">
-            <span className="icon">📄</span>
+            <span className="icon"><Icon name="document" size={48} /></span>
             <p>Aperçu non disponible pour ce type de fichier</p>
             <p className="file-info">{selectedDoc.nom_fichier_original}</p>
             <button className="btn btn-primary" onClick={() => handleDownload(selectedDoc)}>
@@ -89,7 +90,7 @@ export default function DocumentViewerModal({ isOpen, onClose, documents, title 
       <div className="document-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{title || 'Documents'}</h2>
-          <button className="close-btn" onClick={onClose}>✕</button>
+          <button className="close-btn" onClick={onClose}><Icon name="close" size={20} /></button>
         </div>
 
         <div className="modal-body">
@@ -105,8 +106,8 @@ export default function DocumentViewerModal({ isOpen, onClose, documents, title 
                     onClick={() => handlePreview(doc)}
                   >
                     <div className="doc-icon">
-                      {doc.mime_type?.startsWith('image/') ? '🖼️' : 
-                       doc.mime_type === 'application/pdf' ? '📄' : '📎'}
+                      {doc.mime_type?.startsWith('image/') ? <Icon name="image" size={20} /> : 
+                       doc.mime_type === 'application/pdf' ? <Icon name="document" size={20} /> : <Icon name="paperclip" size={20} />}
                     </div>
                     <div className="doc-info">
                       <div className="doc-name">{doc.nom_fichier_original}</div>

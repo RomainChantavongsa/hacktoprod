@@ -1,5 +1,6 @@
 import { useDocuments } from './documents.ts'
 import DataTable from '@components/DataTable.jsx'
+import Icon from '../../../components/Icon.jsx'
 import './documents.scss'
 
 function Documents() {
@@ -47,7 +48,7 @@ function Documents() {
     <div className="documents-page">
       <div className="documents-header">
         <div className="header-content">
-          <h1 className="page-title">📄 Documents de l'entreprise</h1>
+          <h1 className="page-title"><Icon name="document" size={24} /> Documents de l'entreprise</h1>
           <p className="page-description">
             Gérez tous les documents légaux et administratifs de votre entreprise
           </p>
@@ -59,7 +60,7 @@ function Documents() {
             onClick={() => setShowUploadModal(true)}
             disabled={uploading}
           >
-            <span>📤</span>
+            <Icon name="upload" size={18} />
             Ajouter un document
           </button>
         </div>
@@ -67,7 +68,7 @@ function Documents() {
 
       {error && (
         <div className="error-message">
-          <span className="error-icon">⚠️</span>
+          <span className="error-icon"><Icon name="alertTriangle" size={18} /></span>
           {error}
         </div>
       )}
@@ -187,7 +188,7 @@ function Documents() {
                 const expired = isExpired(doc.date_expiration)
                 return (
                   <span className={`dt-expiration ${expired ? 'text-error' : expiringSoon ? 'text-warning' : 'text-success'}`}>
-                    {expired ? '❌' : expiringSoon ? '⚠️' : '✅'} {formatDate(doc.date_expiration)}
+                    {expired ? <Icon name="xCircle" size={16} /> : expiringSoon ? <Icon name="alertTriangle" size={16} /> : <Icon name="checkCircle" size={16} />} {formatDate(doc.date_expiration)}
                   </span>
                 )
               }
@@ -214,22 +215,22 @@ function Documents() {
                     className="btn-action btn-preview"
                     onClick={() => handlePreviewDocument(doc)}
                     title="Prévisualiser"
-                  >👁️</button>
+                  ><Icon name="eye" size={16} /></button>
                   <button
                     className="btn-action btn-edit"
                     onClick={() => handleEditDocument(doc)}
                     title="Modifier"
-                  >✏️</button>
+                  ><Icon name="edit" size={16} /></button>
                   <button
                     className="btn-action btn-download"
                     onClick={() => handleDownloadDocument(doc)}
                     title="Télécharger"
-                  >⬇️</button>
+                  ><Icon name="download" size={16} /></button>
                   <button
                     className="btn-action btn-delete"
                     onClick={() => handleDeleteDocument(doc.id)}
                     title="Supprimer"
-                  >🗑️</button>
+                  ><Icon name="trash" size={16} /></button>
                 </div>
               )
             }
@@ -244,14 +245,14 @@ function Documents() {
       {/* Statistiques */}
       <div className="documents-stats">
         <div className="stat-card">
-          <div className="stat-icon">📊</div>
+          <div className="stat-icon"><Icon name="barChart" size={24} /></div>
           <div className="stat-info">
             <span className="stat-value">{documents.length}</span>
             <span className="stat-label">Documents totaux</span>
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">✅</div>
+          <div className="stat-icon"><Icon name="checkCircle" size={24} /></div>
           <div className="stat-info">
             <span className="stat-value">
               {documents.filter(d => d.est_valide && !isExpired(d.date_expiration)).length}
@@ -260,7 +261,7 @@ function Documents() {
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">⚠️</div>
+          <div className="stat-icon"><Icon name="alertTriangle" size={24} /></div>
           <div className="stat-info">
             <span className="stat-value">
               {documents.filter(d => isExpiringSoon(d.date_expiration)).length}
@@ -269,7 +270,7 @@ function Documents() {
           </div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">❌</div>
+          <div className="stat-icon"><Icon name="xCircle" size={24} /></div>
           <div className="stat-info">
             <span className="stat-value">
               {documents.filter(d => isExpired(d.date_expiration)).length}
@@ -284,8 +285,8 @@ function Documents() {
         <div className="modal-overlay" onClick={() => setShowUploadModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>📤 Ajouter un document</h2>
-              <button className="btn-close" onClick={() => setShowUploadModal(false)}>✕</button>
+              <h2><Icon name="upload" size={20} /> Ajouter un document</h2>
+              <button className="btn-close" onClick={() => setShowUploadModal(false)}><Icon name="close" size={18} /></button>
             </div>
             <form onSubmit={handleUploadSubmit} className="modal-form">
               <div className="form-group">
@@ -298,7 +299,7 @@ function Documents() {
                 />
                 {uploadForm.file && (
                   <div className="file-preview">
-                    <span>{getDocumentIcon(uploadForm.file.name)}</span>
+                    <Icon name={getDocumentIcon(uploadForm.file.name)} size={18} />
                     <span>{uploadForm.file.name}</span>
                     <span>({formatFileSize(uploadForm.file.size)})</span>
                   </div>
@@ -396,7 +397,7 @@ function Documents() {
                   Annuler
                 </button>
                 <button type="submit" className="btn-primary" disabled={uploading}>
-                  {uploading ? '⏳ Upload en cours...' : '📤 Uploader'}
+                  {uploading ? <><Icon name="clock" size={16} /> Upload en cours...</> : <><Icon name="upload" size={16} /> Uploader</>}
                 </button>
               </div>
             </form>
@@ -409,8 +410,8 @@ function Documents() {
         <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2>✏️ Modifier le document</h2>
-              <button className="btn-close" onClick={() => setShowEditModal(false)}>✕</button>
+              <h2><Icon name="edit" size={20} /> Modifier le document</h2>
+              <button className="btn-close" onClick={() => setShowEditModal(false)}><Icon name="close" size={18} /></button>
             </div>
             <form onSubmit={handleUpdateDocument} className="modal-form">
               <div className="form-group">
@@ -513,7 +514,7 @@ function Documents() {
                   Annuler
                 </button>
                 <button type="submit" className="btn-primary" disabled={uploading}>
-                  {uploading ? '⏳ Mise à jour...' : '💾 Enregistrer'}
+                  {uploading ? <><Icon name="clock" size={16} /> Mise à jour...</> : <><Icon name="save" size={16} /> Enregistrer</>}
                 </button>
               </div>
             </form>
@@ -527,10 +528,10 @@ function Documents() {
           <div className="modal-content modal-preview" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>
-                👁️ Aperçu: {previewDocument.nom_fichier_original}
+                <Icon name="eye" size={20} /> Aperçu: {previewDocument.nom_fichier_original}
                 <span className="file-extension">{previewDocument.extension}</span>
               </h2>
-              <button className="btn-close" onClick={closePreviewModal}>✕</button>
+              <button className="btn-close" onClick={closePreviewModal}><Icon name="close" size={18} /></button>
             </div>
             <div className="modal-body preview-container">
               {previewDocument.extension.toLowerCase() === '.pdf' ? (
@@ -553,7 +554,7 @@ function Documents() {
                 className="btn-secondary" 
                 onClick={() => handleDownloadDocument(previewDocument)}
               >
-                📥 Télécharger
+                <Icon name="download" size={16} /> Télécharger
               </button>
               <button type="button" className="btn-primary" onClick={closePreviewModal}>
                 Fermer

@@ -1,4 +1,5 @@
 import { usePropositions } from './propositions.ts'
+import Icon from '../../../components/Icon.jsx'
 import './propositions.scss'
 
 function PropositionsRecues() {
@@ -42,9 +43,9 @@ function PropositionsRecues() {
                     <div className="proposition-header">
                       <span className="proposition-id">Proposition #{prop.id}</span>
                       <span className={`statut-badge ${prop.statut_proposition.toLowerCase()}`}>
-                        {prop.statut_proposition === 'Soumise' ? '⏳ En attente' : 
-                         prop.statut_proposition === 'Acceptee' ? '✓ Acceptée' : 
-                         '✗ Refusée'}
+                        {prop.statut_proposition === 'Soumise' ? <><Icon name="clock" size={14} /> En attente</> : 
+                         prop.statut_proposition === 'Acceptee' ? <><Icon name="check" size={14} /> Acceptée</> : 
+                         <><Icon name="close" size={14} /> Refusée</>}
                       </span>
                     </div>
 

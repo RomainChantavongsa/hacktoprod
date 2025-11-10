@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
 import apiService from '../../services/apiService'
+import Icon from '../../components/Icon.jsx'
 import './commandes.scss'
 
 function Commandes() {
@@ -261,7 +262,7 @@ function Commandes() {
                     {offre.code_postal_chargement} {offre.ville_chargement}
                   </div>
                   <div className="location-date">
-                    📅 {new Date(offre.date_chargement_prevue).toLocaleDateString('fr-FR')}
+                    <Icon name="clock" size={14} /> {new Date(offre.date_chargement_prevue).toLocaleDateString('fr-FR')}
                   </div>
                 </div>
 
@@ -300,7 +301,7 @@ function Commandes() {
 
         {filteredOffres.length === 0 && offres.length === 0 && !loading && (
           <div className="no-offres">
-            <div className="empty-icon">📦</div>
+            <div className="empty-icon"><Icon name="package" size={48} /></div>
             <h3>Aucune commande disponible</h3>
             <p>Il n'y a actuellement aucune offre de transport publiée.</p>
             <p className="empty-subtitle">Revenez plus tard pour découvrir de nouvelles opportunités !</p>
@@ -309,7 +310,7 @@ function Commandes() {
 
         {filteredOffres.length === 0 && offres.length > 0 && (
           <div className="no-offres">
-            <div className="empty-icon">🔍</div>
+            <div className="empty-icon"><Icon name="search" size={48} /></div>
             <h3>Aucune offre trouvée</h3>
             <p>Essayez de modifier vos critères de recherche.</p>
           </div>

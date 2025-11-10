@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMesPropositions } from './mes-propositions.ts';
+import Icon from '../../../components/Icon.jsx';
 import './mes-propositions.scss';
 
 const MesPropositions = () => {
@@ -61,9 +62,9 @@ const MesPropositions = () => {
 const PropositionCard = ({ proposition }) => {
   const getStatutBadge = (statut) => {
     const badges = {
-      Soumise: { label: '⏳ En attente', className: 'soumise' },
-      Acceptee: { label: '✓ Acceptée', className: 'acceptee' },
-      Refusee: { label: '✗ Refusée', className: 'refusee' },
+      Soumise: { label: <><Icon name="clock" size={14} /> En attente</>, className: 'soumise' },
+      Acceptee: { label: <><Icon name="check" size={14} /> Acceptée</>, className: 'acceptee' },
+      Refusee: { label: <><Icon name="close" size={14} /> Refusée</>, className: 'refusee' },
     };
     
     const badge = badges[statut] || badges.Soumise;

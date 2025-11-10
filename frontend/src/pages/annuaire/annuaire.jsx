@@ -1,5 +1,6 @@
 import { useAnnuaire } from './annuaire.ts'
 import { useRef, useEffect } from 'react'
+import Icon from '../../components/Icon.jsx'
 import './annuaire.scss'
 
 function Annuaire() {
@@ -44,7 +45,7 @@ function Annuaire() {
     <div className="annuaire-page">
       {/* En-tête de la page */}
       <div className="page-header">
-        <h1>📇 Annuaire de l'entreprise</h1>
+        <h1><Icon name="book" size={24} /> Annuaire de l'entreprise</h1>
         <p className="subtitle">
           Consultez et gérez les coordonnées de tous les membres de votre entreprise
         </p>
@@ -75,7 +76,7 @@ function Annuaire() {
         {/* Barre de recherche */}
         <div className="search-container">
           <div className="search-input-wrapper">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><Icon name="search" size={18} /></span>
             <input
               type="text"
               placeholder="Rechercher par nom, prénom, email, téléphone..."
@@ -89,7 +90,7 @@ function Annuaire() {
                 onClick={() => setSearchQuery('')}
                 title="Effacer la recherche"
               >
-                ✕
+                <Icon name="close" size={16} />
               </button>
             )}
           </div>
@@ -120,7 +121,7 @@ function Annuaire() {
                 <div className="contact-details">
                   {contact.email && (
                     <div className="detail-row">
-                      <span className="detail-icon">📧</span>
+                      <span className="detail-icon"><Icon name="mail" size={18} /></span>
                       <a href={`mailto:${contact.email}`} className="detail-value email-link">
                         {contact.email}
                       </a>
@@ -129,7 +130,7 @@ function Annuaire() {
                   
                   {contact.telephone_professionnel && (
                     <div className="detail-row">
-                      <span className="detail-icon">📞</span>
+                      <span className="detail-icon"><Icon name="phone" size={18} /></span>
                       <div className="phone-info">
                         <span className="phone-type">Professionnel</span>
                         <a href={`tel:${contact.telephone_professionnel}`} className="detail-value phone-link">
@@ -141,7 +142,7 @@ function Annuaire() {
 
                   {contact.telephone_mobile && (
                     <div className="detail-row">
-                      <span className="detail-icon">📱</span>
+                      <span className="detail-icon"><Icon name="smartphone" size={18} /></span>
                       <div className="phone-info">
                         <span className="phone-type">Mobile</span>
                         <a href={`tel:${contact.telephone_mobile}`} className="detail-value phone-link">
@@ -153,7 +154,7 @@ function Annuaire() {
 
                   {contact.telephone_fixe && (
                     <div className="detail-row">
-                      <span className="detail-icon">☎️</span>
+                      <span className="detail-icon"><Icon name="phone" size={18} /></span>
                       <div className="phone-info">
                         <span className="phone-type">Fixe</span>
                         <a href={`tel:${contact.telephone_fixe}`} className="detail-value phone-link">
@@ -165,7 +166,7 @@ function Annuaire() {
 
                   {contact.notes && (
                     <div className="detail-row notes-row">
-                      <span className="detail-icon">📝</span>
+                      <span className="detail-icon"><Icon name="edit" size={18} /></span>
                       <span className="detail-value notes">{contact.notes}</span>
                     </div>
                   )}
@@ -182,7 +183,7 @@ function Annuaire() {
                     }}
                     title="Modifier"
                   >
-                    ✏️ Modifier
+                    <Icon name="edit" size={16} /> Modifier
                   </button>
                   <button
                     type="button"
@@ -194,7 +195,7 @@ function Annuaire() {
                     }}
                     title="Supprimer"
                   >
-                    🗑️ Supprimer
+                    <Icon name="trash" size={16} /> Supprimer
                   </button>
                 </div>
               </div>
@@ -202,7 +203,7 @@ function Annuaire() {
           </div>
         ) : (
           <div className="empty-state">
-            <div className="empty-icon">�</div>
+            <div className="empty-icon"><Icon name="users" size={48} /></div>
             <h3>Aucun contact dans l'annuaire</h3>
             <p>Commencez par ajouter vos premiers contacts professionnels</p>
             <button
@@ -210,8 +211,7 @@ function Annuaire() {
               className="btn btn-primary"
               onClick={() => setShowCreateModal(true)}
             >
-              <span className="btn-icon">+</span>
-              Ajouter un contact
+              <Icon name="plus" size={16} /> Ajouter un contact
             </button>
           </div>
         )}
@@ -221,7 +221,7 @@ function Annuaire() {
       {showCreateModal && (
         <div ref={formRef} className="contact-form-section">
           <div className="form-header">
-            <h2>➕ Ajouter un nouveau contact</h2>
+            <h2><Icon name="plus" size={20} /> Ajouter un nouveau contact</h2>
             <button 
               type="button" 
               className="btn btn-secondary"
@@ -353,7 +353,7 @@ function Annuaire() {
                 Annuler
               </button>
               <button type="submit" className="btn btn-primary">
-                ➕ Ajouter le contact
+                <Icon name="plus" size={16} /> Ajouter le contact
               </button>
             </div>
           </form>
@@ -364,7 +364,7 @@ function Annuaire() {
       {showEditModal && editingEntry && (
         <div className="contact-form-section">
           <div className="form-header">
-            <h2>✏️ Modifier le contact</h2>
+            <h2><Icon name="edit" size={20} /> Modifier le contact</h2>
             <button 
               type="button" 
               className="btn btn-secondary"
@@ -487,7 +487,7 @@ function Annuaire() {
                 Annuler
               </button>
               <button type="submit" className="btn btn-primary">
-                💾 Enregistrer les modifications
+                <Icon name="save" size={16} /> Enregistrer les modifications
               </button>
             </div>
           </form>

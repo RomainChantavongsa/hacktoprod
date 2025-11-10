@@ -194,8 +194,11 @@ class CompteBancaireService {
       }
     }
 
-    if (!data.entreprise_id || typeof data.entreprise_id !== 'number') {
-      throw new Error('L\'ID de l\'entreprise est requis et doit être un nombre');
+    // L'entreprise_id est requis uniquement lors de la création
+    if (!isUpdate || data.entreprise_id !== undefined) {
+      if (!data.entreprise_id || typeof data.entreprise_id !== 'number') {
+        throw new Error('L\'ID de l\'entreprise est requis et doit être un nombre');
+      }
     }
   }
 }

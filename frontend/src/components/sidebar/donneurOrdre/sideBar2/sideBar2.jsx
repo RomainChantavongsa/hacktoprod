@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import Icon from '../../../Icon.jsx'
 import './sideBar2.scss'
 
 // Sidebar pour la section "Mon Entreprise" (Donneur d'Ordre)
@@ -13,7 +14,7 @@ function SideBar2() {
               to="/entreprise/profil"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">👤</span>
+              <span className="sidebar-icon"><Icon name="user" size={18} /></span>
               <span className="sidebar-label">Profil</span>
             </NavLink>
           </li>
@@ -23,7 +24,7 @@ function SideBar2() {
               to="/entreprise/documents" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">📄</span>
+              <span className="sidebar-icon"><Icon name="document" size={18} /></span>
               <span className="sidebar-label">Documents</span>
             </NavLink>
           </li>
@@ -33,7 +34,7 @@ function SideBar2() {
               to="/entreprise/compte-bancaire" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">💳</span>
+              <span className="sidebar-icon"><Icon name="creditCard" size={18} /></span>
               <span className="sidebar-label">Compte bancaire</span>
             </NavLink>
           </li>
@@ -43,7 +44,7 @@ function SideBar2() {
               to="/entreprise/entrepots" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">🏭</span>
+              <span className="sidebar-icon"><Icon name="warehouse" size={18} /></span>
               <span className="sidebar-label">Entrepôts</span>
             </NavLink>
           </li>
@@ -53,7 +54,7 @@ function SideBar2() {
               to="/entreprise/annuaire"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">📇</span>
+              <span className="sidebar-icon"><Icon name="book" size={18} /></span>
               <span className="sidebar-label">Annuaire</span>
             </NavLink>
           </li>

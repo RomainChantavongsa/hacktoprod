@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../../contexts/AuthContext'
 import apiService from '../../../services/apiService'
+import Icon from '../../../components/Icon.jsx'
 import './documents.scss'
 
 function Documents() {
@@ -192,7 +193,7 @@ function Documents() {
       <div className="documents-status">
         <div className={`status-card ${allRequiredDocumentsPresent() ? 'complete' : 'incomplete'}`}>
           <div className="status-icon">
-            {allRequiredDocumentsPresent() ? '✅' : '⚠️'}
+            {allRequiredDocumentsPresent() ? <Icon name="checkCircle" size={32} /> : <Icon name="alertTriangle" size={32} />}
           </div>
           <div className="status-content">
             <h3>Documents requis</h3>
@@ -216,7 +217,7 @@ function Documents() {
             <div key={docType.type} className={`document-card ${isUploaded ? 'uploaded' : 'missing'}`}>
               <div className="document-header">
                 <div className="document-icon">
-                  {isUploaded ? '📄' : '📋'}
+                  {isUploaded ? <Icon name="document" size={32} /> : <Icon name="clipboard" size={32} />}
                 </div>
                 <div className="document-info">
                   <h3>{docType.label}</h3>
