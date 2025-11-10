@@ -16,6 +16,11 @@ export const useVehicules = () => {
     capacite_tonnes: '' as string | number
   })
 
+  const [uploadedFiles, setUploadedFiles] = useState({
+    carte_grise: null as File | null,
+    assurance: null as File | null
+  })
+
   const load = async () => {
     setLoading(true)
     setError('')
@@ -44,18 +49,70 @@ export const useVehicules = () => {
     e.preventDefault()
     setError('')
     setSubmitting(true)
-    const payload = {
-      type_vehicule: form.type_vehicule,
-      plaque_immatriculation: form.plaque_immatriculation,
-      conducteur_attitre: form.conducteur_attitre || undefined,
-      capacite_tonnes: form.capacite_tonnes === '' ? undefined : Number(form.capacite_tonnes)
+
+    try {
+      // Étape 1: Uploader les documents
+      let carteGriseDocId = null
+      let assuranceDocId = null
+
+      // Uploader la carte grise
+      if (uploadedFiles.carte_grise) {
+        const carteGriseFormData = new FormData()
+        carteGriseFormData.append('file', uploadedFiles.carte_grise)
+        carteGriseFormData.append('type_document', 'Carte_grise')
+        carteGriseFormData.append('categorie', 'Vehicule')
+        carteGriseFormData.append('plaque_immatriculation', form.plaque_immatriculation)
+        carteGriseFormData.append('nom_fichier_original', `Carte_grise_${form.plaque_immatriculation}`)
+
+        const carteGriseResponse = await apiService.uploadDocument(carteGriseFormData)
+        if (carteGriseResponse.success) {
+          carteGriseDocId = carteGriseResponse.data.id
+        } else {
+          throw new Error('Erreur lors de l\'upload de la carte grise')
+        }
+      }
+
+      // Uploader l'assurance
+      if (uploadedFiles.assurance) {
+        const assuranceFormData = new FormData()
+        assuranceFormData.append('file', uploadedFiles.assurance)
+        assuranceFormData.append('type_document', 'Assurance')
+        assuranceFormData.append('categorie', 'Assurance')
+        assuranceFormData.append('plaque_immatriculation', form.plaque_immatriculation)
+        assuranceFormData.append('nom_fichier_original', `Assurance_${form.plaque_immatriculation}`)
+
+        const assuranceResponse = await apiService.uploadDocument(assuranceFormData)
+        if (assuranceResponse.success) {
+          assuranceDocId = assuranceResponse.data.id
+        } else {
+          throw new Error('Erreur lors de l\'upload de l\'assurance')
+        }
+      }
+
+      // Étape 2: Créer le véhicule avec les références des documents
+      const payload = {
+        type_vehicule: form.type_vehicule,
+        plaque_immatriculation: form.plaque_immatriculation,
+        conducteur_attitre: form.conducteur_attitre || undefined,
+        capacite_tonnes: form.capacite_tonnes === '' ? undefined : Number(form.capacite_tonnes),
+        carte_grise_document_id: carteGriseDocId,
+        assurance_document_id: assuranceDocId
+      }
+
+      const res = await apiService.createVehicule(payload)
+      if (res.success) {
+        setForm({ type_vehicule: '', plaque_immatriculation: '', conducteur_attitre: '', capacite_tonnes: '' })
+        setUploadedFiles({ carte_grise: null, assurance: null })
+        await load()
+      } else {
+        setError(res.message)
+      }
+    } catch (error) {
+      console.error('Erreur lors de la création du véhicule:', error)
+      setError(error.message || 'Erreur lors de la création du véhicule')
+    } finally {
+      setSubmitting(false)
     }
-    const res = await apiService.createVehicule(payload)
-    if (res.success) {
-      setForm({ type_vehicule: '', plaque_immatriculation: '', conducteur_attitre: '', capacite_tonnes: '' })
-      await load()
-    } else setError(res.message)
-    setSubmitting(false)
   }
 
   const remove = async (id: number) => {
@@ -64,7 +121,31 @@ export const useVehicules = () => {
     else setError(res.message)
   }
 
-  const resetForm = () => setForm({ type_vehicule: '', plaque_immatriculation: '', conducteur_attitre: '', capacite_tonnes: '' })
+  const resetForm = () => {
+    setForm({ type_vehicule: '', plaque_immatriculation: '', conducteur_attitre: '', capacite_tonnes: '' })
+    setUploadedFiles({ carte_grise: null, assurance: null })
+  }
 
-  return { vehicules, conducteurs, loading, error, form, handleChange, create, remove, reload: load, submitting, resetForm }
+  const handleFileChange = (file: File | null, type: 'carte_grise' | 'assurance') => {
+    setUploadedFiles(prev => ({
+      ...prev,
+      [type]: file
+    }))
+  }
+
+  return {
+    vehicules,
+    conducteurs,
+    loading,
+    error,
+    form,
+    handleChange,
+    create,
+    remove,
+    reload: load,
+    submitting,
+    resetForm,
+    uploadedFiles,
+    handleFileChange
+  }
 }

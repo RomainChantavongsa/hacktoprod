@@ -8,10 +8,25 @@ class OffreFretService {
    * Créer une nouvelle offre de fret
    */
   async createOffreFret(offreData) {
-    const offre = await OffreFret.create({
-      ...offreData,
+    // Transformer les noms de champs pour correspondre à la DB
+    const dbData = { ...offreData };
+    if (dbData.donneur_ordre_id !== undefined) {
+      dbData.entreprise_donneur_ordre_id = dbData.donneur_ordre_id;
+      delete dbData.donneur_ordre_id;
+    }
+    if (dbData.transporteur_attribue_id !== undefined) {
+      dbData.entreprise_transporteur_id = dbData.transporteur_attribue_id;
+      delete dbData.transporteur_attribue_id;
+    }
+    
+    // Créer une nouvelle instance d'OffreFret avec les données
+    const offre = new OffreFret({
+      ...dbData,
       statut_offre: 'Publiee'
     });
+    
+    // Sauvegarder en base
+    await offre.save();
 
     return this._formatOffreFret(offre);
   }
@@ -22,16 +37,19 @@ class OffreFretService {
   async getAllOffresFret(filters = {}) {
     const { statut, donneur_ordre_id, transporteur_id } = filters;
     
+    // Récupérer toutes les offres ou filtrer par le filtre principal
     let offres;
-    
-    if (statut) {
-      offres = await OffreFret.where('statut_offre', '=', statut);
-    } else if (donneur_ordre_id) {
+    if (donneur_ordre_id) {
       offres = await OffreFret.getOffresByDonneurOrdre(donneur_ordre_id);
     } else if (transporteur_id) {
       offres = await OffreFret.getOffresByTransporteur(transporteur_id);
     } else {
       offres = await OffreFret.getAll();
+    }
+    
+    // Appliquer le filtre de statut si fourni
+    if (statut && offres.length > 0) {
+      offres = offres.filter(offre => offre.getStatutOffre() === statut);
     }
     
     return offres.map(o => this._formatOffreFret(o));

@@ -1,4 +1,5 @@
 import { useSecurite } from './securite.ts'
+import Icon from '../../../components/Icon.jsx'
 import './securite.scss'
 
 function Securite() {
@@ -71,11 +72,11 @@ function Securite() {
         <div className="form-section">
           <h2>Conseils de sécurité</h2>
           <ul className="security-tips">
-            <li>✓ Utilisez au moins 8 caractères</li>
-            <li>✓ Mélangez lettres majuscules et minuscules</li>
-            <li>✓ Incluez des chiffres et des symboles</li>
-            <li>✓ Ne réutilisez pas un ancien mot de passe</li>
-            <li>✓ Évitez les informations personnelles évidentes</li>
+            <li><Icon name="check" size={14} /> Utilisez au moins 8 caractères</li>
+            <li><Icon name="check" size={14} /> Mélangez lettres majuscules et minuscules</li>
+            <li><Icon name="check" size={14} /> Incluez des chiffres et des symboles</li>
+            <li><Icon name="check" size={14} /> Ne réutilisez pas un ancien mot de passe</li>
+            <li><Icon name="check" size={14} /> Évitez les informations personnelles évidentes</li>
           </ul>
         </div>
 

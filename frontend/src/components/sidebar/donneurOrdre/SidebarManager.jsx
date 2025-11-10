@@ -9,22 +9,22 @@ function SidebarManager() {
   // Détermine quelle sidebar afficher selon le chemin actuel
   const getSidebar = () => {
     const path = location.pathname
-    
-    // Section Offres (Mes offres de transport)
-    if (path.startsWith('/offres')) {
+
+    // Section Offres (Mes offres de transport) et Missions
+    if (path.startsWith('/offres') || path.startsWith('/missions')) {
       return <SideBar1 />
     }
-    
+
     // Section Entreprise (Mon Entreprise)
-    if (path.startsWith('/entreprise')) {
+    if (path.startsWith('/entreprise') || path.startsWith('/donneurOrdre')) {
       return <SideBar2 />
     }
-    
+
     // Section Paramètres
     if (path.startsWith('/parametres')) {
       return <SideBar3 />
     }
-    
+
     // Pas de sidebar pour les autres pages (login, register, home, etc.)
     return null
   }

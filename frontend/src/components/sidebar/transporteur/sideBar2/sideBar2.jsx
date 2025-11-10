@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import Icon from '../../../Icon.jsx'
 import './sideBar2.scss'
 
 // Sidebar pour la section "Mon Entreprise"
@@ -13,7 +14,7 @@ function SideBar2() {
               to="/entreprise/verification" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">📱</span>
+              <span className="sidebar-icon"><Icon name="smartphone" size={18} /></span>
               <span className="sidebar-label">Guide de vérification</span>
             </NavLink>
           </li>
@@ -23,7 +24,7 @@ function SideBar2() {
               to="/entreprise/profil" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">👤</span>
+              <span className="sidebar-icon"><Icon name="user" size={18} /></span>
               <span className="sidebar-label">Profil</span>
             </NavLink>
           </li>
@@ -33,7 +34,7 @@ function SideBar2() {
               to="/entreprise/documents" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">📄</span>
+              <span className="sidebar-icon"><Icon name="document" size={18} /></span>
               <span className="sidebar-label">Documents</span>
             </NavLink>
           </li>
@@ -43,7 +44,7 @@ function SideBar2() {
               to="/entreprise/compte-bancaire" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">💳</span>
+              <span className="sidebar-icon"><Icon name="creditCard" size={18} /></span>
               <span className="sidebar-label">Compte bancaire</span>
             </NavLink>
           </li>
@@ -53,7 +54,7 @@ function SideBar2() {
               to="/entreprise/vehicules" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">🚛</span>
+              <span className="sidebar-icon"><Icon name="truck" size={18} /></span>
               <span className="sidebar-label">Véhicules</span>
             </NavLink>
           </li>
@@ -63,18 +64,18 @@ function SideBar2() {
               to="/entreprise/remorques" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">🚐</span>
+              <span className="sidebar-icon"><Icon name="trailer" size={18} /></span>
               <span className="sidebar-label">Remorques</span>
             </NavLink>
           </li>
           
           <li>
-            <NavLink 
-              to="/entreprise/telephones" 
+            <NavLink
+              to="/entreprise/annuaire"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">📞</span>
-              <span className="sidebar-label">Téléphones</span>
+              <span className="sidebar-icon"><Icon name="book" size={18} /></span>
+              <span className="sidebar-label">Annuaire</span>
             </NavLink>
           </li>
           
@@ -83,7 +84,7 @@ function SideBar2() {
               to="/entreprise/conducteurs" 
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
-              <span className="sidebar-icon">👨‍✈️</span>
+              <span className="sidebar-icon"><Icon name="users" size={18} /></span>
               <span className="sidebar-label">Conducteurs</span>
             </NavLink>
           </li>

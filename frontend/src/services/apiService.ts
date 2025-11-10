@@ -11,6 +11,8 @@ import type {
   OffreFret,
   CreateOffreFretRequest,
   UpdateOffreFretRequest,
+  PropositionOffre,
+  CreatePropositionRequest,
   Entreprise,
   ApiResponse,
   Vehicule,
@@ -18,7 +20,9 @@ import type {
   Remorque,
   CreateRemorqueRequest,
   Conducteur,
-  CreateConducteurRequest
+  CreateConducteurRequest,
+  Entrepot,
+  CreateEntrepotRequest
 } from '@models/api';
 
 import { isApiSuccess } from '@models/api';
@@ -497,6 +501,36 @@ class ApiService {
   }
 
   // ============================================
+  // PROPOSITION ENDPOINTS
+  // ============================================
+
+  /**
+   * Soumettre une proposition pour une offre (transporteur)
+   */
+  async soumettreProposition(offreId: number, data: CreatePropositionRequest): Promise<ApiResponse<PropositionOffre>> {
+    return this.request<PropositionOffre>(`/offres-fret/${offreId}/propositions`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Lister les propositions reçues pour une offre (donneur d'ordre)
+   */
+  async getPropositionsPourOffre(offreId: number): Promise<ApiResponse<PropositionOffre[]>> {
+    return this.request<PropositionOffre[]>(`/offres-fret/${offreId}/propositions`);
+  }
+
+  /**
+   * Accepter une proposition (donneur d'ordre)
+   */
+  async accepterProposition(offreId: number, propositionId: number): Promise<ApiResponse<{ offre: any; proposition: PropositionOffre }>> {
+    return this.request(`/offres-fret/${offreId}/propositions/${propositionId}/accepter`, {
+      method: 'POST',
+    });
+  }
+
+  // ============================================
   // DOCUMENT ENDPOINTS
   // ============================================
 
@@ -505,6 +539,27 @@ class ApiService {
    */
   async getDocuments(queryString: string = ''): Promise<ApiResponse<any[]>> {
     return this.request<any[]>(`/documents${queryString}`);
+  }
+
+  /**
+   * Récupérer les documents d'un véhicule spécifique
+   */
+  async getDocumentsVehicule(vehiculeId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?vehicule_id=${vehiculeId}`);
+  }
+
+  /**
+   * Récupérer les documents d'un conducteur spécifique
+   */
+  async getDocumentsConducteur(conducteurId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?conducteur_id=${conducteurId}`);
+  }
+
+  /**
+   * Récupérer les documents d'une remorque spécifique
+   */
+  async getDocumentsRemorque(remorqueId: number): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>(`/documents?remorque_id=${remorqueId}`);
   }
 
   /**
@@ -589,6 +644,132 @@ class ApiService {
   async deleteDocument(id: number): Promise<ApiResponse<{ message: string }>> {
     return this.request<{ message: string }>(`/documents/${id}`, {
       method: 'DELETE',
+    });
+  }
+
+  // ============================================
+  // COMPTE BANCAIRE ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer tous les comptes bancaires de l'entreprise
+   */
+  async getComptesBancaires(): Promise<ApiResponse<any[]>> {
+    return this.request<any[]>('/compte-bancaire');
+  }
+
+  /**
+   * Récupérer un compte bancaire par ID
+   */
+  async getCompteBancaireById(id: number): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}`);
+  }
+
+  /**
+   * Créer un compte bancaire
+   */
+  async createCompteBancaire(data: any): Promise<ApiResponse<any>> {
+    return this.request<any>('/compte-bancaire', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Mettre à jour un compte bancaire
+   */
+  async updateCompteBancaire(id: number, data: any): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Supprimer un compte bancaire
+   */
+  async deleteCompteBancaire(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/compte-bancaire/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  /**
+   * Définir un compte bancaire comme principal
+   */
+  async setCompteAsPrincipal(id: number): Promise<ApiResponse<any>> {
+    return this.request<any>(`/compte-bancaire/${id}/set-principal`, {
+      method: 'POST',
+    });
+  }
+
+  /**
+   * Récupérer le compte bancaire principal
+   */
+  async getComptePrincipal(): Promise<ApiResponse<any>> {
+    return this.request<any>('/compte-bancaire/principal');
+  }
+
+  // ============================================
+  // ENTREPOTS ENDPOINTS
+  // ============================================
+
+  /**
+   * Récupérer tous les entrepôts de l'entreprise
+   */
+  async getEntrepots(): Promise<ApiResponse<Entrepot[]>> {
+    return this.request<Entrepot[]>('/entrepots');
+  }
+
+  /**
+   * Récupérer les entrepôts actifs
+   */
+  async getEntrepotsActifs(): Promise<ApiResponse<Entrepot[]>> {
+    return this.request<Entrepot[]>('/entrepots/actifs');
+  }
+
+  /**
+   * Récupérer un entrepôt par ID
+   */
+  async getEntrepotById(id: number): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>(`/entrepots/${id}`);
+  }
+
+  /**
+   * Créer un entrepôt
+   */
+  async createEntrepot(data: CreateEntrepotRequest): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>('/entrepots', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+
+  /**
+   * Mettre à jour un entrepôt
+   */
+  async updateEntrepot(id: number, data: Partial<CreateEntrepotRequest>): Promise<ApiResponse<Entrepot>> {
+    return this.request<Entrepot>(`/entrepots/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+
+  /**
+   * Activer / Désactiver un entrepôt
+   */
+  async toggleEntrepotStatus(id: number): Promise<ApiResponse<{ id: number; est_actif: boolean; message: string }>> {
+    return this.request<{ id: number; est_actif: boolean; message: string }>(`/entrepots/${id}/toggle-status`, {
+      method: 'PATCH'
+    });
+  }
+
+  /**
+   * Supprimer un entrepôt
+   */
+  async deleteEntrepot(id: number): Promise<ApiResponse<{ message: string }>> {
+    return this.request<{ message: string }>(`/entrepots/${id}`, {
+      method: 'DELETE'
     });
   }
 }

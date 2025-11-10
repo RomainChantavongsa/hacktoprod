@@ -349,6 +349,18 @@
     padding: 0.5rem 1rem;
     font-size: .875rem;
   }
+
+  &.btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background: rgba(61, 155, 166, 0.1);
+      box-shadow: 0 2px 6px rgba(61, 155, 166, 0.2);
+    }
+  }
 }
 
 .badge {
@@ -502,5 +514,23 @@
   .add-form-container {
     padding: 1.25rem;
     border-radius: var(--radius-md);
+  }
+}
+
+.doc-status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.present {
+    background-color: #d4edda;
+    color: #155724;
+  }
+
+  &.missing {
+    background-color: #f8d7da;
+    color: #721c24;
   }
 }

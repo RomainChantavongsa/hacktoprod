@@ -45,6 +45,9 @@ const remorquesRouter = require('./routes/remorques');
 const conducteursRouter = require('./routes/conducteurs');
 const documentsRouter = require('./routes/documents');
 const chatRouter = require('./routes/chat');
+const compteBancaireRouter = require('./routes/compte-bancaire');
+const annuaireRouter = require('./routes/annuaire');
+const entrepotsRouter = require('./routes/entrepots');
 
 // Routes
 app.get('/', (req, res) => {
@@ -61,6 +64,9 @@ app.get('/', (req, res) => {
       conducteurs: '/api/conducteurs',
       documents: '/api/documents',
       chat: '/api/chat'
+      compte_bancaire: '/api/compte-bancaire',
+      annuaire: '/api/annuaire',
+      entrepots: '/api/entrepots'
     }
   });
 });
@@ -76,6 +82,9 @@ app.use('/api/remorques', remorquesRouter);
 app.use('/api/conducteurs', conducteursRouter);
 app.use('/api/documents', documentsRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/compte-bancaire', compteBancaireRouter);
+app.use('/api/annuaire', annuaireRouter);
+app.use('/api/entrepots', entrepotsRouter);
 
 // Middleware de gestion des erreurs (DOIT être après les routes)
 app.use(errorHandler);

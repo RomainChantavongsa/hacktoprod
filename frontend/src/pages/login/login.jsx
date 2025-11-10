@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useLogin } from './login.ts'
+import Icon from '../../components/Icon.jsx'
 import './login.scss'
 
 function Login() {
@@ -12,7 +13,7 @@ function Login() {
         
         {successMessage && (
           <div className="success-message">
-            ✓ {successMessage}
+            <Icon name="check" size={16} /> {successMessage}
           </div>
         )}
         

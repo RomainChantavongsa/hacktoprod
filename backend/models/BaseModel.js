@@ -187,10 +187,38 @@ class BaseModel {
     try {
       const tableName = new this()._tableName;
       const result = await pool.query(`SELECT * FROM ${tableName}`);
-      
+
       return result.rows.map(row => new this(row));
     } catch (error) {
       throw new Error(`Erreur lors de la récupération: ${error.message}`);
+    }
+  }
+
+  /**
+   * Exécute une requête SQL statique (pour les méthodes statiques)
+   * @param {string} query - La requête SQL
+   * @param {Array} values - Les valeurs des paramètres
+   * @returns {Promise<Object>} Résultat de la requête
+   */
+  static async _executeStaticQuery(query, values = []) {
+    try {
+      return await pool.query(query, values);
+    } catch (error) {
+      throw new Error(`Erreur lors de l'exécution de la requête: ${error.message}`);
+    }
+  }
+
+  /**
+   * Exécute une requête SQL sur l'instance (pour les méthodes d'instance)
+   * @param {string} query - La requête SQL
+   * @param {Array} values - Les valeurs des paramètres
+   * @returns {Promise<Object>} Résultat de la requête
+   */
+  async _executeQuery(query, values = []) {
+    try {
+      return await this._pool.query(query, values);
+    } catch (error) {
+      throw new Error(`Erreur lors de l'exécution de la requête: ${error.message}`);
     }
   }
 }

@@ -1,4 +1,5 @@
 import { homeLogic } from './home.ts'
+import Icon from '../../components/Icon.jsx'
 import './home.scss'
 
 function Home() {
@@ -11,19 +12,19 @@ function Home() {
 
       <div className="home-features">
         <div className="home-feature-card">
-          <div className="home-feature-icon">🚚</div>
+          <div className="home-feature-icon"><Icon name="truck" size={48} /></div>
           <h3>Transport</h3>
           <p>Gestion complète de vos transports et livraisons</p>
         </div>
 
         <div className="home-feature-card">
-          <div className="home-feature-icon">📦</div>
+          <div className="home-feature-icon"><Icon name="package" size={48} /></div>
           <h3>Fret</h3>
           <p>Optimisez vos opérations de fret</p>
         </div>
 
         <div className="home-feature-card">
-          <div className="home-feature-icon">📊</div>
+          <div className="home-feature-icon"><Icon name="barChart" size={48} /></div>
           <h3>Suivi</h3>
           <p>Suivez vos commandes en temps réel</p>
         </div>
