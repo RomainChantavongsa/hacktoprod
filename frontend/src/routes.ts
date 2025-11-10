@@ -25,16 +25,14 @@ export const routeConfig = [
   { path: '/entreprise/compte-bancaire', folder: 'settings/compte-bancaire' },
   // Route pour l'annuaire
   { path: '/entreprise/annuaire', folder: 'annuaire' },
-  // Route pour le profil transporteur
-  { path: '/entreprise/profil', folder: 'transporteur/profil' },
+  // Route unifiée du profil entreprise (rend transporteur OU donneur d'ordre selon le rôle)
+  { path: '/entreprise/profil', folder: 'entreprise/profil' },
   { path: '/entreprise/vehicules', folder: 'transporteur/vehicules' },
   { path: '/entreprise/remorques', folder: 'transporteur/remorques' },
   { path: '/entreprise/conducteurs', folder: 'transporteur/conducteurs' },
   { path: '/transporteur/conducteurs', folder: 'transporteur/conducteurs' },
-  // Route pour le profil donneur d'ordre
-  { path: '/donneurOrdre/profil', folder: 'donneurOrdre/profil' },
-  // Route pour les entrepôts donneur d'ordre
-  { path: '/entreprise/entrepots', folder: 'donneurOrdre/entrepots' },
+  // Route unifiée des entrepôts (rend la page donneur d'ordre si applicable)
+  { path: '/entreprise/entrepots', folder: 'entreprise/entrepots' },
 ]
 
 // Fonction pour charger dynamiquement un composant de page

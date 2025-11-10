@@ -1,8 +1,8 @@
-import { useEntrepots } from './entrepots.ts'
+import { useEntrepots } from './donneurEntrepots.ts'
 import DataTable from '../../../components/DataTable.jsx'
-import './entrepots.scss'
+import './donneurEntrepots.scss'
 
-function Entrepots() {
+function DonneurOrdreEntrepots() {
   const {
     entrepots,
     isLoading,
@@ -25,10 +25,7 @@ function Entrepots() {
       <div className="page-header">
         <h1>Mes Entrepôts</h1>
         <p className="subtitle">Gérez vos entrepôts et points de stockage</p>
-        <button
-          className="btn btn-primary"
-          onClick={toggleForm}
-        >
+        <button className="btn btn-primary" onClick={toggleForm}>
           {showForm ? 'Annuler' : 'Ajouter un entrepôt'}
         </button>
       </div>
@@ -38,30 +35,17 @@ function Entrepots() {
 
       {showForm && (
         <div className="form-section">
-          <h2>{editingEntrepot ? 'Modifier l\'entrepôt' : 'Ajouter un entrepôt'}</h2>
+          <h2>{editingEntrepot ? "Modifier l'entrepôt" : 'Ajouter un entrepôt'}</h2>
           <form onSubmit={handleSubmit} className="entrepot-form">
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="nom_entrepot">Nom de l'entrepôt *</label>
-                <input
-                  type="text"
-                  id="nom_entrepot"
-                  name="nom_entrepot"
-                  value={formData.nom_entrepot || ''}
-                  onChange={handleChange}
-                  required
-                  placeholder="Entrepôt principal"
-                />
+                <input type="text" id="nom_entrepot" name="nom_entrepot" value={formData.nom_entrepot || ''} onChange={handleChange} required placeholder="Entrepôt principal" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="type_entrepot">Type d'entrepôt</label>
-                <select
-                  id="type_entrepot"
-                  name="type_entrepot"
-                  value={formData.type_entrepot || ''}
-                  onChange={handleChange}
-                >
+                <select id="type_entrepot" name="type_entrepot" value={formData.type_entrepot || ''} onChange={handleChange}>
                   <option value="">Sélectionner un type</option>
                   <option value="Stockage">Stockage</option>
                   <option value="Chargement">Chargement</option>
@@ -74,152 +58,68 @@ function Entrepots() {
 
             <div className="form-group">
               <label htmlFor="adresse">Adresse *</label>
-              <textarea
-                id="adresse"
-                name="adresse"
-                value={formData.adresse || ''}
-                onChange={handleChange}
-                required
-                rows="3"
-                placeholder="Adresse complète de l'entrepôt"
-              />
+              <textarea id="adresse" name="adresse" value={formData.adresse || ''} onChange={handleChange} required rows="3" placeholder="Adresse complète de l'entrepôt" />
             </div>
 
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="ville">Ville *</label>
-                <input
-                  type="text"
-                  id="ville"
-                  name="ville"
-                  value={formData.ville || ''}
-                  onChange={handleChange}
-                  required
-                  placeholder="Ville"
-                />
+                <input type="text" id="ville" name="ville" value={formData.ville || ''} onChange={handleChange} required placeholder="Ville" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="code_postal">Code postal *</label>
-                <input
-                  type="text"
-                  id="code_postal"
-                  name="code_postal"
-                  value={formData.code_postal || ''}
-                  onChange={handleChange}
-                  required
-                  pattern="[0-9]{5}"
-                  placeholder="75000"
-                />
+                <input type="text" id="code_postal" name="code_postal" value={formData.code_postal || ''} onChange={handleChange} required pattern="[0-9]{5}" placeholder="75000" />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="pays">Pays</label>
-                <input
-                  type="text"
-                  id="pays"
-                  name="pays"
-                  value={formData.pays || 'France'}
-                  onChange={handleChange}
-                  placeholder="France"
-                />
+                <input type="text" id="pays" name="pays" value={formData.pays || 'France'} onChange={handleChange} placeholder="France" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="capacite_stockage_m3">Capacité de stockage (m³)</label>
-                <input
-                  type="number"
-                  id="capacite_stockage_m3"
-                  name="capacite_stockage_m3"
-                  value={formData.capacite_stockage_m3 || ''}
-                  onChange={handleChange}
-                  min="0"
-                  step="0.1"
-                  placeholder="1000"
-                />
+                <input type="number" id="capacite_stockage_m3" name="capacite_stockage_m3" value={formData.capacite_stockage_m3 || ''} onChange={handleChange} min="0" step="0.1" placeholder="1000" />
               </div>
             </div>
 
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="telephone">Téléphone</label>
-                <input
-                  type="tel"
-                  id="telephone"
-                  name="telephone"
-                  value={formData.telephone || ''}
-                  onChange={handleChange}
-                  placeholder="+33 1 23 45 67 89"
-                />
+                <input type="tel" id="telephone" name="telephone" value={formData.telephone || ''} onChange={handleChange} placeholder="+33 1 23 45 67 89" />
               </div>
 
               <div className="form-group">
                 <label htmlFor="email_contact">Email de contact</label>
-                <input
-                  type="email"
-                  id="email_contact"
-                  name="email_contact"
-                  value={formData.email_contact || ''}
-                  onChange={handleChange}
-                  placeholder="contact@entrepot.com"
-                />
+                <input type="email" id="email_contact" name="email_contact" value={formData.email_contact || ''} onChange={handleChange} placeholder="contact@entrepot.com" />
               </div>
             </div>
 
             <div className="form-group">
               <label htmlFor="horaires_ouverture">Horaires d'ouverture</label>
-              <textarea
-                id="horaires_ouverture"
-                name="horaires_ouverture"
-                value={formData.horaires_ouverture || ''}
-                onChange={handleChange}
-                rows="2"
-                placeholder="Lundi-Vendredi: 8h-18h, Samedi: 8h-12h"
-              />
+              <textarea id="horaires_ouverture" name="horaires_ouverture" value={formData.horaires_ouverture || ''} onChange={handleChange} rows="2" placeholder="Lundi-Vendredi: 8h-18h, Samedi: 8h-12h" />
             </div>
 
             <div className="form-group">
               <label htmlFor="equipements_speciaux">Équipements spéciaux</label>
-              <textarea
-                id="equipements_speciaux"
-                name="equipements_speciaux"
-                value={formData.equipements_speciaux || ''}
-                onChange={handleChange}
-                rows="2"
-                placeholder="Chariots élévateurs, quais de chargement, stockage frigorifique..."
-              />
+              <textarea id="equipements_speciaux" name="equipements_speciaux" value={formData.equipements_speciaux || ''} onChange={handleChange} rows="2" placeholder="Chariots élévateurs, quais de chargement, stockage frigorifique..." />
             </div>
 
             <div className="form-group">
               <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  name="est_actif"
-                  checked={formData.est_actif || false}
-                  onChange={handleChange}
-                />
+                <input type="checkbox" name="est_actif" checked={formData.est_actif || false} onChange={handleChange} />
                 <span className="checkmark"></span>
                 Entrepôt actif
               </label>
             </div>
 
             <div className="form-actions">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={isLoading}
-              >
+              <button type="submit" className="btn btn-primary" disabled={isLoading}>
                 {isLoading ? 'Enregistrement...' : (editingEntrepot ? 'Modifier' : 'Ajouter')}
               </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={toggleForm}
-              >
-                Annuler
-              </button>
+              <button type="button" className="btn btn-secondary" onClick={toggleForm}>Annuler</button>
             </div>
           </form>
         </div>
@@ -232,16 +132,14 @@ function Entrepots() {
         ) : entrepots.length === 0 ? (
           <div className="empty-state">
             <p>Aucun entrepôt enregistré</p>
-            <button className="btn btn-primary" onClick={toggleForm}>
-              Ajouter votre premier entrepôt
-            </button>
+            <button className="btn btn-primary" onClick={toggleForm}>Ajouter votre premier entrepôt</button>
           </div>
         ) : (
           <>
             <div style={{ marginBottom: 16 }}>
               <DataTable
                 columns={[
-                  { key: 'nom_entrepot', header: "Nom", sortable: true },
+                  { key: 'nom_entrepot', header: 'Nom', sortable: true },
                   { key: 'type_entrepot', header: 'Type', sortable: true },
                   { key: 'ville', header: 'Ville', sortable: true },
                   { key: 'code_postal', header: 'CP', sortable: true, width: 100 },
@@ -286,18 +184,8 @@ function Entrepots() {
                   </div>
 
                   <div className="entrepot-actions">
-                    <button
-                      className="btn btn-small btn-secondary"
-                      onClick={() => handleEdit(entrepot)}
-                    >
-                      Modifier
-                    </button>
-                    <button
-                      className="btn btn-small btn-danger"
-                      onClick={() => handleDelete(entrepot.id)}
-                    >
-                      Supprimer
-                    </button>
+                    <button className="btn btn-small btn-secondary" onClick={() => handleEdit(entrepot)}>Modifier</button>
+                    <button className="btn btn-small btn-danger" onClick={() => handleDelete(entrepot.id)}>Supprimer</button>
                   </div>
                 </div>
               ))}
@@ -309,4 +197,4 @@ function Entrepots() {
   )
 }
 
-export default Entrepots
+export default DonneurOrdreEntrepots

@@ -10,7 +10,7 @@ function SideBar2() {
         <ul className="sidebar-menu">
           <li>
             <NavLink
-              to="/donneurOrdre/profil"
+              to="/entreprise/profil"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon">👤</span>

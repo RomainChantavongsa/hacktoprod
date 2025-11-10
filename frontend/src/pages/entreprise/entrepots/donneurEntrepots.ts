@@ -61,7 +61,6 @@ export const useEntrepots = () => {
     est_actif: true
   })
 
-  // Charger les entrepôts au montage
   useEffect(() => {
     loadEntrepots()
   }, [user?.entreprise_id])
@@ -85,7 +84,6 @@ export const useEntrepots = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target
-
     setFormData(prev => {
       const updated = { ...prev }
       if (type === 'checkbox') {
@@ -109,14 +107,11 @@ export const useEntrepots = () => {
 
     try {
       if (!user?.entreprise_id) {
-        setError('ID de l\'entreprise non trouvé')
+        setError("ID de l'entreprise non trouvé")
         return
       }
 
-      const payload = {
-        ...formData,
-        entreprise_id: user.entreprise_id
-      }
+      const payload = { ...formData, entreprise_id: user.entreprise_id }
 
       if (editingEntrepot) {
         const response = await apiService.updateEntrepot(editingEntrepot.id, payload)
@@ -136,13 +131,9 @@ export const useEntrepots = () => {
         }
       }
 
-      // Recharger la liste
       await loadEntrepots()
-
-      // Réinitialiser le formulaire
       resetForm()
       setShowForm(false)
-
     } catch (err: any) {
       setError('Erreur lors de la sauvegarde')
     } finally {
@@ -171,7 +162,6 @@ export const useEntrepots = () => {
 
   const handleDelete = async (entrepotId: number) => {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cet entrepôt ?')) return
-
     setIsLoading(true)
     try {
       const response = await apiService.deleteEntrepot(entrepotId)

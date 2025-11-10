@@ -1,7 +1,7 @@
-import { useProfil } from './profil.ts'
-import './profil.scss'
+import { useProfil } from './donneurProfil.ts'
+import './donneurProfil.scss'
 
-function Profil() {
+function DonneurOrdreProfil() {
   const {
     formData,
     isLoading,
@@ -200,31 +200,14 @@ function Profil() {
               <option value="Quotidienne">Quotidienne</option>
               <option value="Hebdomadaire">Hebdomadaire</option>
               <option value="Mensuelle">Mensuelle</option>
-              <option value="Occasionnelle">Occasionnelle</option>
+              <option value="Ponctuelle">Ponctuelle</option>
             </select>
-          </div>
-
-          <div className="form-group">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                name="digitalisation_active"
-                checked={formData.digitalisation_active || false}
-                onChange={handleChange}
-              />
-              <span className="checkmark"></span>
-              Digitalisation active
-            </label>
           </div>
         </div>
 
         <div className="form-actions">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Enregistrement...' : 'Enregistrer les modifications'}
+          <button type="submit" className="btn btn-primary" disabled={isLoading}>
+            {isLoading ? 'Enregistrement...' : 'Enregistrer'}
           </button>
         </div>
       </form>
@@ -232,4 +215,4 @@ function Profil() {
   )
 }
 
-export default Profil
+export default DonneurOrdreProfil
