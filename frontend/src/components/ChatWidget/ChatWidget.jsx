@@ -86,8 +86,8 @@ const ChatWidget = ({ token, isAuthenticated }) => {
         setMessages(prev => [...prev, response.message]);
       } else if (response.text) {
         setMessages(prev => [...prev, {
-          mittente: 'bot',
-          contenuto: response.text,
+          expediteur: 'bot',
+          contenu: response.text,
           createdAt: new Date()
         }]);
       }
@@ -103,8 +103,8 @@ const ChatWidget = ({ token, isAuthenticated }) => {
     const unsubError = chatService.onError((error) => {
       console.error('Chat error:', error);
       setMessages(prev => [...prev, {
-        mittente: 'bot',
-        contenuto: t(language, 'errorMessage'),
+        expediteur: 'bot',
+        contenu: t(language, 'errorMessage'),
         createdAt: new Date()
       }]);
       setIsTyping(false);
@@ -116,8 +116,8 @@ const ChatWidget = ({ token, isAuthenticated }) => {
       } else {
         // Messaggio di benvenuto se non c'è storico
         setMessages([{
-          mittente: 'bot',
-          contenuto: t(language, 'welcomeMessage'),
+          expediteur: 'bot',
+          contenu: t(language, 'welcomeMessage'),
           createdAt: new Date()
         }]);
         setSuggestions([
@@ -144,8 +144,8 @@ const ChatWidget = ({ token, isAuthenticated }) => {
 
     // Aggiungi messaggio utente alla lista
     const userMessage = {
-      mittente: 'user',
-      contenuto: inputMessage,
+      expediteur: 'user',
+      contenu: inputMessage,
       createdAt: new Date()
     };
 
@@ -334,17 +334,17 @@ const ChatWidget = ({ token, isAuthenticated }) => {
           {/* Messaggi */}
           <div className="chat-messages">
             {messages.map((msg, index) => (
-              <div key={index} className={`message ${msg.mittente}`}>
+              <div key={index} className={`message ${msg.expediteur}`}>
                 <div className="message-bubble">
-                  {msg.mittente === 'bot' ? (
+                  {msg.expediteur === 'bot' ? (
                     <>
                       <div
                         className="message-content"
-                        dangerouslySetInnerHTML={{ __html: formatBotMessage(msg.contenuto) }}
+                        dangerouslySetInnerHTML={{ __html: formatBotMessage(msg.contenu) }}
                       />
                       <button
                         className={`play-audio-btn ${playingMessageIndex === index ? 'playing' : ''}`}
-                        onClick={() => handlePlayMessage(msg.contenuto, index)}
+                        onClick={() => handlePlayMessage(msg.contenu, index)}
                         disabled={loadingAudioIndex === index}
                         aria-label={playingMessageIndex === index ? 'Stop audio' : 'Play audio'}
                         title={playingMessageIndex === index ? 'Stop' : 'Listen'}
@@ -366,7 +366,7 @@ const ChatWidget = ({ token, isAuthenticated }) => {
                       </button>
                     </>
                   ) : (
-                    <p>{msg.contenuto}</p>
+                    <p>{msg.contenu}</p>
                   )}
                   <span className="message-time">
                     {new Date(msg.createdAt).toLocaleTimeString(language === 'fr' ? 'fr-FR' : 'en-US', {

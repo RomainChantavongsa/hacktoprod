@@ -1,8 +1,8 @@
 const BaseModel = require('./BaseModel');
 
 /**
- * Modello ChatMessage
- * Gestisce i singoli messaggi delle conversazioni
+ * Modèle ChatMessage
+ * Gère les messages individuels des conversations
  */
 class ChatMessage extends BaseModel {
   constructor(data = {}) {
@@ -10,9 +10,9 @@ class ChatMessage extends BaseModel {
   }
 
   /**
-   * Trova messaggi per conversazione
-   * @param {number} conversationId - ID della conversazione
-   * @param {number} limit - Numero massimo di messaggi (default: 50)
+   * Trouve les messages pour une conversation
+   * @param {number} conversationId - ID de la conversation
+   * @param {number} limit - Nombre maximum de messages (default: 50)
    * @returns {Promise<Array<ChatMessage>>}
    */
   static async findByConversation(conversationId, limit = 50) {
@@ -37,16 +37,16 @@ class ChatMessage extends BaseModel {
   }
 
   /**
-   * Crea un nuovo messaggio
-   * @param {Object} data - Dati del messaggio
+   * Crée un nouveau message
+   * @param {Object} data - Données du message
    * @returns {Promise<ChatMessage>}
    */
   static async createMessage(data) {
     const message = new this({
       conversation_id: data.conversation_id,
-      mittente: data.mittente, // 'user' o 'bot'
-      contenuto: data.contenuto,
-      intent_riconosciuto: data.intent_riconosciuto || null,
+      expediteur: data.expediteur, // 'user' ou 'bot'
+      contenu: data.contenu,
+      intention_reconnue: data.intention_reconnue || null,
       utile: null
     });
 
@@ -55,8 +55,8 @@ class ChatMessage extends BaseModel {
   }
 
   /**
-   * Segna il messaggio come utile o non utile
-   * @param {boolean} utile - True se utile, false altrimenti
+   * Marque le message comme utile ou non utile
+   * @param {boolean} utile - True si utile, false sinon
    */
   async setFeedback(utile) {
     this.utile = utile;
@@ -64,8 +64,8 @@ class ChatMessage extends BaseModel {
   }
 
   /**
-   * Conta i messaggi in una conversazione
-   * @param {number} conversationId - ID della conversazione
+   * Compte les messages dans une conversation
+   * @param {number} conversationId - ID de la conversation
    * @returns {Promise<number>}
    */
   static async countByConversation(conversationId) {
@@ -89,9 +89,9 @@ class ChatMessage extends BaseModel {
   }
 
   /**
-   * Trova ultimi N messaggi di una conversazione
-   * @param {number} conversationId - ID della conversazione
-   * @param {number} limit - Numero di messaggi da recuperare
+   * Trouve les derniers N messages d'une conversation
+   * @param {number} conversationId - ID de la conversation
+   * @param {number} limit - Nombre de messages à récupérer
    * @returns {Promise<Array<ChatMessage>>}
    */
   static async findLastMessages(conversationId, limit = 10) {
@@ -109,7 +109,7 @@ class ChatMessage extends BaseModel {
       `;
 
       const result = await pool.query(query, [conversationId, limit]);
-      // Inverti l'ordine per avere i messaggi più vecchi prima
+      // Inverse l'ordre pour avoir les messages plus anciens en premier
       return result.rows.reverse().map(row => new this(row));
     } catch (error) {
       throw new Error(`Erreur lors de la recherche derniers messages: ${error.message}`);

@@ -6,7 +6,7 @@ const { authMiddleware } = require('../utils/jwt');
 const { asyncHandler } = require('../middleware/errorHandler');
 
 /**
- * GET /api/chat/history - Ottieni storico conversazione
+ * GET /api/chat/history - Obtenir l'historique de la conversation
  */
 router.get('/history', authMiddleware, asyncHandler(async (req, res) => {
   const utilisateurId = req.user.userId;
@@ -21,7 +21,7 @@ router.get('/history', authMiddleware, asyncHandler(async (req, res) => {
 }));
 
 /**
- * POST /api/chat/message - Invia un messaggio (REST fallback se WebSocket non disponibile)
+ * POST /api/chat/message - Envoyer un message (REST fallback si WebSocket non disponible)
  */
 router.post('/message', authMiddleware, asyncHandler(async (req, res) => {
   const utilisateurId = req.user.userId;
@@ -30,11 +30,11 @@ router.post('/message', authMiddleware, asyncHandler(async (req, res) => {
   if (!message || message.trim().length === 0) {
     return res.status(400).json({
       success: false,
-      message: 'Il messaggio non può essere vuoto'
+      message: 'Le message ne peut pas être vide'
     });
   }
 
-  // Determina tipo utente dall'azienda
+  // Détermine le type d'utilisateur depuis l'entreprise
   const tipoUtente = req.user.type_entreprise;
 
   const response = await ChatService.processMessage(utilisateurId, message, tipoUtente);
@@ -46,7 +46,7 @@ router.post('/message', authMiddleware, asyncHandler(async (req, res) => {
 }));
 
 /**
- * POST /api/chat/feedback - Feedback su un messaggio
+ * POST /api/chat/feedback - Feedback sur un message
  */
 router.post('/feedback', authMiddleware, asyncHandler(async (req, res) => {
   const { messageId, utile } = req.body;
@@ -54,7 +54,7 @@ router.post('/feedback', authMiddleware, asyncHandler(async (req, res) => {
   if (!messageId || typeof utile !== 'boolean') {
     return res.status(400).json({
       success: false,
-      message: 'Parametri non validi'
+      message: 'Paramètres non valides'
     });
   }
 
@@ -62,12 +62,12 @@ router.post('/feedback', authMiddleware, asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Feedback registrato'
+    message: 'Feedback enregistré'
   });
 }));
 
 /**
- * POST /api/chat/close - Chiudi conversazione
+ * POST /api/chat/close - Fermer la conversation
  */
 router.post('/close', authMiddleware, asyncHandler(async (req, res) => {
   const { conversationId } = req.body;
@@ -75,7 +75,7 @@ router.post('/close', authMiddleware, asyncHandler(async (req, res) => {
   if (!conversationId) {
     return res.status(400).json({
       success: false,
-      message: 'ID conversazione richiesto'
+      message: 'ID de conversation requis'
     });
   }
 
@@ -83,7 +83,7 @@ router.post('/close', authMiddleware, asyncHandler(async (req, res) => {
 
   res.status(200).json({
     success: true,
-    message: 'Conversazione chiusa'
+    message: 'Conversation fermée'
   });
 }));
 

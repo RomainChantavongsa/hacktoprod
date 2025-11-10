@@ -7,8 +7,8 @@ const SOCKET_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://
  */
 export interface ChatMessage {
   id?: number;
-  mittente: 'user' | 'bot';
-  contenuto: string;
+  expediteur: 'user' | 'bot';
+  contenu: string;
   createdAt?: Date | string;
 }
 

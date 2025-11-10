@@ -260,21 +260,21 @@ CREATE TABLE IF NOT EXISTS offre_fret (
 ---
 
 -- ******************************************************
--- 8. Table : chat_conversation (Conversazioni chat)
+-- 8. Table : chat_conversation (Conversations chat)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS chat_conversation (
     id SERIAL PRIMARY KEY,
 
-    -- Utente che chatta
+    -- Utilisateur qui discute
     utilisateur_id INT NOT NULL,
     FOREIGN KEY (utilisateur_id) REFERENCES utilisateur(id) ON DELETE CASCADE,
 
     -- Metadata
-    ultima_attivita TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    stato VARCHAR(50) DEFAULT 'attiva', -- 'attiva', 'chiusa', 'archiviata'
+    derniere_activite TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    statut VARCHAR(50) DEFAULT 'active', -- 'active', 'fermee', 'archivee'
 
     -- Context
-    context_data JSONB, -- Dati aggiuntivi sul contesto della conversazione
+    context_data JSONB, -- Données additionnelles sur le contexte de la conversation
 
     -- Dates
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -282,34 +282,34 @@ CREATE TABLE IF NOT EXISTS chat_conversation (
 );
 
 CREATE INDEX IF NOT EXISTS idx_conversation_utilisateur ON chat_conversation (utilisateur_id);
-CREATE INDEX IF NOT EXISTS idx_conversation_stato ON chat_conversation (stato);
+CREATE INDEX IF NOT EXISTS idx_conversation_statut ON chat_conversation (statut);
 
 ---
 
 -- ******************************************************
--- 9. Table : chat_message (Messaggi della chat)
+-- 9. Table : chat_message (Messages du chat)
 -- ******************************************************
 CREATE TABLE IF NOT EXISTS chat_message (
     id SERIAL PRIMARY KEY,
 
-    -- Conversazione di appartenenza
+    -- Conversation d'appartenance
     conversation_id INT NOT NULL,
     FOREIGN KEY (conversation_id) REFERENCES chat_conversation(id) ON DELETE CASCADE,
 
-    -- Messaggio
-    mittente VARCHAR(50) NOT NULL, -- 'user' o 'bot'
-    contenuto TEXT NOT NULL,
+    -- Message
+    expediteur VARCHAR(50) NOT NULL, -- 'user' ou 'bot'
+    contenu TEXT NOT NULL,
 
     -- Metadata
-    intent_riconosciuto VARCHAR(100), -- Intent identificato dal bot
+    intention_reconnue VARCHAR(100), -- Intention identifiée par le bot
 
-    -- Feedback utente
-    utile BOOLEAN, -- L'utente ha trovato utile questa risposta?
+    -- Feedback utilisateur
+    utile BOOLEAN, -- L'utilisateur a-t-il trouvé cette réponse utile?
 
     -- Dates
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX IF NOT EXISTS idx_message_conversation ON chat_message (conversation_id);
-CREATE INDEX IF NOT EXISTS idx_message_mittente ON chat_message (mittente);
+CREATE INDEX IF NOT EXISTS idx_message_expediteur ON chat_message (expediteur);
 CREATE INDEX IF NOT EXISTS idx_message_created ON chat_message (created_at);

@@ -1,8 +1,8 @@
 const BaseModel = require('./BaseModel');
 
 /**
- * Modello ChatConversation
- * Gestisce le conversazioni chat degli utenti
+ * Modèle ChatConversation
+ * Gère les conversations chat des utilisateurs
  */
 class ChatConversation extends BaseModel {
   constructor(data = {}) {
@@ -10,19 +10,19 @@ class ChatConversation extends BaseModel {
   }
 
   /**
-   * Trova conversazione attiva per un utente
-   * @param {number} utilisateurId - ID dell'utente
+   * Trouve une conversation active pour un utilisateur
+   * @param {number} utilisateurId - ID de l'utilisateur
    * @returns {Promise<ChatConversation|null>}
    */
   static async findActiveByUser(utilisateurId) {
     try {
       const conversations = await this.where('utilisateur_id', '=', utilisateurId);
-      const active = conversations.filter(c => c.stato === 'attiva');
+      const active = conversations.filter(c => c.statut === 'active');
 
       if (active.length > 0) {
-        // Ritorna la più recente
+        // Retourne la plus récente
         return active.sort((a, b) =>
-          new Date(b.ultima_attivita) - new Date(a.ultima_attivita)
+          new Date(b.derniere_activite) - new Date(a.derniere_activite)
         )[0];
       }
 
@@ -33,8 +33,8 @@ class ChatConversation extends BaseModel {
   }
 
   /**
-   * Trova tutte le conversazioni di un utente
-   * @param {number} utilisateurId - ID dell'utente
+   * Trouve toutes les conversations d'un utilisateur
+   * @param {number} utilisateurId - ID de l'utilisateur
    * @returns {Promise<Array<ChatConversation>>}
    */
   static async findByUser(utilisateurId) {
@@ -42,22 +42,22 @@ class ChatConversation extends BaseModel {
   }
 
   /**
-   * Crea o recupera una conversazione attiva per un utente
-   * @param {number} utilisateurId - ID dell'utente
-   * @param {Object} contextData - Dati di contesto opzionali
+   * Crée ou récupère une conversation active pour un utilisateur
+   * @param {number} utilisateurId - ID de l'utilisateur
+   * @param {Object} contextData - Données de contexte optionnelles
    * @returns {Promise<ChatConversation>}
    */
   static async getOrCreate(utilisateurId, contextData = null) {
     try {
-      // Cerca una conversazione attiva esistente
+      // Cherche une conversation active existante
       let conversation = await this.findActiveByUser(utilisateurId);
 
       if (!conversation) {
-        // Crea una nuova conversazione
+        // Crée une nouvelle conversation
         conversation = new this({
           utilisateur_id: utilisateurId,
-          ultima_attivita: new Date(),
-          stato: 'attiva',
+          derniere_activite: new Date(),
+          statut: 'active',
           context_data: contextData ? JSON.stringify(contextData) : null
         });
 
@@ -71,32 +71,32 @@ class ChatConversation extends BaseModel {
   }
 
   /**
-   * Aggiorna l'ultima attività della conversazione
+   * Met à jour la dernière activité de la conversation
    */
   async updateActivity() {
-    this.ultima_attivita = new Date();
+    this.derniere_activite = new Date();
     await this.save();
   }
 
   /**
-   * Chiude la conversazione
+   * Ferme la conversation
    */
   async close() {
-    this.stato = 'chiusa';
+    this.statut = 'fermee';
     await this.save();
   }
 
   /**
-   * Archivia la conversazione
+   * Archive la conversation
    */
   async archive() {
-    this.stato = 'archiviata';
+    this.statut = 'archivee';
     await this.save();
   }
 
   /**
-   * Aggiorna il contesto della conversazione
-   * @param {Object} newContext - Nuovo contesto da aggiungere/aggiornare
+   * Met à jour le contexte de la conversation
+   * @param {Object} newContext - Nouveau contexte à ajouter/mettre à jour
    */
   async updateContext(newContext) {
     const currentContext = this.context_data

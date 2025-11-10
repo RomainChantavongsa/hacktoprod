@@ -229,8 +229,8 @@ ${isTransporter ? `
 
       // Converti i messaggi nel formato richiesto da Gemini
       const history = messages.map(msg => ({
-        role: msg.mittente === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.contenuto }]
+        role: msg.expediteur === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.contenu }]
       }));
 
       // Gemini richiede che la storia inizi sempre con un messaggio 'user'
@@ -270,8 +270,8 @@ ${isTransporter ? `
       // 2. Save user message
       await ChatMessage.createMessage({
         conversation_id: conversation.id,
-        mittente: 'user',
-        contenuto: messageText
+        expediteur: 'user',
+        contenu: messageText
       });
 
       // 3. Update conversation activity
@@ -301,9 +301,9 @@ ${isTransporter ? `
       // 8. Save bot response
       const botMessage = await ChatMessage.createMessage({
         conversation_id: conversation.id,
-        mittente: 'bot',
-        contenuto: aiResponse.text,
-        intent_riconosciuto: aiResponse.intent || null
+        expediteur: 'bot',
+        contenu: aiResponse.text,
+        intention_reconnue: aiResponse.intent || null
       });
 
       return {
@@ -540,8 +540,8 @@ ${isTransporter ? `
         conversationId: conversation.id,
         messages: messages.map(msg => ({
           id: msg.id,
-          mittente: msg.mittente,
-          contenuto: msg.contenuto,
+          expediteur: msg.expediteur,
+          contenu: msg.contenu,
           createdAt: msg.created_at
         }))
       };

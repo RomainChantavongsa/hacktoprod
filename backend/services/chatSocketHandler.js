@@ -74,8 +74,8 @@ function setupChatSocketHandlers(io) {
           conversationId: response.conversationId,
           message: {
             id: response.messageId,
-            mittente: 'bot',
-            contenuto: response.text,
+            expediteur: 'bot',
+            contenu: response.text,
             createdAt: new Date()
           },
           suggestions: response.suggestions
