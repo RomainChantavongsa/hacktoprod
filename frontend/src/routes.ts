@@ -33,6 +33,12 @@ export const routeConfig = [
   { path: '/transporteur/conducteurs', folder: 'transporteur/conducteurs' },
   // Route unifiée des entrepôts (rend la page donneur d'ordre si applicable)
   { path: '/entreprise/entrepots', folder: 'entreprise/entrepots' },
+  // Routes de gestion des offres de fret pour donneur d'ordre
+  { path: '/offres/publier', folder: 'offres/publier' },
+  { path: '/offres/actives', folder: 'offres/actives' },
+  { path: '/offres/propositions', folder: 'offres/propositions' },
+  { path: '/offres/en-cours', folder: 'offres/en-cours' },
+  { path: '/offres/terminees', folder: 'offres/terminees' },
 ]
 
 // Fonction pour charger dynamiquement un composant de page

@@ -11,6 +11,8 @@ import type {
   OffreFret,
   CreateOffreFretRequest,
   UpdateOffreFretRequest,
+  PropositionOffre,
+  CreatePropositionRequest,
   Entreprise,
   ApiResponse,
   Vehicule,
@@ -495,6 +497,36 @@ class ApiService {
   async deleteOffreFret(id: number): Promise<ApiResponse<{ message: string }>> {
     return this.request<{ message: string }>(`/offres-fret/${id}`, {
       method: 'DELETE',
+    });
+  }
+
+  // ============================================
+  // PROPOSITION ENDPOINTS
+  // ============================================
+
+  /**
+   * Soumettre une proposition pour une offre (transporteur)
+   */
+  async soumettreProposition(offreId: number, data: CreatePropositionRequest): Promise<ApiResponse<PropositionOffre>> {
+    return this.request<PropositionOffre>(`/offres-fret/${offreId}/propositions`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  /**
+   * Lister les propositions reçues pour une offre (donneur d'ordre)
+   */
+  async getPropositionsPourOffre(offreId: number): Promise<ApiResponse<PropositionOffre[]>> {
+    return this.request<PropositionOffre[]>(`/offres-fret/${offreId}/propositions`);
+  }
+
+  /**
+   * Accepter une proposition (donneur d'ordre)
+   */
+  async accepterProposition(offreId: number, propositionId: number): Promise<ApiResponse<{ offre: any; proposition: PropositionOffre }>> {
+    return this.request(`/offres-fret/${offreId}/propositions/${propositionId}/accepter`, {
+      method: 'POST',
     });
   }
 

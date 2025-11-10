@@ -5,7 +5,22 @@ const BaseModel = require('./BaseModel');
  */
 class OffreFret extends BaseModel {
   constructor(data = {}) {
-    super('offre_fret', data);
+    // Mapper les noms de propriétés vers les vrais noms de colonnes SQL
+    const mappedData = { ...data };
+    
+    // Si on reçoit donneur_ordre_id, le transformer en entreprise_donneur_ordre_id
+    if (data.donneur_ordre_id !== undefined && data.entreprise_donneur_ordre_id === undefined) {
+      mappedData.entreprise_donneur_ordre_id = data.donneur_ordre_id;
+      delete mappedData.donneur_ordre_id;
+    }
+    
+    // Si on reçoit transporteur_attribue_id, le transformer en entreprise_transporteur_id
+    if (data.transporteur_attribue_id !== undefined && data.entreprise_transporteur_id === undefined) {
+      mappedData.entreprise_transporteur_id = data.transporteur_attribue_id;
+      delete mappedData.transporteur_attribue_id;
+    }
+    
+    super('offre_fret', mappedData);
   }
 
   // Getters
@@ -14,11 +29,15 @@ class OffreFret extends BaseModel {
   }
 
   getDonneurOrdreId() {
-    return this.donneur_ordre_id;
+    return this.donneur_ordre_id || this.entreprise_donneur_ordre_id;
   }
 
   getTransporteurAttribueId() {
-    return this.transporteur_attribue_id;
+    return this.transporteur_attribue_id || this.entreprise_transporteur_id;
+  }
+
+  getCreateurId() {
+    return this.createur_id;
   }
 
   getDatePublication() {
@@ -83,12 +102,17 @@ class OffreFret extends BaseModel {
 
   // Setters
   setDonneurOrdreId(value) {
-    this.donneur_ordre_id = value;
+    this.entreprise_donneur_ordre_id = value;
     return this;
   }
 
   setTransporteurAttribueId(value) {
-    this.transporteur_attribue_id = value;
+    this.entreprise_transporteur_id = value;
+    return this;
+  }
+
+  setCreateurId(value) {
+    this.createur_id = value;
     return this;
   }
 
@@ -223,12 +247,12 @@ class OffreFret extends BaseModel {
 
   // Récupérer les offres d'un donneur d'ordre
   static async getOffresByDonneurOrdre(donneurOrdreId) {
-    return await OffreFret.where('donneur_ordre_id', '=', donneurOrdreId);
+    return await OffreFret.where('entreprise_donneur_ordre_id', '=', donneurOrdreId);
   }
 
   // Récupérer les offres attribuées à un transporteur
   static async getOffresByTransporteur(transporteurId) {
-    return await OffreFret.where('transporteur_attribue_id', '=', transporteurId);
+    return await OffreFret.where('entreprise_transporteur_id', '=', transporteurId);
   }
 }
 

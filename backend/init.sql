@@ -269,6 +269,25 @@ CREATE TABLE IF NOT EXISTS offre_fret (
     FOREIGN KEY (createur_id) REFERENCES utilisateur(id) ON DELETE SET NULL
 );
 
+-- ******************************************************
+-- 7b. Table : proposition_offre (propositions faites par les transporteurs sur une offre)
+-- ******************************************************
+CREATE TABLE IF NOT EXISTS proposition_offre (
+    id SERIAL PRIMARY KEY,
+    offre_fret_id INT NOT NULL,
+    entreprise_transporteur_id INT NOT NULL,
+    prix_propose DECIMAL(10,2) NOT NULL,
+    message VARCHAR(500),
+    statut_proposition VARCHAR(20) NOT NULL DEFAULT 'Soumise', -- 'Soumise','Acceptee','Refusee'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (offre_fret_id) REFERENCES offre_fret(id) ON DELETE CASCADE,
+    FOREIGN KEY (entreprise_transporteur_id) REFERENCES entreprise(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_proposition_offre_offre ON proposition_offre (offre_fret_id);
+CREATE INDEX IF NOT EXISTS idx_proposition_offre_transporteur ON proposition_offre (entreprise_transporteur_id);
+
 ---
 
 -- ******************************************************

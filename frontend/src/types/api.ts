@@ -213,6 +213,27 @@ export interface UpdateOffreFretRequest {
   statut_offre?: StatutOffre;
 }
 
+// PROPOSITION TYPES
+// ============================================
+
+export type StatutProposition = 'Soumise' | 'Acceptee' | 'Refusee';
+
+export interface PropositionOffre {
+  id: number;
+  offre_fret_id: number;
+  entreprise_transporteur_id: number;
+  prix_propose: number;
+  message?: string;
+  statut_proposition: StatutProposition;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface CreatePropositionRequest {
+  prix_propose: number;
+  message?: string;
+}
+
 // ============================================
 // API RESPONSE TYPES
 // ============================================
