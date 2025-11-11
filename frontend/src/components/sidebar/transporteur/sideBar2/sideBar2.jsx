@@ -10,18 +10,8 @@ function SideBar2() {
       <nav className="sidebar-nav">
         <ul className="sidebar-menu">
           <li>
-            <NavLink 
-              to="/entreprise/verification" 
-              className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
-            >
-              <span className="sidebar-icon"><Icon name="smartphone" size={18} /></span>
-              <span className="sidebar-label">Guide de vérification</span>
-            </NavLink>
-          </li>
-          
-          <li>
-            <NavLink 
-              to="/entreprise/profil" 
+            <NavLink
+              to="/entreprise/profil"
               className={({ isActive }) => isActive ? 'sidebar-item active' : 'sidebar-item'}
             >
               <span className="sidebar-icon"><Icon name="user" size={18} /></span>

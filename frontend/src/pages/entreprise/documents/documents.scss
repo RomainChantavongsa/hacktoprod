@@ -1,3 +1,5 @@
+@import '../../../styles/variables';
+
 .documents-page {
   padding: 2rem;
   max-width: 1200px;
@@ -190,7 +192,7 @@
     overflow: hidden;
 
     .progress-fill {
-      background: linear-gradient(90deg, #3498db, #2980b9);
+      background: linear-gradient(90deg, $primary-color, $primary-hover);
       height: 100%;
       transition: width 0.3s ease;
     }
@@ -208,7 +210,7 @@
   background: #f8f9fa;
   border-radius: 8px;
   padding: 1.5rem;
-  border-left: 4px solid #3498db;
+  border-left: 4px solid $primary-color;
 
   h3 {
     margin: 0 0 1rem 0;
@@ -240,26 +242,26 @@
   display: inline-block;
 
   &.btn-primary {
-    background-color: #3498db;
+    background-color: $primary-color;
     color: white;
 
     &:hover:not(:disabled) {
-      background-color: #2980b9;
+      background-color: $primary-hover;
     }
 
     &:disabled {
-      background-color: #bdc3c7;
+      background-color: $gray-400;
       cursor: not-allowed;
     }
   }
 
   &.btn-outline {
     background-color: transparent;
-    color: #3498db;
-    border: 1px solid #3498db;
+    color: $primary-color;
+    border: 1px solid $primary-color;
 
     &:hover {
-      background-color: #3498db;
+      background-color: $primary-color;
       color: white;
     }
   }
