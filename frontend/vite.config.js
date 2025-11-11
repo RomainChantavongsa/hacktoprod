@@ -36,7 +36,8 @@ export default defineConfig(({ mode }) => {
     // Affiche les erreurs dans le terminal ET dans le navigateur
     hmr: {
       overlay: true, // Active l'overlay d'erreurs (activé par défaut)
-    }
+    },
+    allowedHosts: ['hacktofront.onrender.com', '.onrender.com']
   },
   // Configuration pour de meilleurs messages d'erreur
   build: {
