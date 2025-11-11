@@ -1,3 +1,4 @@
+@import '../../../styles/variables';
 .en-cours-page {
   padding: 2rem;
   max-width: 1400px;
@@ -41,7 +42,7 @@
   }
 
   .route-arrow {
-    color: #3b82f6;
+    color: $primary-color;
     font-weight: bold;
   }
 

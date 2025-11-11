@@ -1,3 +1,5 @@
+@import '../styles/variables';
+
 .datatable {
   /* Inherit page variables when available, with sensible fallbacks */
   --dt-border: var(--border, #e1e5e8);
@@ -40,7 +42,7 @@
   transition: border-color .25s, background .25s, box-shadow .25s;
 }
 
-.datatable__search:focus { outline: none; border-color: #3498db; background: #fff; box-shadow: 0 0 0 3px rgba(52,152,219,.2); }
+.datatable__search:focus { outline: none; border-color: $primary-color; background: #fff; box-shadow: 0 0 0 3px rgba($primary-color, 0.2); }
 
 .datatable__controls { display: flex; gap: 1rem; align-items: center; }
 

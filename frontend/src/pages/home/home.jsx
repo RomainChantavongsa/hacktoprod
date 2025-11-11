@@ -6,7 +6,7 @@ function Home() {
   return (
     <div className="home">
       <div className="home-hero">
-        <h1>Bienvenue sur HackToGone</h1>
+        <h1>Bienvenue sur GDS</h1>
         <p>Plateforme de gestion de transport et de fret</p>
       </div>
 

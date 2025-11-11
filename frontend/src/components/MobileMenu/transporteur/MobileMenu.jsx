@@ -31,7 +31,6 @@ function MobileMenu({ isOpen, onClose }) {
   ]
 
   const entrepriseLinks = [
-    { to: '/entreprise/verification', icon: 'smartphone', label: 'Guide de vérification' },
     { to: '/entreprise/profil', icon: 'user', label: 'Profil' },
     { to: '/entreprise/documents', icon: 'document', label: 'Documents' },
     { to: '/entreprise/compte-bancaire', icon: 'creditCard', label: 'Compte bancaire' },

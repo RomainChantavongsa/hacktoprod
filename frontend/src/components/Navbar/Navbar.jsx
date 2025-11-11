@@ -91,8 +91,8 @@ function Navbar() {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink 
-                      to="/entreprise/verification" 
+                    <NavLink
+                      to="/entreprise/profil"
                       className={location.pathname.startsWith('/entreprise') ? 'navbar-link active' : 'navbar-link'}
                     >
                       Mon Entreprise

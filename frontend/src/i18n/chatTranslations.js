@@ -18,7 +18,7 @@ export const chatTranslations = {
     messagePlaceholder: 'Type a message...',
     
     // Welcome message
-    welcomeMessage: 'Hello! I\'m the virtual assistant of HackToGone. How can I help you today?',
+    welcomeMessage: 'Hello! I\'m the virtual assistant of GDS. How can I help you today?',
     
     // Error messages
     errorMessage: 'An error occurred. Please try again shortly.',
@@ -46,7 +46,7 @@ export const chatTranslations = {
     messagePlaceholder: 'Écrivez un message...',
     
     // Welcome message
-    welcomeMessage: 'Bonjour ! Je suis l\'assistant virtuel de HackToGone. Comment puis-je vous aider aujourd\'hui ?',
+    welcomeMessage: 'Bonjour ! Je suis l\'assistant virtuel de GDS. Comment puis-je vous aider aujourd\'hui ?',
     
     // Error messages
     errorMessage: 'Une erreur s\'est produite. Veuillez réessayer dans un instant.',
