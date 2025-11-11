@@ -4,18 +4,17 @@ FROM node:20-alpine
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier package.json ET yarn.lock
+# Copier package.json
 COPY package.json ./
-COPY yarn.lock ./
 
-# Installer les dépendances avec Yarn
-RUN yarn install
+# Installer les dépendances avec npm
+RUN npm install
 
 # Copier le reste du code source
 COPY . .
 
-# Exposer le port que nous avons défini dans package.json
-EXPOSE 3000
+# Exposer le port Vite (5173)
+EXPOSE 5173
 
-# Commande pour lancer l'application en mode dev
-CMD ["yarn", "dev"]
+# Commande pour lancer l'application en mode dev avec host 0.0.0.0
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
